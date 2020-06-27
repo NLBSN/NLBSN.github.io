@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>golang on 帅小伙的博客</title>
+    <link>https://NLBSN.github.io/categories/golang/</link>
+    <description>Recent content in golang on 帅小伙的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 24 Jun 2020 21:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://NLBSN.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>「连载十」分布式链路追踪 gRPC &#43; Opentracing &#43; Zipkin</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%8D%81%E5%88%86%E5%B8%83%E5%BC%8F%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA-grpc-opentracing-zipkin/</link>
+      <pubDate>Wed, 24 Jun 2020 21:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%8D%81%E5%88%86%E5%B8%83%E5%BC%8F%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA-grpc-opentracing-zipkin/</guid>
+      <description>&lt;p&gt;本文将通过 gRPC + Opentracing + Zipkin 搭建一个&lt;strong&gt;分布式链路追踪系统&lt;/strong&gt;来实现查看整个系统的链路、性能等指标。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载九」gRPC Deadlines</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B9%9Dgrpc-deadlines/</link>
+      <pubDate>Wed, 24 Jun 2020 20:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B9%9Dgrpc-deadlines/</guid>
+      <description>&lt;p&gt;Deadlines 意指截止时间，在 gRPC 中强调 TL;DR（Too long, Don&amp;rsquo;t read）并建议&lt;strong&gt;始终设定截止日期&lt;/strong&gt;，为什么呢？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载八」对 RPC 方法做自定义认证</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/</link>
+      <pubDate>Wed, 24 Jun 2020 19:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/</guid>
+      <description>&lt;p&gt;对某些模块的 RPC 方法做特殊认证或校验。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载七」让你的服务同时提供 HTTP 接口</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/</link>
+      <pubDate>Wed, 24 Jun 2020 18:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/</guid>
+      <description>&lt;p&gt;gRPC 的协议是基于 HTTP/2 的，因此应用程序能够在单个 TCP 端口上提供 HTTP/1.1 和 gRPC 接口服务（两种不同的流量）&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载六」Unary and Stream interceptor</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/</link>
+      <pubDate>Wed, 24 Jun 2020 17:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/</guid>
+      <description>&lt;p&gt;​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载五」基于 CA 的 TLS 证书认证</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/</link>
+      <pubDate>Wed, 24 Jun 2020 16:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/</guid>
+      <description>&lt;p&gt;为了保证证书的可靠性和有效性，在这里可引入 CA 颁发的根证书的概念。其遵守 X.509 标准&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载四」TLS 证书认证</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%9B%9Btls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/</link>
+      <pubDate>Wed, 24 Jun 2020 15:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%9B%9Btls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/</guid>
+      <description>&lt;p&gt;TLS 证书认证&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载三」gRPC Streaming, Client and Server</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%89grpc-streaming-client-and-server/</link>
+      <pubDate>Wed, 24 Jun 2020 14:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%89grpc-streaming-client-and-server/</guid>
+      <description>&lt;p&gt;本章节将介绍 gRPC 的流式，分为三种类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Server-side streaming RPC：服务器端流式 RPC&lt;/li&gt;
+&lt;li&gt;Client-side streaming RPC：客户端流式 RPC&lt;/li&gt;
+&lt;li&gt;Bidirectional streaming RPC：双向流式 RPC&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;备注：grpc主要是四种模式，除了上面的三种，还有一种就是简单模式(Simple RPC)：客户端发起请求并等待服务端响应。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载二」gRPC Client and Server</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%8Cgrpc-client-and-server/</link>
+      <pubDate>Wed, 24 Jun 2020 13:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%8Cgrpc-client-and-server/</guid>
+      <description>&lt;p&gt;本章节将使用 Go 来编写 gRPC Server 和 Client，让其互相通讯。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>「连载一」gRPC及相关介绍</title>
+      <link>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Wed, 24 Jun 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;p&gt;作为开篇章，将会介绍 gRPC 相关的一些知识。简单来讲 gRPC 是一个 基于 HTTP/2 协议设计的 RPC 框架，它采用了 Protobuf 作为 IDL&lt;/p&gt;
+&lt;p&gt;你是否有过疑惑，它们都是些什么？本文将会介绍一些常用的知识和概念，更详细的会给出手册地址去深入&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>golang开发中使用到的包整理</title>
+      <link>https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/</guid>
+      <description>&lt;p&gt;​    开发中使用过或者感兴趣的包。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>golang中cgo的使用</title>
+      <link>https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Sun, 21 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;​    Golang环境下调用c/c++&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>golang多平台编译</title>
+      <link>https://NLBSN.github.io/2020/06/golang%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%BC%96%E8%AF%91/</link>
+      <pubDate>Sun, 21 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/golang%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%BC%96%E8%AF%91/</guid>
+      <description>&lt;p&gt;​    Golang 编译Mac、Linux、Windows多平台可执行程序&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
