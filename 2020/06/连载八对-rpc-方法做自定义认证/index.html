@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="对某些模块的 RPC 方法做特殊认证或校验。">
+
+
+<meta property="og:description" content="对某些模块的 RPC 方法做特殊认证或校验。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「连载八」对 RPC 方法做自定义认证">
+<meta name="twitter:title" content="「连载八」对 RPC 方法做自定义认证">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="对某些模块的 RPC 方法做特殊认证或校验。">
+<meta name="twitter:description" content="对某些模块的 RPC 方法做特殊认证或校验。">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-24T19:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-24T19:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="golang">
+    
+      <meta property="article:section" content="grpc">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="grpc">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200626101651.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200626101651.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>「连载八」对 RPC 方法做自定义认证</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      「连载八」对 RPC 方法做自定义认证
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-24T19:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月24日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/golang">golang</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/grpc">grpc</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>对某些模块的 RPC 方法做特殊认证或校验。</p>
+<blockquote>
+<p>转载自：https://eddycjy.com/</p>
+<p>于原文章写的时间有点长，这里会做一些更新。</p>
+<p>项目地址：https://github.com/EDDYCJY/go-grpc-example</p>
+</blockquote>
+<h2 id="前言">前言</h2>
+<p>在前面的章节中，我们介绍了两种（证书算一种）可全局认证的方法：</p>
+<ol>
+<li><a href="https://github.com/EDDYCJY/blog/blob/master/grpc/grpc-tls.md">TLS 证书认证</a></li>
+<li><a href="https://github.com/EDDYCJY/blog/blob/master/grpc/ca-tls.md">基于 CA 的 TLS 证书认证</a></li>
+<li><a href="https://github.com/EDDYCJY/blog/blob/master/grpc/interceptor.md">Unary and Stream interceptor</a></li>
+</ol>
+<p>而在实际需求中，常常会对某些模块的 RPC 方法做特殊认证或校验。今天将会讲解、实现这块的功能点</p>
+<h2 id="课前知识">课前知识</h2>
+<pre><code>type PerRPCCredentials interface {
+    GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error)
+    RequireTransportSecurity() bool
+}
+</code></pre><p>在 gRPC 中默认定义了 PerRPCCredentials，它就是本章节的主角，是 gRPC 默认提供用于自定义认证的接口，它的作用是将所需的安全认证信息添加到每个 RPC 方法的上下文中。其包含 2 个方法：</p>
+<ul>
+<li>GetRequestMetadata：获取当前请求认证所需的元数据（metadata）</li>
+<li>RequireTransportSecurity：是否需要基于 TLS 认证进行安全传输</li>
+</ul>
+<h2 id="目录结构">目录结构</h2>
+<p>新建 simple_token_server/server.go 和 simple_token_client/client.go，目录结构如下：</p>
+<pre><code>go-grpc-example
+├── client
+│   ├── simple_client
+│   ├── simple_http_client
+│   ├── simple_token_client
+│   └── stream_client
+├── conf
+├── pkg
+├── proto
+├── server
+│   ├── simple_http_server
+│   ├── simple_server
+│   ├── simple_token_server
+│   └── stream_server
+└── vendor
+</code></pre><h2 id="grpc">gRPC</h2>
+<h3 id="client">Client</h3>
+<pre><code>package main
+
+import (
+	&quot;context&quot;
+	&quot;log&quot;
+
+	&quot;google.golang.org/grpc&quot;
+
+	&quot;github.com/EDDYCJY/go-grpc-example/pkg/gtls&quot;
+	pb &quot;github.com/EDDYCJY/go-grpc-example/proto&quot;
+)
+
+const PORT = &quot;9004&quot;
+
+type Auth struct {
+	AppKey    string
+	AppSecret string
+}
+
+func (a *Auth) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
+	return map[string]string{&quot;app_key&quot;: a.AppKey, &quot;app_secret&quot;: a.AppSecret}, nil
+}
+
+func (a *Auth) RequireTransportSecurity() bool {
+	return true
+}
+
+func main() {
+	tlsClient := gtls.Client{
+		ServerName: &quot;go-grpc-example&quot;,
+		CertFile:   &quot;../../conf/server/server.pem&quot;,
+	}
+	c, err := tlsClient.GetTLSCredentials()
+	if err != nil {
+		log.Fatalf(&quot;tlsClient.GetTLSCredentials err: %v&quot;, err)
+	}
+
+	auth := Auth{
+		AppKey:    &quot;eddycjy&quot;,
+		AppSecret: &quot;20181005&quot;,
+	}
+	conn, err := grpc.Dial(&quot;:&quot;+PORT, grpc.WithTransportCredentials(c), grpc.WithPerRPCCredentials(&amp;auth))
+	...
+}
+</code></pre><p>在 Client 端，重点实现 <code>type PerRPCCredentials interface</code> 所需的方法，关注两点即可：</p>
+<ul>
+<li>struct Auth：GetRequestMetadata、RequireTransportSecurity</li>
+<li>grpc.WithPerRPCCredentials</li>
+</ul>
+<h3 id="server">Server</h3>
+<pre><code>package main
+
+import (
+	&quot;context&quot;
+	&quot;log&quot;
+	&quot;net&quot;
+
+	&quot;google.golang.org/grpc&quot;
+	&quot;google.golang.org/grpc/codes&quot;
+	&quot;google.golang.org/grpc/metadata&quot;
+	&quot;google.golang.org/grpc/status&quot;
+
+	&quot;github.com/EDDYCJY/go-grpc-example/pkg/gtls&quot;
+	pb &quot;github.com/EDDYCJY/go-grpc-example/proto&quot;
+)
+
+type SearchService struct {
+	auth *Auth
+}
+
+func (s *SearchService) Search(ctx context.Context, r *pb.SearchRequest) (*pb.SearchResponse, error) {
+	if err := s.auth.Check(ctx); err != nil {
+		return nil, err
+	}
+	return &amp;pb.SearchResponse{Response: r.GetRequest() + &quot; Token Server&quot;}, nil
+}
+
+const PORT = &quot;9004&quot;
+
+func main() {
+	...
+}
+
+type Auth struct {
+	appKey    string
+	appSecret string
+}
+
+func (a *Auth) Check(ctx context.Context) error {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return status.Errorf(codes.Unauthenticated, &quot;自定义认证 Token 失败&quot;)
+	}
+
+	var (
+		appKey    string
+		appSecret string
+	)
+	if value, ok := md[&quot;app_key&quot;]; ok {
+		appKey = value[0]
+	}
+	if value, ok := md[&quot;app_secret&quot;]; ok {
+		appSecret = value[0]
+	}
+
+	if appKey != a.GetAppKey() || appSecret != a.GetAppSecret() {
+		return status.Errorf(codes.Unauthenticated, &quot;自定义认证 Token 无效&quot;)
+	}
+
+	return nil
+}
+
+func (a *Auth) GetAppKey() string {
+	return &quot;eddycjy&quot;
+}
+
+func (a *Auth) GetAppSecret() string {
+	return &quot;20181005&quot;
+}
+</code></pre><p>在 Server 端就更简单了，实际就是调用 <code>metadata.FromIncomingContext</code> 从上下文中获取 metadata，再在不同的 RPC 方法中进行认证检查</p>
+<h3 id="验证">验证</h3>
+<p>重新启动 server.go 和 client.go，得到以下结果：</p>
+<pre><code>$ go run client.go
+2018/10/05 20:59:58 resp: gRPC Token Server
+</code></pre><p>修改 client.go 的值，制造两者不一致，得到无效结果：</p>
+<pre><code>$ go run client.go
+2018/10/05 21:00:05 client.Search err: rpc error: code = Unauthenticated desc = invalid token
+exit status 1
+</code></pre><h3 id="一个个加太麻烦">一个个加太麻烦</h3>
+<p>我相信你肯定会问一个个加，也太麻烦了吧？有这个想法的你，应当把 <code>type PerRPCCredentials interface</code> 做成一个拦截器（interceptor）</p>
+<h2 id="总结">总结</h2>
+<p>本章节比较简单，主要是针对 RPC 方法的自定义认证进行了介绍，如果是想做全局的，建议是举一反三从拦截器下手哦。</p>
+<h2 id="参考">参考</h2>
+<h3 id="本系列示例代码">本系列示例代码</h3>
+<ul>
+<li><a href="https://github.com/EDDYCJY/go-grpc-example">go-grpc-example</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/grpc/">grpc</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B9%9Dgrpc-deadlines/" data-tooltip="「连载九」gRPC Deadlines">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B9%9Dgrpc-deadlines/" data-tooltip="「连载九」gRPC Deadlines">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25AB%25E5%25AF%25B9-rpc-%25E6%2596%25B9%25E6%25B3%2595%25E5%2581%259A%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589%25E8%25AE%25A4%25E8%25AF%2581%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25AB%25E5%25AF%25B9-rpc-%25E6%2596%25B9%25E6%25B3%2595%25E5%2581%259A%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589%25E8%25AE%25A4%25E8%25AF%2581%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25AB%25E5%25AF%25B9-rpc-%25E6%2596%25B9%25E6%25B3%2595%25E5%2581%259A%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589%25E8%25AE%25A4%25E8%25AF%2581%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81\/';
+          
+            this.page.identifier = '\/2020\/06\/%E8%BF%9E%E8%BD%BD%E5%85%AB%E5%AF%B9-rpc-%E6%96%B9%E6%B3%95%E5%81%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%A4%E8%AF%81\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

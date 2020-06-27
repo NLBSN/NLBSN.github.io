@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="自动化构建部署。CI/CD">
+
+
+<meta property="og:description" content="自动化构建部署。CI/CD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jenkins自动化构建部署">
+<meta name="twitter:title" content="jenkins自动化构建部署">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="自动化构建部署。CI/CD">
+<meta name="twitter:description" content="自动化构建部署。CI/CD">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-18T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-18T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="容器">
+    
+      <meta property="article:section" content="docker">
+    
+  
+  
+    
+      <meta property="article:tag" content="容器">
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="部署">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193619.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193619.png">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>jenkins自动化构建部署</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      jenkins自动化构建部署
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-18T00:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月18日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/%e5%ae%b9%e5%99%a8">容器</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/docker">docker</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>自动化构建部署。CI/CD</p>
+<blockquote>
+<p>大纲：
+1、jenkins插件的安装
+     1.1 全局工具的配置
+     1.2 jenkins插件配置
+2、开始项目的简单配置
+     2.1 配置服务器的登陆用户
+     2.2 开始进行项目的配置</p>
+</blockquote>
+<p>##1. jenkins插件的安装
+     **jenkins的安装可以参考另一篇文章：**<a href="https://www.jianshu.com/p/835986f64cf1">https://www.jianshu.com/p/835986f64cf1</a></p>
+<p>####1.1  全局工具配置(jdk1.8 + maven + docker)
+     点击：系统管理 &ndash;&gt; 全局工具配置
+     大家根据自己的实际情况配置即可
+     由于本人前面使用的是数据卷的形式，所以将相关的软件cp到jenkins_data数据卷进行安装。</p>
+<pre><code>[root@tag _data]# docker volume inspect jenkins_data
+[
+    {
+        &quot;CreatedAt&quot;: &quot;2019-03-20T12:54:52+08:00&quot;,
+        &quot;Driver&quot;: &quot;local&quot;,
+        &quot;Labels&quot;: {
+            &quot;com.docker.compose.project&quot;: &quot;jenkins&quot;,
+            &quot;com.docker.compose.version&quot;: &quot;1.23.0dev&quot;,
+            &quot;com.docker.compose.volume&quot;: &quot;data&quot;
+        },
+        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/jenkins_data/_data&quot;,
+        &quot;Name&quot;: &quot;jenkins_data&quot;,
+        &quot;Options&quot;: null,
+        &quot;Scope&quot;: &quot;local&quot;
+    }
+]
+</code></pre><p>     <em>可以直接将文件复制到挂载点(Mountpoint)：/var/lib/docker/volumes/jenkins_data/_data</em></p>
+<pre><code>[root@tag _data]# mkdir -p /var/lib/docker/volumes/jenkins_data/_data/soft
+[root@tag soft]# pwd
+/var/lib/docker/volumes/jenkins_data/_data/soft
+[root@tag soft]# ls
+apache-maven-3.5.0-bin.tar.gz  docker-18.06.0-ce.tgz  git-2.9.5.tar.gz  jdk-8u152-linux-x64.tar.gz
+[root@tag soft]# tar -zxvf apache-maven-3.5.0-bin.tar.gz 
+[root@tag soft]# tar -zxvf docker-18.06.0-ce.tgz
+[root@tag soft]# tar -zxvf jdk-8u152-linux-x64.tar.gz
+[root@tag soft]# ls
+apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz  git-2.9.5.tar.gz  jdk1.8.0_152  jdk-8u152-linux-x64.tar.gz
+</code></pre><p>配置示例如下：
+<img src="https://upload-images.jianshu.io/upload_images/7906353-986203d11bbbc344.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png">
+<img src="https://upload-images.jianshu.io/upload_images/7906353-5549b903ada132b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>####1.2  jenkins插件配置</p>
+<blockquote>
+<p>     <strong>主要安装的是：</strong>
+     1. **Maven Integration：**新建job时有maven项目可以选择；
+     2. **Deploy to container：**将war包部署到tomcat所在的服务器上；
+     3. **Publish Over SSH：**通过ssh推送文件，并可以执行shell命令；</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-a4d52c53acefc42b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="插件安装.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-cb2c85dcb92f2204.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="Maven Integration安装.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-27e8615a55d0853a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="Deploy to container.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-6e49dc08df25bc94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="Publish Over SSH.png">
+##2. 开始项目的简单配置</p>
+<h4 id="21-配置服务器的登陆用户">2.1 配置服务器的登陆用户</h4>
+<blockquote>
+<p><strong>在设置里增加所要部署的服务器的ssh连接方式</strong></p>
+</blockquote>
+<p>直接看图操作</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-35a35329e08ac52b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-7012933258f5be2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png">
+###<strong>这里可以配置多台不一样密码的服务器，自己慢慢去琢磨把！！！</strong></p>
+<h4 id="22-开始进行项目的配置">2.2 开始进行项目的配置</h4>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-20b54414e6343906.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="创建任务.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-37bc91efb274ff62.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-0daeae7f25880c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-f3e08824aba1b0ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-6aea196e47acbb9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-fe29e80bc93ce42a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-a6bc5a0f6803b9e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-1015debb8b7a19be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-899f5bd51a0eaa9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-2623595b494894c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>##ok，到这里就部署完成了，这就是一个简单的流水线的部署。
+<strong>当然了，jenkins核心部署并不是这样的形势，但是作为一个入门或者平常的开发使用，对于博主来说目前是足够了，等有时间了再去琢磨另一种流水线的部署。</strong></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E9%83%A8%E7%BD%B2/">部署</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fjenkins%25E8%2587%25AA%25E5%258A%25A8%25E5%258C%2596%25E6%259E%2584%25E5%25BB%25BA%25E9%2583%25A8%25E7%25BD%25B2%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fjenkins%25E8%2587%25AA%25E5%258A%25A8%25E5%258C%2596%25E6%259E%2584%25E5%25BB%25BA%25E9%2583%25A8%25E7%25BD%25B2%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fjenkins%25E8%2587%25AA%25E5%258A%25A8%25E5%258C%2596%25E6%259E%2584%25E5%25BB%25BA%25E9%2583%25A8%25E7%25BD%25B2%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2\/';
+          
+            this.page.identifier = '\/2020\/06\/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

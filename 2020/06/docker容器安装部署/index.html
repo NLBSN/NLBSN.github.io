@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="docker容器的在线以及二进制安装。以及一些简单的配置。">
+
+
+<meta property="og:description" content="docker容器的在线以及二进制安装。以及一些简单的配置。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker容器安装部署">
+<meta name="twitter:title" content="docker容器安装部署">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="docker容器的在线以及二进制安装。以及一些简单的配置。">
+<meta name="twitter:description" content="docker容器的在线以及二进制安装。以及一些简单的配置。">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-18T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-18T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="容器">
+    
+      <meta property="article:section" content="docker">
+    
+  
+  
+    
+      <meta property="article:tag" content="容器">
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="部署">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>docker容器安装部署</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      docker容器安装部署
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-18T00:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月18日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/%e5%ae%b9%e5%99%a8">容器</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/docker">docker</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>docker容器的在线以及二进制安装。以及一些简单的配置。</p>
+<!-- raw HTML omitted -->
+<h1 id="在线安装">在线安装</h1>
+<p>卸载老版本的 docker 及其相关依赖</p>
+<pre><code>sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine docker-ce -y
+</code></pre><p>删除旧的docker文件</p>
+<pre><code>rm -rf /var/lib/docker
+</code></pre><p>使用yum进行安装</p>
+<p># step 1: 安装必要的一些系统工具</p>
+<pre><code>sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+</code></pre><p>安装仓库地址</p>
+<pre><code>yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre><p>查看仓库内可选的版本包</p>
+<pre><code>[root@DESKTOP-KQN1KKC ~]# yum list docker-ce --showduplicates | sort -r
+ * updates: mirrors.huaweicloud.com
+Loading mirror speeds from cached hostfile
+Loaded plugins: fastestmirror
+ * extras: mirrors.huaweicloud.com
+docker-ce.x86_64            3:19.03.9-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.8-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.7-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.6-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.5-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.4-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.3-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.2-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.1-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.12-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.11-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.10-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.0-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.9-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.8-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.7-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.6-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.5-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.4-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.3-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.2-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.1-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.0-3.el7                     docker-ce-stable
+docker-ce.x86_64            18.06.3.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.06.2.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.06.1.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.06.0.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.03.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            18.03.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.12.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.12.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.09.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.09.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.06.2.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.06.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.06.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.03.3.ce-1.el7                    docker-ce-stable
+docker-ce.x86_64            17.03.2.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.03.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.03.0.ce-1.el7.centos             docker-ce-stable
+ * base: mirror.bit.edu.cn
+Available Packages
+[root@DESKTOP-KQN1KKC ~]#
+</code></pre><p>选则其中一个包安装</p>
+<pre><code>[root@DESKTOP-KQN1KKC ~]# yum install -y docker-ce-19.03.12
+</code></pre><h2 id="安装docker-compose">安装docker-compose</h2>
+<pre><code>sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+docker-compose --version
+</code></pre><h1 id="离线安装">离线安装</h1>
+<p>docker版本：docker-18.06.0-ce</p>
+<blockquote>
+<p>大纲：
+一、为什么要采用二进制安装
+二、二进制的安装包的下载
+三、二进制安装包的安装步骤
+四、小tips
+     1、docker默认网卡网段的修改
+     2、docker版本13和18的一个差别&mdash;-文件挂载</p>
+</blockquote>
+<h2 id="一为什么要采用二进制安装">一、为什么要采用二进制安装</h2>
+<p>     网上有很多的docker的安装教程，我也原来写过关于docker的安装(CSDN)，但最近在部署使用docker的过程中，发现有很多的配置还是需要学习并注意的。所以再写一次并方便自己日后进行补充。
+     使用二进制部署的实际场景：
+          1、在open suse12的系统上安装部署过。(备注：docker官方只提供了在suse12上的docker ee的版本，没有docker ce的版本，虽然suse的仓库中存在docker的rpm安装包，博主也下载了，但实际安装时并未安装成功，而采用的二进制docker包部署上了)
+          2、在没有外网的环境中并且没有yum源时，部署过。
+          3、这篇文章从开始编写，到发布，拖得太久了，貌似脱了有一个月的时间，以后有文章最多不超过3天写完，导致要写的好多东西都忘记了。</p>
+<h2 id="二二进制安装包的下载">二、二进制安装包的下载</h2>
+<p>     首先打开 <a href="https://www.docker.com/">https://www.docker.com/</a></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-d93401c76fe3bb6c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/740" alt="docker的主页"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-8cf66a3540a281c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/740" alt="docker的文档"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-0428c57fed5b264e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/740" alt="docker二进制链接的获取"></p>
+<p>          <strong>docker二进制文件的下载链接： <a href="https://download.docker.com/linux/static/stable/">https://download.docker.com/linux/static/stable/</a></strong></p>
+<h2 id="三二进制安装包的安装步骤">三、二进制安装包的安装步骤</h2>
+<p>     模拟一个局域网，信息中心要求把相关的软件包和数据放到固定的路径的一个环境。
+     安装非常的简单，就是把二进制的可执行包放到被要求的固定的路径下，然后将此路径加到系统的环境变量中，然后自己创建docker.service和daemon.json两个配置文件。
+     <strong>实际的部署过程</strong>
+           在这里将二进制的包放到/opt/docker路径下，数据放到/data/docker <br>
+     <strong>直接上操作步骤</strong></p>
+<pre><code>[root@tag home]# ls
+docker-18.06.0-ce.tgz
+[root@tag home]# tar -zxvf docker-18.06.0-ce.tgz -C /opt/
+docker/
+docker/dockerd
+docker/docker-proxy
+docker/docker-containerd
+docker/docker-runc
+docker/docker-init
+docker/docker-containerd-shim
+docker/docker
+docker/docker-containerd-ctr
+[root@tag home]# 
+[root@tag home]# ls /opt/docker/
+docker  docker-containerd  docker-containerd-ctr  docker-containerd-shim  dockerd  docker-init  docker-proxy  docker-runc 
+[root@tag home]# 
+[root@tag home]# cat &gt; /etc/systemd/system/docker.service &lt;&lt;&quot;EOF&quot;
+[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.io
+ 
+[Service]
+Environment=&quot;PATH=/opt/docker:/bin:/sbin:/usr/bin:/usr/sbin&quot;
+EnvironmentFile=-/run/flannel/docker
+ExecStart=/opt/docker/dockerd \
+         --graph /data/docker                          ###备注：这里就是docker数据存储的目录设置
+         --log-level=error \
+          $DOCKER_NETWORK_OPTIONS
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Delegate=yes
+KillMode=process
+ 
+[Install]
+WantedBy=multi-user.target
+EOF
+[root@tag home]# 
+[root@tag home]# mkdir -p  /etc/docker/
+[root@tag home]# cat &gt; /etc/docker/daemon.json &lt;&lt;EOF        #备注：外网拉取镜像时可用
+{
+    &quot;registry-mirrors&quot;: [&quot;https://hub-mirror.c.163.com&quot;, &quot;https://docker.mirrors.ustc.edu.cn&quot;],
+    &quot;max-concurrent-downloads&quot;: 20
+}
+EOF
+[root@tag home]#  cat /etc/docker/daemon.json              #备注：使用内网仓库时可用
+{
+    &quot;insecure-registries&quot;:[&quot;https://内网镜像仓库ip:5000&quot;]
+}
+[root@tag home]#  
+[root@tag home]#  systemctl daemon-reload
+[root@tag home]#  systemctl enable docker 
+[root@tag home]#  systemctl restart docker
+[root@tag home]#  systemctl status docker
+[root@tag home]#  ip a                                 #备注：查看是否多了一张docker0的网卡
+</code></pre><h2 id="四小tips">四、小tips</h2>
+<p>####     <strong>1、docker默认网卡网段的修改</strong>
+     <strong><code>这里提供两种修改方法：一种是新建一个网桥；另一种是直接修改docker0网卡的网段</code></strong>
+#####    第一种：新建一个网桥</p>
+<pre><code>[root@tag home]#  
+[root@tag home]#  systemctl stop docker
+[root@tag home]#  iptables -t nat -F POSTROUTING            #查看一下防火墙的nat
+[root@tag home]#  ip link set dev docker0 down                    # 删除docker默认网关配置
+[root@tag home]#  ip addr del 172.17.0.1/16 dev docker0
+[root@tag home]#  yum install -y bridge-utils                   #新建一张网卡
+[root@tag home]#  brctl addbr bridge1
+[root@tag home]#  ip addr add 172.18.2.1/24 dev bridge1       # 增加新的docker网关配置
+[root@tag home]#  ip link set dev bridge1 up
+[root@tag home]#  ip addr show bridge1
+[root@tag home]#
+[root@tag home]# cat &gt; /etc/docker/docker-daemon.json &lt;&lt;EOF       #这里你也可以将上面的仓库地址加上
+{
+  &quot;bridge&quot;: &quot;bridge1&quot;
+}
+EOF
+[root@tag home]# 
+[root@tag home]#  systemctl daemon-reload
+[root@tag home]#  systemctl enable docker 
+[root@tag home]#  systemctl restart docker
+[root@tag home]#  systemctl status docker
+[root@tag home]#  
+</code></pre><p>#####    第二种：直接修改docker0网卡的网段</p>
+<pre><code>[root@tag home]#
+[root@tag home]# cat &gt; /etc/docker/daemon.json &lt;&lt;EOF       #这里你也可以将上面的仓库地址加上
+{
+    &quot;bip&quot;: &quot;179.2.0.1/16&quot;
+}
+EOF
+[root@tag home]# 
+[root@tag home]#  systemctl daemon-reload
+[root@tag home]#  systemctl enable docker 
+[root@tag home]#  systemctl restart docker
+[root@tag home]#  systemctl status docker
+[root@tag home]#  
+[root@tag home]#  iptables -t nat -L -n
+[root@tag home]#  iptables -t nat -F POSTROUTING
+[root@tag home]#  
+</code></pre><p>####     <strong>2、docker版本13和18的一个差别&mdash;-文件挂载</strong>
+     这也是今天去客户那里安装才发现的。在把宿主机的目录挂载到容器内时，使用docker run方式启动容器时，需要添加参数docker run -itd &ndash;privileged &hellip;，使用docker-compose方式启动时，需要添加参数privileged: true。
+忘记要写什么了，记得时候再来补充</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E9%83%A8%E7%BD%B2/">部署</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E4%B8%BA%E4%BB%80%E4%B9%88-redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E8%83%BD%E8%BE%BE%E5%88%B0%E7%99%BE%E4%B8%87-qps/" data-tooltip="为什么 Redis 单线程能达到百万&#43;QPS？">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E4%B8%BA%E4%BB%80%E4%B9%88-redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E8%83%BD%E8%BE%BE%E5%88%B0%E7%99%BE%E4%B8%87-qps/" data-tooltip="为什么 Redis 单线程能达到百万&#43;QPS？">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fdocker%25E5%25AE%25B9%25E5%2599%25A8%25E5%25AE%2589%25E8%25A3%2585%25E9%2583%25A8%25E7%25BD%25B2%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fdocker%25E5%25AE%25B9%25E5%2599%25A8%25E5%25AE%2589%25E8%25A3%2585%25E9%2583%25A8%25E7%25BD%25B2%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fdocker%25E5%25AE%25B9%25E5%2599%25A8%25E5%25AE%2589%25E8%25A3%2585%25E9%2583%25A8%25E7%25BD%25B2%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2\/';
+          
+            this.page.identifier = '\/2020\/06\/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

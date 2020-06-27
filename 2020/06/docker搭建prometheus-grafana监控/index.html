@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="">
+
+
+<meta property="og:description" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker搭建prometheus&#43;grafana监控">
+<meta name="twitter:title" content="docker搭建prometheus&#43;grafana监控">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="">
+<meta name="twitter:description" content="">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-18T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-18T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="容器">
+    
+      <meta property="article:section" content="docker">
+    
+  
+  
+    
+      <meta property="article:tag" content="容器">
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="部署">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193253.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193253.png">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>docker搭建prometheus&#43;grafana监控</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      docker搭建prometheus&#43;grafana监控
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-18T00:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月18日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/%e5%ae%b9%e5%99%a8">容器</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/docker">docker</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>大纲：
+     1、为什么要进行搭建，以及搭建的好处
+     2、prometheus 的搭建
+     3、grafana 的搭建
+     4、cadvisor 的搭建
+     5、elasticsearch 的搭建
+     6、filebeat 的搭建
+     7、elasticsearch_exporter 的搭建
+     8、node-exporter 的搭建</p>
+</blockquote>
+<p>#1、为什么要进行搭建，以及搭建的好处
+     这次的搭建主要是为了解决数据监控的问题，顺便解决机器的日常维护以及容器的监控。
+     其实监控系统公司已经存在一套zabbix监控了，那我为什么还要重搭一套呢？答：(1)、zabbix监控的报警我现在邮箱有上千封；(2)、容器的监控，如果有可能会去监控kubernetes集群；(3)、体验目前比较流行的监控。
+     <strong>这次搭建主要是利用docker容器进行</strong>，好处就不用我多说了，大家都知道。这篇文章会让你用最快的速度入门体验到pormetheus监控，如果有可能我会在接下来的文章中更新一些自己自定义的监控方案(当然了，也是一些比较基础的)。
+     <em><strong>本篇不会涉及到报警的设置</strong></em>
+     <em><strong>如果在启动容器时报错，最有可能的是挂载进容器的目录权限不够，最简单的方法，给777所有权限即可</strong></em></p>
+<p>#2、prometheus 的搭建
+     prometheus以及相关的大部分组件都是采用<strong>go语言</strong>进行编写的，所以安装配置及其简单。这里采用官方提供的镜像进行搭建。
+     prometheus我主要是用这个时序数据库进行采集分析的，不做告警处理。
+     备注：prometheus.yml 这个配置文件，你可以先从镜像里复制一份出来，然后进行修改，也可以直接复制我下面的配置文件进行修改。
+     因为我是单台机器进行部署的，如果你需要监测多台机器，只需要在数组中配置多个ip即可，形式如;[&lsquo;10.16.88.44:9090&rsquo;,&lsquo;10.16.88.45:9090&rsquo;]。
+     目前这个配置文件中配置了这次搭建所需要的所有的组件，如果你以后还要增加组件，只需修改这个配置文件，然后重启prometheus这个服务即可。</p>
+<pre><code>[root@tag config]# cat prometheus.yml 
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+#alerting:
+#  alertmanagers:
+#  - static_configs:
+#    - targets:
+#      - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+#rule_files:
+  # - &quot;first_rules.yml&quot;
+  # - &quot;second_rules.yml&quot;
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    static_configs:
+      - targets: ['10.16.88.44:9090']
+  
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['10.16.88.44:8084'] # 本地 cadvisor 访问地址
+  
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['10.16.88.44:9100']
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets: ['10.16.88.44:9108']
+[root@tag yaml]#
+[root@tag yaml]#
+[root@tag yaml]# cat prometheus.yaml 
+version: '3.1'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.9.2
+    container_name: monitor_prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - /data/prometheus/prometheus/data:/prometheus/data   #prometheus数据目录
+      - /data/prometheus/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml   #prometheus数据采集的配置文件
+[root@tag yaml]#
+[root@tag yaml]#
+[root@tag yaml]# docker-compose -f prometheus.yaml up -d              #启动容器
+</code></pre><p>http://ip地址:9090
+<img src="https://upload-images.jianshu.io/upload_images/7906353-67a180278a3c3313.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>#3、grafana 的搭建(效果图的展示以后再写)
+     这个服务主要是将pormetheus采集过来的数据做可视化的界面展示的，虽然pormetheus也带有界面展示，但是它的界面展示太单一了，没有grafana的好看。</p>
+<pre><code>[root@tag yaml]# cat grafana.yaml 
+version: '3.1'
+
+services:
+  grafana:
+    image: grafana/grafana:6.1.4
+    container_name: monitor_grafana
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - /data/prometheus/grafana/data:/var/lib/grafana   #prometheus数据目录
+[root@tagyaml]#
+[root@tagyaml]#
+[root@tagyaml]#docker-compose -f grafana.yaml up -d              #启动容器
+</code></pre><p>出现类似下面的界面就算成功，我这里放出来的是我已经搭建好的界面了。
+http://ip地址:3000
+<img src="https://upload-images.jianshu.io/upload_images/7906353-cccedeffa4394893.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>#4、cadvisor 的搭建
+     这个服务主要是将容器的各种信息采集过来，主要是为了解决docker stats的问题(存储、展示)，然后传到prometheus。有关容器日志的相关知识，请自行去学习补充，目前只需要知道，当你采用docker的默认的日志配置时，采用cadvisor是可以采到日志信息的。
+<em><strong>注意：privileged 这个配置选项，必须配置，否则会出现各种报错，如果你想自行折腾了，可以尝试着不去配置</strong></em></p>
+<pre><code>[root@tag yaml]# cat cadvisor.yaml 
+version: '3.1'
+
+services:
+  cadvisor:
+    image: google/cadvisor:v0.33.0
+    container_name: monitor_cadvisor
+    restart: always
+    volumes:
+       - /:/rootfs:ro
+       - /var/run:/var/run:rw
+       - /sys:/sys:ro
+       - /var/lib/docker/:/var/lib/docker:ro
+    ports: 
+      - 8084:8080
+    privileged: true
+[root@tagyaml]#
+[root@tagyaml]#
+[root@tagyaml]#docker-compose -f cadvisor.yaml up -d              #启动容器
+</code></pre><p>http://ip地址:8084
+<img src="https://upload-images.jianshu.io/upload_images/7906353-a6ba90a11831e170.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>#5、elasticsearch 搭建
+     elasticsearch 我这里采用的也是官方提供的镜像，并没有采用第三方的镜像。官方这里提供 的docker-compose安装的配置是采用了集群的形式，我这里就直接拿来使用了。
+     **注意：**elasticsearch 采集到的数据是无法直接交给prometheus进行直接的使用的，需要通过一个中转的 elasticsearch_exporter 插件服务(后面也会进行安装)，才能让prometheus采集到。</p>
+<pre><code>[root@tag yaml]# cat elasticsearch.yaml 
+version: '3.1'
+services:
+  elasticsearch:
+    image: elasticsearch:6.4.3
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - &quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&quot;
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /data/prometheus/elk/data/1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  elasticsearch2:
+    image: elasticsearch:6.4.3
+    container_name: elasticsearch2
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - &quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&quot;
+      - &quot;discovery.zen.ping.unicast.hosts=elasticsearch&quot;
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /data/prometheus/elk/data/2:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+
+#volumes:          #我这里是直接采用的本机目录的形式，当然了，你也可以替换成这种数据卷的形式
+#  esdata1:
+#    driver: local
+#  esdata2:
+#    driver: local
+
+networks:
+  esnet:
+[root@tagyaml]#
+[root@tagyaml]#
+[root@tagyaml]#docker-compose -f elasticsearch.yaml up -d              #启动容器
+</code></pre><p>http://ip地址:9200
+<img src="https://upload-images.jianshu.io/upload_images/7906353-6bd15485528eb23e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>#6、filebeat 的搭建
+     filebeat 的作用主要是将采集到的日志文件发送给刚刚上面搭建的 elasticsearch。</p>
+<pre><code>[root@tag config]# cat filebeat.docker.yml 
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:            # 这里配置所需要进行采集的日志目录
+    - /var/log/syslog          #这里是采集的系统的一些日志
+    - /var/lib/docker/containers/*/*.log        # 这里是采集的docker的一下日志文件
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+setup.kibana:
+
+output.elasticsearch:
+  hosts: [&quot;10.16.88.44:9200&quot;]            将采集到的日志发送到刚刚上面搭建的 elasticsearch 中
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+[root@tag config]# 
+[root@tag config]# 
+[root@tag yaml]# cat filebeat.yaml 
+version: '3.1'
+services:
+  filebeat:
+    image: store/elastic/filebeat:7.0.0
+    restart: always
+    container_name: monitor_filebeat
+    user: root
+    volumes:
+      - /data/prometheus/filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&quot;10.16.88.44:9200&quot;] 
+[root@tagyaml]#
+[root@tagyaml]#
+[root@tagyaml]#docker-compose -f filebeat.yaml up -d              #启动容器
+</code></pre><p>如果采集到数据，可以在这个界面看到：http://ip地址:9200/_search?pretty
+<img src="https://upload-images.jianshu.io/upload_images/7906353-2c919e3aec570c0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>#7、elasticsearch_exporter 的搭建
+     filebeat 已经将日志采集到 elasticsearch 中了，那么prometheus怎么才能拿到elasticsearch 中的日志呢？通过刚刚暴露的9200端口？你可以自己尝试着这样配置一下，看看是否可以取到相关的日志信息，顺便看看prometheus默认取的是elasticsearch 9200端口的哪个页面的日志信息。
+     <em><strong>elasticsearch_exporter</strong></em> 的作用是将elasticsearch 9200端口的日志文件，处理成prometheus 可以直接采集的数据。然后交给9108进行暴露。(这一段纯属博主猜测，并未去看真正的源代码，如有解读错误，还请各位指出)。</p>
+<pre><code>[root@tag yaml]# cat elasticsearch_exporter.yaml 
+version: '3.1'
+
+services:
+  elasticsearch_exporter:
+    image: justwatch/elasticsearch_exporter:1.0.2
+    container_name: monitor_elasticsearch_exporter
+    command:
+      - '-es.uri=http://10.16.48.44:9200'
+    restart: always
+    ports:
+      - 9108:9108
+[root@tagyaml]#
+[root@tagyaml]#
+[root@tagyaml]#docker-compose -f elasticsearch_exporter.yaml up -d              #启动容器
+</code></pre><p>http://ip地址:9108/
+<img src="https://upload-images.jianshu.io/upload_images/7906353-b6f5675d59393bf6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png">
+这是转发后的页面：http://ip地址:9108/metrics
+<img src="https://upload-images.jianshu.io/upload_images/7906353-56444b92d37a044f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>#8、node-exporter 的搭建
+     上面采集了容器的信息、容器的日志信息，那么服务器自己本身的信息怎么办？prometheus 官方提供了 <em><strong>node-exporter</strong></em> 这个组件进行服务器底层信息的采集。</p>
+<pre><code>[root@tag yaml]# cat node-exporter.yaml 
+version: '3.1'
+
+services:
+  node-exporter:
+    image: prom/node-exporter:v0.17.0
+    container_name: monitor_node-exporter
+    restart: always
+    ports:
+      - 9100:9100
+[root@tagyaml]#
+[root@tagyaml]#
+[root@tagyaml]#docker-compose -f node-exporter.yaml up -d              #启动容器
+</code></pre><p>http://ip地址:9100/metrics
+<img src="https://upload-images.jianshu.io/upload_images/7906353-3cf7e64cf235060d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p>***通过这个页面：***http://10.16.88.44:9090/targets，可以看到四个数据源到已经连接到了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7906353-080da1107ebd2f9a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E9%83%A8%E7%BD%B2/">部署</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" data-tooltip="docker容器安装部署">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/" data-tooltip="jenkins自动化构建部署">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" data-tooltip="docker容器安装部署">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/jenkins%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/" data-tooltip="jenkins自动化构建部署">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fdocker%25E6%2590%25AD%25E5%25BB%25BAprometheus-grafana%25E7%259B%2591%25E6%258E%25A7%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fdocker%25E6%2590%25AD%25E5%25BB%25BAprometheus-grafana%25E7%259B%2591%25E6%258E%25A7%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fdocker%25E6%2590%25AD%25E5%25BB%25BAprometheus-grafana%25E7%259B%2591%25E6%258E%25A7%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7\/';
+          
+            this.page.identifier = '\/2020\/06\/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

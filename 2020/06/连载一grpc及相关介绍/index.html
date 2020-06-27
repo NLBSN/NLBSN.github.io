@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="作为开篇章，将会介绍 gRPC 相关的一些知识。简单来讲 gRPC 是一个 基于 HTTP/2 协议设计的 RPC 框架，它采用了 Protobuf 作为 IDL
+你是否有过疑惑，它们都是些什么？本文将会介绍一些常用的知识和概念，更详细的会给出手册地址去深入">
+
+
+<meta property="og:description" content="作为开篇章，将会介绍 gRPC 相关的一些知识。简单来讲 gRPC 是一个 基于 HTTP/2 协议设计的 RPC 框架，它采用了 Protobuf 作为 IDL
+你是否有过疑惑，它们都是些什么？本文将会介绍一些常用的知识和概念，更详细的会给出手册地址去深入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「连载一」gRPC及相关介绍">
+<meta name="twitter:title" content="「连载一」gRPC及相关介绍">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="作为开篇章，将会介绍 gRPC 相关的一些知识。简单来讲 gRPC 是一个 基于 HTTP/2 协议设计的 RPC 框架，它采用了 Protobuf 作为 IDL
+你是否有过疑惑，它们都是些什么？本文将会介绍一些常用的知识和概念，更详细的会给出手册地址去深入">
+<meta name="twitter:description" content="作为开篇章，将会介绍 gRPC 相关的一些知识。简单来讲 gRPC 是一个 基于 HTTP/2 协议设计的 RPC 框架，它采用了 Protobuf 作为 IDL
+你是否有过疑惑，它们都是些什么？本文将会介绍一些常用的知识和概念，更详细的会给出手册地址去深入">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-24T12:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-24T12:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="golang">
+    
+      <meta property="article:section" content="grpc">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="grpc">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200626101651.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200626101651.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>「连载一」gRPC及相关介绍</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      「连载一」gRPC及相关介绍
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-24T12:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月24日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/golang">golang</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/grpc">grpc</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>作为开篇章，将会介绍 gRPC 相关的一些知识。简单来讲 gRPC 是一个 基于 HTTP/2 协议设计的 RPC 框架，它采用了 Protobuf 作为 IDL</p>
+<p>你是否有过疑惑，它们都是些什么？本文将会介绍一些常用的知识和概念，更详细的会给出手册地址去深入</p>
+<blockquote>
+<p>转载自：https://eddycjy.com/</p>
+<p>于原文章写的时间有点长，这里会做一些更新。</p>
+<p>项目地址：https://github.com/EDDYCJY/go-grpc-example</p>
+</blockquote>
+<h2 id="一rpc">一、RPC</h2>
+<h3 id="什么是-rpc">什么是 RPC</h3>
+<p>RPC 代指远程过程调用（Remote Procedure Call），它的调用包含了传输协议和编码（对象序列号）协议等等。允许运行于一台计算机的程序调用另一台计算机的子程序，而开发人员无需额外地为这个交互作用编程</p>
+<h4 id="实际场景">实际场景：</h4>
+<p>有两台服务器，分别是 A、B。在 A 上的应用 C 想要调用 B 服务器上的应用 D，它们可以直接本地调用吗？<br>
+答案是不能的，但走 RPC 的话，十分方便。因此常有人称使用 RPC，就跟本地调用一个函数一样简单</p>
+<h3 id="rpc-框架">RPC 框架</h3>
+<p>我认为，一个完整的 RPC 框架，应包含负载均衡、服务注册和发现、服务治理等功能，并具有可拓展性便于流量监控系统等接入<br>
+那么它才算完整的，当然了。有些较单一的 RPC 框架，通过组合多组件也能达到这个标准</p>
+<p>你认为呢？</p>
+<h3 id="常见-rpc-框架">常见 RPC 框架</h3>
+<ul>
+<li><a href="https://grpc.io/">gRPC</a></li>
+<li><a href="https://github.com/apache/thrift">Thrift</a></li>
+<li><a href="https://github.com/smallnest/rpcx">Rpcx</a></li>
+<li><a href="https://github.com/apache/incubator-dubbo">Dubbo</a></li>
+</ul>
+<h3 id="比较一下">比较一下</h3>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>跨语言</th>
+<th>多 IDL</th>
+<th>服务治理</th>
+<th>注册中心</th>
+<th>服务管理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gRPC</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>Thrift</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>Rpcx</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>Dubbo</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<h3 id="为什么要-rpc">为什么要 RPC</h3>
+<p>简单、通用、安全、效率</p>
+<h3 id="rpc-可以基于-http-吗">RPC 可以基于 HTTP 吗</h3>
+<p>RPC 是代指远程过程调用，是可以基于 HTTP 协议的</p>
+<p>肯定会有人说效率优势，我可以告诉你，那是基于 HTTP/1.1 来讲的，HTTP/2 优化了许多问题（当然也存在新的问题），所以你看到了本文的主题 gRPC</p>
+<h2 id="二protobuf">二、Protobuf</h2>
+<h3 id="介绍">介绍</h3>
+<p>Protocol Buffers 是一种与语言、平台无关，可扩展的序列化结构化数据的方法，常用于通信协议，数据存储等等。相较于 JSON、XML，它更小、更快、更简单，因此也更受开发人员的青眯</p>
+<h3 id="语法">语法</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">syntax</span> = <span style="color:#e6db74">&#34;proto3&#34;</span>;
+
+<span style="color:#a6e22e">service</span> <span style="color:#a6e22e">SearchService</span> {
+    <span style="color:#a6e22e">rpc</span> <span style="color:#a6e22e">Search</span> (<span style="color:#a6e22e">SearchRequest</span>) <span style="color:#a6e22e">returns</span> (<span style="color:#a6e22e">SearchResponse</span>);
+}
+
+<span style="color:#a6e22e">message</span> <span style="color:#a6e22e">SearchRequest</span> {
+  <span style="color:#66d9ef">string</span> <span style="color:#a6e22e">query</span> = <span style="color:#ae81ff">1</span>;
+  <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">page_number</span> = <span style="color:#ae81ff">2</span>;
+  <span style="color:#66d9ef">int32</span> <span style="color:#a6e22e">result_per_page</span> = <span style="color:#ae81ff">3</span>;
+}
+
+<span style="color:#a6e22e">message</span> <span style="color:#a6e22e">SearchResponse</span> {
+    <span style="color:#f92672">...</span>
+}
+</code></pre></div><p>1、第一行（非空的非注释行）声明使用 <code>proto3</code> 语法。如果不声明，将默认使用 <code>proto2</code> 语法。同时我建议用 v2 还是 v3，都应当声明其使用的版本</p>
+<p>2、定义 <code>SearchService</code> RPC 服务，其包含 RPC 方法 <code>Search</code>，入参为 <code>SearchRequest</code> 消息，出参为 <code>SearchResponse</code> 消息</p>
+<p>3、定义 <code>SearchRequest</code>、<code>SearchResponse</code> 消息，前者定义了三个字段，每一个字段包含三个属性：类型、字段名称、字段编号</p>
+<p>4、Protobuf 编译器会根据选择的语言不同，生成相应语言的 Service Interface Code 和 Stubs</p>
+<p>最后，这里只是简单的语法介绍，详细的请右拐 <a href="https://developers.google.com/protocol-buffers/docs/proto3">
+Language Guide (proto3)</a></p>
+<h3 id="数据类型">数据类型</h3>
+<table>
+<thead>
+<tr>
+<th>.proto Type</th>
+<th>C++ Type</th>
+<th>Java Type</th>
+<th>Go Type</th>
+<th>PHP Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>double</td>
+<td>double</td>
+<td>double</td>
+<td>float64</td>
+<td>float</td>
+</tr>
+<tr>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float32</td>
+<td>float</td>
+</tr>
+<tr>
+<td>int32</td>
+<td>int32</td>
+<td>int</td>
+<td>int32</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>int64</td>
+<td>int64</td>
+<td>long</td>
+<td>int64</td>
+<td>integer/string</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>uint32</td>
+<td>int</td>
+<td>uint32</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>uint64</td>
+<td>long</td>
+<td>uint64</td>
+<td>integer/string</td>
+</tr>
+<tr>
+<td>sint32</td>
+<td>int32</td>
+<td>int</td>
+<td>int32</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>sint64</td>
+<td>int64</td>
+<td>long</td>
+<td>int64</td>
+<td>integer/string</td>
+</tr>
+<tr>
+<td>fixed32</td>
+<td>uint32</td>
+<td>int</td>
+<td>uint32</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>fixed64</td>
+<td>uint64</td>
+<td>long</td>
+<td>uint64</td>
+<td>integer/string</td>
+</tr>
+<tr>
+<td>sfixed32</td>
+<td>int32</td>
+<td>int</td>
+<td>int32</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>sfixed64</td>
+<td>int64</td>
+<td>long</td>
+<td>int64</td>
+<td>integer/string</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>bool</td>
+<td>boolean</td>
+<td>bool</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>string</td>
+<td>string</td>
+<td>String</td>
+<td>string</td>
+<td>string</td>
+</tr>
+<tr>
+<td>bytes</td>
+<td>string</td>
+<td>ByteString</td>
+<td>[]byte</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h3 id="v2-和-v3-主要区别">v2 和 v3 主要区别</h3>
+<ul>
+<li>删除原始值字段的字段存在逻辑</li>
+<li>删除 required 字段</li>
+<li>删除 optional 字段，默认就是</li>
+<li>删除 default 字段</li>
+<li>删除扩展特性，新增 Any 类型来替代它</li>
+<li>删除 unknown 字段的支持</li>
+<li>新增 <a href="https://developers.google.com/protocol-buffers/docs/proto3#json">JSON Mapping</a></li>
+<li>新增 Map 类型的支持</li>
+<li>修复 enum 的 unknown 类型</li>
+<li>repeated 默认使用 packed 编码</li>
+<li>引入了新的语言实现（C＃，JavaScript，Ruby，Objective-C）</li>
+</ul>
+<p>以上是日常涉及的常见功能，如果还想详细了解可阅读 <a href="https://github.com/protocolbuffers/protobuf/releases?after=v3.2.1">Protobuf Version 3.0.0</a></p>
+<h3 id="相较-protobuf为什么不使用-xml">相较 Protobuf，为什么不使用 XML？</h3>
+<ul>
+<li>更简单</li>
+<li>数据描述文件只需原来的 1/10 至 1/3</li>
+<li>解析速度是原来的 20 倍至 100 倍</li>
+<li>减少了二义性</li>
+<li>生成了更易使用的数据访问类</li>
+</ul>
+<h2 id="三grpc">三、gRPC</h2>
+<h3 id="介绍-1">介绍</h3>
+<ul>
+<li>gRPC 是一个高性能、开源和通用的 RPC 框架，面向移动和 HTTP/2 设计，带来诸如双向流、流控、头部压缩、单 TCP 连接上的多复用请求等特。这些特性使得其在移动设备上表现更好，更省电和节省空间占用。</li>
+<li>在 gRPC 里客户端应用可以像调用本地对象一样直接调用另一台不同的机器上服务端应用的方法，使得您能够更容易地创建分布式应用和服务。</li>
+<li>gRPC 默认使用 protocol buffers，这是 Google 开源的一套成熟的结构数据序列化机制，它的作用与 XML、json 类似，但它是二进制格式，性能好、效率高（缺点：可读性差）。</li>
+</ul>
+<h4 id="多语言">多语言</h4>
+<ul>
+<li>C++</li>
+<li>C#</li>
+<li>Dart</li>
+<li>Go</li>
+<li>Java</li>
+<li>Node.js</li>
+<li>Objective-C</li>
+<li>PHP</li>
+<li>Python</li>
+<li>Ruby</li>
+</ul>
+<h4 id="特点">特点</h4>
+<p>1、HTTP/2</p>
+<p>2、Protobuf</p>
+<p>3、客户端、服务端基于同一份 IDL</p>
+<p>4、移动网络的良好支持</p>
+<p>5、支持多语言</p>
+<h3 id="概览">概览</h3>
+<p><img src="https://image.eddycjy.com/7dcac5be0a34636c699025368242d3f3.png" alt="image"></p>
+<h3 id="讲解">讲解</h3>
+<p>1、客户端（gRPC Sub）调用 A 方法，发起 RPC 调用</p>
+<p>2、对请求信息使用 Protobuf 进行对象序列化压缩（IDL）</p>
+<p>3、服务端（gRPC Server）接收到请求后，解码请求体，进行业务逻辑处理并返回</p>
+<p>4、对响应结果使用 Protobuf 进行对象序列化压缩（IDL）</p>
+<p>5、客户端接受到服务端响应，解码请求体。回调被调用的 A 方法，唤醒正在等待响应（阻塞）的客户端调用并返回响应结果</p>
+<h3 id="示例">示例</h3>
+<p>在这一小节，将简单的给大家展示 gRPC 的客户端和服务端的示例代码，希望大家先有一个基础的印象，将会在下一章节详细介绍 🤔</p>
+<h4 id="构建和启动服务端">构建和启动服务端</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">lis</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;:%d&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">port</span>))
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to listen: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+}
+
+<span style="color:#a6e22e">grpcServer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">grpc</span>.<span style="color:#a6e22e">NewServer</span>()
+<span style="color:#f92672">...</span>
+<span style="color:#a6e22e">pb</span>.<span style="color:#a6e22e">RegisterSearchServer</span>(<span style="color:#a6e22e">grpcServer</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">SearchServer</span>{})
+<span style="color:#a6e22e">grpcServer</span>.<span style="color:#a6e22e">Serve</span>(<span style="color:#a6e22e">lis</span>)
+</code></pre></div><p>1、监听指定 TCP 端口，用于接受客户端请求</p>
+<p>2、创建 gRPC Server 的实例对象</p>
+<p>3、gRPC Server 内部服务和路由的注册</p>
+<p>4、Serve() 调用服务器以执行阻塞等待，直到进程被终止或被 Stop() 调用</p>
+<h4 id="创建客户端">创建客户端</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">opts</span> []<span style="color:#a6e22e">grpc</span>.<span style="color:#a6e22e">DialOption</span>
+<span style="color:#f92672">...</span>
+<span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">grpc</span>.<span style="color:#a6e22e">Dial</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">serverAddr</span>, <span style="color:#a6e22e">opts</span><span style="color:#f92672">...</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;fail to dial: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+}
+
+<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Close</span>()
+<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">pb</span>.<span style="color:#a6e22e">NewSearchClient</span>(<span style="color:#a6e22e">conn</span>)
+<span style="color:#f92672">...</span>
+</code></pre></div><p>1、创建 gRPC Channel 与 gRPC Server 进行通信（需服务器地址和端口作为参数）</p>
+<p>2、设置 DialOptions 凭证（例如，TLS，GCE 凭据，JWT 凭证）</p>
+<p>3、创建 Search Client Stub</p>
+<p>4、调用对应的服务方法</p>
+<h2 id="思考题">思考题</h2>
+<p>1、什么场景下不适合使用 Protobuf，而适合使用 JSON、XML？</p>
+<p>2、Protobuf 一节中提到的 packed 编码，是什么？</p>
+<h2 id="总结">总结</h2>
+<p>在开篇内容中，我利用了尽量简短的描述给你介绍了接下来所必须、必要的知识点
+希望你能够有所收获，建议能到我给的参考资料处进行深入学习，是最好的了</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://developers.google.com/protocol-buffers/docs/proto3">Protocol Buffers</a></li>
+<li><a href="https://grpc.io/docs/">gRPC</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/grpc/">grpc</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%8Cgrpc-client-and-server/" data-tooltip="「连载二」gRPC Client and Server">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/" data-tooltip="windows自带的linux子系统进行安装docker">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%8Cgrpc-client-and-server/" data-tooltip="「连载二」gRPC Client and Server">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/" data-tooltip="windows自带的linux子系统进行安装docker">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E4%25B8%2580grpc%25E5%258F%258A%25E7%259B%25B8%25E5%2585%25B3%25E4%25BB%258B%25E7%25BB%258D%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E4%25B8%2580grpc%25E5%258F%258A%25E7%259B%25B8%25E5%2585%25B3%25E4%25BB%258B%25E7%25BB%258D%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E4%25B8%2580grpc%25E5%258F%258A%25E7%259B%25B8%25E5%2585%25B3%25E4%25BB%258B%25E7%25BB%258D%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D\/';
+          
+            this.page.identifier = '\/2020\/06\/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

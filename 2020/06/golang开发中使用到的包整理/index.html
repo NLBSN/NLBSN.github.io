@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="​    开发中使用过或者感兴趣的包。">
+
+
+<meta property="og:description" content="​    开发中使用过或者感兴趣的包。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang开发中使用到的包整理">
+<meta name="twitter:title" content="golang开发中使用到的包整理">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="​    开发中使用过或者感兴趣的包。">
+<meta name="twitter:description" content="​    开发中使用过或者感兴趣的包。">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-22T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-22T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="golang">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622200041.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622200041.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>golang开发中使用到的包整理</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      golang开发中使用到的包整理
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-22T00:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月22日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/golang">golang</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>​    开发中使用过或者感兴趣的包。</p>
+<h2 id="闲看">闲看：</h2>
+<p><a href="https://github.com/eddycjy/blog">eddycjy/blog</a>：煎鱼的博客，有点忙，传送门：<a href="https://eddycjy.com/">https://eddycjy.com</a></p>
+<p><a href="https://bingjian-zhu.github.io/">烟花易冷</a>：go分享</p>
+<p><a href="https://github.com/pibigstar/go-demo">pibigstar/go-demo</a>：Go语言实例教程从入门到进阶，包括基础库使用、设计模式、面试易错点、工具类、对接第三方等</p>
+<p><a href="http://doc.oschina.net/grpc">grpc官方文档中文版</a>：<a href="http://www.oschina.net/p/grpc-framework">gRPC</a>  是一个高性能、开源和通用的 RPC 框架，面向移动和 HTTP/2 设计。目前提供 C、Java 和 Go 语言版本，分别是：grpc, grpc-java, grpc-go. 其中 C 版本支持 C, C++, Node.js, Python, Ruby, Objective-C, PHP 和 C# 支持。gRPC 基于 HTTP/2 标准设计，带来诸如双向流、流控、头部压缩、单 TCP 连接上的多复用请求等特。这些特性使得其在移动设备上表现更好，更省电和节省空间占用。</p>
+<h2 id="资讯类">资讯类</h2>
+<p><a href="https://github.com/1046102779/prometheus">1046102779/prometheus</a>：Prometheus官网的非官方中文手册，旨在为大家提供一个比较容易入手的文档。翻译得不好，请大家多多包涵，并帮忙修订校正</p>
+<p><a href="https://github.com/Alikhll/golang-developer-roadmap">golang-developer-roadmap</a>：在 2020年 成为一名 <a href="https://golang.org/">Go</a> 开发者的路线图</p>
+<p><a href="https://github.com/tuvtran/project-based-learning">project-based-learning</a>：精选的基于项目的教程列表</p>
+<p><a href="https://github.com/hackstoic/golang-open-source-projects">awesome-go</a>：为互联网IT人打造的中文版awesome-go</p>
+<p><a href="https://github.com/avelino/awesome-go">awesome-go</a>：精选的Go框架，库和软件的精选列表 <a href="https://awesome-go.com/">https://awesome-go.com/</a></p>
+<p><a href="https://github.com/TeamStuQ/skill-map">skill-map</a>：程序员技能图谱</p>
+<p><a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts">GitHub-Chinese-Top-Charts</a>：GitHub中文排行榜，帮助你发现高分优秀中文项目</p>
+<p><a href="https://github.com/hwholiday/learning_tools">learning_tools</a>：Go 学习、Go 进阶、Go 实用工具类、Go-kit ，Go-Micro 微服务实践、Go 推送 <a href="https://www.hwholiday.com/">https://www.hwholiday.com/</a></p>
+<p><a href="https://github.com/astaxie/build-web-application-with-golang">build-web-application-with-golang</a>：Golang电子书介绍如何使用Golang构建网络&ndash;<strong>可以多看看</strong></p>
+<p><a href="https://github.com/overnote/over-algorithm">over-algorithm</a>：数据结构与算法相关：[进度40%]以Go语言描述数据结构与算法，同时附带C、JS版本</p>
+<p><a href="https://github.com/overnote/over-golang"> over-golang</a>：Golang相关：[进度80%]Go语法、Go并发思想、Go与web开发、Go微服务设施等</p>
+<p><a href="https://github.com/jiujuan/go-collection">go-collection</a>：更牛逼，集合了上面的这些，和网上各种资源</p>
+<h2 id="工具类库">工具类库：</h2>
+<p><a href="https://github.com/grpc-ecosystem/go-grpc-middleware">go-grpc-middleware</a>：Golang gRPC中间件：拦截器链接，身份验证，日志记录，重试等。</p>
+<p><a href="https://github.com/protocolbuffers/protobuf-go">protobuf-go</a>：第二版（推荐使用）：golang支持Google的协议缓冲区</p>
+<p><a href="https://github.com/golang/protobuf">protobuf</a>：第一版(慢慢被取代)：golang支持Google的协议缓冲区</p>
+<p><a href="https://github.com/protocolbuffers/protobuf">protobuf</a>：协议缓冲区-Google的数据交换格式</p>
+<p><a href="https://github.com/docker/go-units">go-units</a>：以人类可读的格式解析并打印大小和时间单位</p>
+<p><a href="https://github.com/dustin/go-humanize">go-humanize</a>：以人类可读的格式解析并打印大小单位</p>
+<p><a href="https://github.com/Shopify/sarama">sarama</a>：kafka的客户端库</p>
+<p><a href="https://github.com/mongodb/mongo-go-driver">mongo-go-driver</a>：MongoDB的Go驱动程序</p>
+<p><a href="https://github.com/go-yaml/yaml">yaml</a>：yaml文件解析</p>
+<p><a href="https://github.com/fsnotify/fsnotify">fsnotify/fsnotify</a>：Go的跨平台文件系统通知。</p>
+<p><a href="https://github.com/shirou/gopsutil">shirou/gopsutil</a>：获取各个平台的一些监控信息</p>
+<p><a href="https://github.com/json-iterator/go">json-iterator</a>：高性能100％兼容的“ encoding / json”替代产品</p>
+<p><a href="https://github.com/buger/jsonparser">jsonparser</a>：Go的不需要模式的替代JSON解析器（到目前为止最快）</p>
+<p><a href="https://github.com/swaggo/swag">swaggo/swag</a>：使用Swagger 2.0 for Go自动生成RESTful API文档。</p>
+<p><a href="https://github.com/urfave/cli">urfave/cli</a>：一个简单，快速，有趣的软件包，用于在Go中构建命令行应用</p>
+<p><a href="https://github.com/volatiletech/authboss">authboss</a>：Authboss是用于Web的模块化身份验证系统。</p>
+<p><a href="https://github.com/ftpgrab/ftpgrab">ftpgrab</a>：定期从远程FTP或SFTP服务器轻松获取文件</p>
+<p><a href="https://github.com/grpc/grpc-go">grpc-go</a>：gRPC的Go语言实现。基于HTTP / 2的RPC</p>
+<p><a href="https://github.com/GopherCoder/Go-Spider">Go-Spider</a>：写爬虫时一些参考的项目</p>
+<p><a href="https://github.com/PuerkitoBio/goquery">goquery</a>：html页面解析</p>
+<p><a href="https://github.com/gocolly/colly">colly</a>：Gophers的闪电般快速且优雅的抓取框架</p>
+<p><a href="https://github.com/spf13/cobra">cobra</a>：Cobra既是用于创建功能强大的现代CLI应用程序的库，又是用于生成应用程序和命令文件的程序。</p>
+<p><a href="https://github.com/go-gorm/gorm">gorm</a>：用于Golang的出色的ORM库，旨在对开发人员友好</p>
+<p><a href="https://github.com/rakyll/statik"> statik</a>：statik允许您将静态文件目录嵌入Go二进制文件中，以便以后从http.FileSystem提供服务。</p>
+<p><a href="https://github.com/mattn/go-gtk">go-gtk</a>：gtk</p>
+<p>[go-chart](go chart is a basic charting library in native golang.)：go chart是本机golang中的基本图表库。</p>
+<p><a href="https://github.com/adnanh/webhook">webhook</a>：webhook是轻量级传入的webhook服务器，用于运行shell命令</p>
+<p><a href="https://github.com/leeli73/goFileView">goFileView</a>：Online Preview Word,Excel,PPT,PDF,Image by Golang.基于Golang的在线预览Word,Excel,PPT,PDF,图片.</p>
+<p><a href="https://github.com/fyne-io/fyne">fyne</a>：为移动和桌面构建漂亮的应用程序</p>
+<p><a href="https://github.com/therecipe/qt">qt</a>：<a href="https://en.wikipedia.org/wiki/Qt_(software)">Qt</a>是一个免费的开源小部件工具包，用于创建图形用户界面以及跨平台的应用程序，这些应用程序可以在各种软件和硬件平台上运行，而底层代码库几乎没有变化。</p>
+<h2 id="框架">框架</h2>
+<p><a href="https://github.com/yangchuansheng/envoy-handbook">envoy</a>：<strong>网络代理包</strong>&ndash;重点关注</p>
+<p><a href="https://github.com/go-kratos/kratos">kratos</a>：Kratos是bilibili开源的一套Go微服务框架，包含大量微服务相关框架及工具。</p>
+<p><a href="https://github.com/gogf/gf">gf</a>：GoFrame是golang的模块化，强大，高性能和可用于生产的应用程序开发框架。</p>
+<p><a href="https://github.com/flipped-aurora/gin-vue-admin">gin-vue-admin</a>：Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。</p>
+<p><a href="https://github.com/crawlab-team/crawlab">crawlab</a>：用于蜘蛛管理的分布式Web爬网程序管理平台，与语言和框架无关。分布式爬虫管理平台，支持任何语言和框架 <a href="https://crawlab.cn/">https://crawlab.cn</a></p>
+<p><a href="https://github.com/aceld/zinx">zinx</a>：基于Golang轻量级TCP并发服务器框架</p>
+<h2 id="非golang">非golang</h2>
+<p><a href="https://github.com/heibaiying/BigData-Notes">heibaiying/BigData-Notes</a>：大数据入门指南&mdash;&mdash;-一个很不错的项目，将大数据平台的好多框架都做了编写</p>
+<p><a href="https://github.com/eip-work/kuboard-press">eip-work/kuboard-press</a>：Kuboard 是基于 Kubernetes 的微服务管理界面。同时提供 Kubernetes 免费中文教程，入门教程，最新版本的 Kubernetes v1.18 安装手册，(k8s install) 在线答疑，持续更新。 <a href="https://kuboard.cn/">https://kuboard.cn/</a></p>
+<p><a href="https://github.com/Molunerfinn/PicGo">PicGo</a>：由vue-cli-electron-builder <a href="https://molunerfinn.com/PicGo/">https://molunerfinn.com/PicGo/</a>构建的简单而精美的图片上传工具</p>
+<p><a href="https://github.com/gildas-lormeau/JSONView-for-Chrome">JSONView-for-Chrome</a>：JSONView为Chrome</p>
+<p><a href="https://github.com/makelove">程序员赚钱指南</a></p>
+<p><a href="https://github.com/aqzt/kjyw">kjyw</a>：快捷运维，代号kjyw，项目基于shell、python，运维脚本工具库，收集各类运维常用工具脚本，实现快速安装nginx、mysql、php、redis、nagios、运维经常使用的脚本等等&hellip; <a href="https://aq2.cn/c/kjyw">https://aq2.cn/c/kjyw</a></p>
+<p><a href="https://github.com/coregear/linux">linux</a>：运维笔记(&mdash;-早已停止更新)</p>
+<p><a href="https://github.com/DjangoPeng/tensorflow-101">tensorflow-101</a>：《TensorFlow 快速入门与实战》和《TensorFlow 2 项目进阶实战》课程代码与课件</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/golang/">golang</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/" data-tooltip="windows自带的linux子系统进行安装docker">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/" data-tooltip="golang中cgo的使用">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/" data-tooltip="windows自带的linux子系统进行安装docker">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/" data-tooltip="golang中cgo的使用">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fgolang%25E5%25BC%2580%25E5%258F%2591%25E4%25B8%25AD%25E4%25BD%25BF%25E7%2594%25A8%25E5%2588%25B0%25E7%259A%2584%25E5%258C%2585%25E6%2595%25B4%25E7%2590%2586%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fgolang%25E5%25BC%2580%25E5%258F%2591%25E4%25B8%25AD%25E4%25BD%25BF%25E7%2594%25A8%25E5%2588%25B0%25E7%259A%2584%25E5%258C%2585%25E6%2595%25B4%25E7%2590%2586%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fgolang%25E5%25BC%2580%25E5%258F%2591%25E4%25B8%25AD%25E4%25BD%25BF%25E7%2594%25A8%25E5%2588%25B0%25E7%259A%2584%25E5%258C%2585%25E6%2595%25B4%25E7%2590%2586%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86\/';
+          
+            this.page.identifier = '\/2020\/06\/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

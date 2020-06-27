@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="使用windows商店提供的ubuntu内置系统进行安装docker">
+
+
+<meta property="og:description" content="使用windows商店提供的ubuntu内置系统进行安装docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows自带的linux子系统进行安装docker">
+<meta name="twitter:title" content="windows自带的linux子系统进行安装docker">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="使用windows商店提供的ubuntu内置系统进行安装docker">
+<meta name="twitter:description" content="使用windows商店提供的ubuntu内置系统进行安装docker">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-23T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-23T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="容器">
+    
+      <meta property="article:section" content="docker">
+    
+  
+  
+    
+      <meta property="article:tag" content="容器">
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="windows">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>windows自带的linux子系统进行安装docker</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      windows自带的linux子系统进行安装docker
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-23T00:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月23日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/%e5%ae%b9%e5%99%a8">容器</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/docker">docker</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>使用windows商店提供的ubuntu内置系统进行安装docker</p>
+<!-- raw HTML omitted -->
+<blockquote>
+<p>主要分为几个步骤</p>
+<ol>
+<li>调整windows10的设置，运行内置的linux子系统</li>
+<li>从微软商店下载ubuntu子系统</li>
+<li>ubuntu安装docker</li>
+<li>测试</li>
+</ol>
+</blockquote>
+<h1 id="一windows设置更改">一、windows设置更改</h1>
+<ol>
+<li>
+<p>将linux子系统的设置打开
+在如下图的位置，如果不知道，请自行百度。Telnet客户端也打开，方便之后做一些端口的排错。</p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200624202205.png" alt="img"></p>
+</li>
+<li>
+<p>直接阅读官方文档</p>
+<ul>
+<li>
+<p><a href="https://docs.microsoft.com/zh-cn/windows/wsl/install-win10">适用于 Linux 的 Windows 子系统安装指南 (Windows 10)</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/zh-cn/windows/wsl/wsl2-kernel">更新 WSL 2 Linux 内核</a>
+我写这篇文章的时候，官方要求的最新的是
+<img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200624201611.png" alt="img"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>安装ubuntu子系统
+推荐选择我图中所示的，当然了，你选择其他的也可以，无非就是试试错</p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200624202653.png" alt="img">
+安装完毕之后，会在这里可以找得到：</p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200624202916.png" alt="img">
+点击，打开即可</p>
+</li>
+<li>
+<p>在ubuntu中运行docker网上有很多的关于先下载windows版docker，利用它的服务，然后在ubuntu中执行命令的教程，看的我很是头大，哈哈。
+<strong>这里给一个直接在ubuntu中安装docker的过程</strong>
+注：自己的安装过程有点忘记了，这里放出了docker官方的&mdash;（到2020年6月25日左右，微软官方最新的linux内置子系统ubuntu是直接支持docker安装的，下面写的那个自己参考的博客应该是没啥用，但我懒得折腾，就不去重新去做试验了）</p>
+</li>
+</ol>
+<pre><code>   $ sudo apt-get remove docker docker-engine docker.io containerd runc
+   $ sudo apt-get update
+   $ sudo apt-get install \
+       apt-transport-https \
+       ca-certificates \
+       curl \
+       gnupg-agent \
+       software-properties-common
+   $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+   $ sudo apt-key fingerprint 0EBFCD88
+   $ sudo add-apt-repository \
+      &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) \
+      stable&quot;
+   $ sudo apt-get update
+   $ sudo apt-get install docker-ce docker-ce-cli containerd.io
+</code></pre><p>自己的参考的是这个：</p>
+<pre><code>   $ wget https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_17.09.0~ce-0~ubuntu_amd64.deb -P /tmp/
+   $ sudo dpkg -i /tmp/docker-ce_17.09.0~ce-0~ubuntu_amd64.deb
+   $ sudo apt -y -f install
+   $ sudo usermod -aG docker $USER
+   $ sudo apt -y install cgroupfs-mount
+   $ sudo cgroupfs-mount
+   $ sudo service docker start
+   $ sudo docker run --rm hello-world
+</code></pre><p>参考自：https://blog.51cto.com/juestnow/2418932</p>
+<ol start="5">
+<li>
+<p>测试
+查看ubuntu的ip地址
+<img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200624205821.png" alt="img"></p>
+<pre><code>$ sudo docker run -p 8080:80 nginx
+</code></pre><p>本机浏览器访问：</p>
+<pre><code>http://172.29.157.192:8080/
+</code></pre><p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200624205925.png" alt="img"></p>
+<p><strong>但是     但是     但是</strong>       你会发现也是可以访问的。哈哈 自己去解密把</p>
+<pre><code>http://localhost:8080/
+</code></pre><p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200625204310.png" alt="img"></p>
+<p>大功告成~~~</p>
+</li>
+</ol>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/windows/">windows</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" data-tooltip="「连载一」gRPC及相关介绍">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/" data-tooltip="golang开发中使用到的包整理">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%80grpc%E5%8F%8A%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" data-tooltip="「连载一」gRPC及相关介绍">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/golang%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E5%8C%85%E6%95%B4%E7%90%86/" data-tooltip="golang开发中使用到的包整理">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fwindows%25E8%2587%25AA%25E5%25B8%25A6%25E7%259A%2584linux%25E5%25AD%2590%25E7%25B3%25BB%25E7%25BB%259F%25E8%25BF%259B%25E8%25A1%258C%25E5%25AE%2589%25E8%25A3%2585docker%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fwindows%25E8%2587%25AA%25E5%25B8%25A6%25E7%259A%2584linux%25E5%25AD%2590%25E7%25B3%25BB%25E7%25BB%259F%25E8%25BF%259B%25E8%25A1%258C%25E5%25AE%2589%25E8%25A3%2585docker%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2Fwindows%25E8%2587%25AA%25E5%25B8%25A6%25E7%259A%2584linux%25E5%25AD%2590%25E7%25B3%25BB%25E7%25BB%259F%25E8%25BF%259B%25E8%25A1%258C%25E5%25AE%2589%25E8%25A3%2585docker%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker\/';
+          
+            this.page.identifier = '\/2020\/06\/windows%E8%87%AA%E5%B8%A6%E7%9A%84linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85docker\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

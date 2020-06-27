@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渣吧，少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。">
+
+
+<meta property="og:description" content="​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「连载六」Unary and Stream interceptor">
+<meta name="twitter:title" content="「连载六」Unary and Stream interceptor">
+<meta property="og:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:description" content="​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。">
+<meta name="twitter:description" content="​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-06-24T17:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-06-24T17:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="golang">
+    
+      <meta property="article:section" content="grpc">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="grpc">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200626101651.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200626101651.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png">
+
+
+    <title>「连载六」Unary and Stream interceptor</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      「连载六」Unary and Stream interceptor
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-06-24T17:00:00Z">
+        
+  
+  
+  
+  
+    2020年6月24日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/golang">golang</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/grpc">grpc</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。</p>
+<p>在 gRPC 中，大类可分为两种 RPC 方法，与拦截器的对应关系是：</p>
+<ul>
+<li>普通方法：一元拦截器（grpc.UnaryInterceptor）</li>
+<li>流方法：流拦截器（grpc.StreamInterceptor）</li>
+</ul>
+<blockquote>
+<p>转载自：https://eddycjy.com/</p>
+<p>于原文章写的时间有点长，这里会做一些更新。</p>
+<p>项目地址：https://github.com/EDDYCJY/go-grpc-example</p>
+</blockquote>
+<h2 id="前言">前言</h2>
+<p>我想在每个 RPC 方法的前或后做某些事情，怎么做？</p>
+<p>本章节将要介绍的拦截器（interceptor），就能帮你在合适的地方实现这些功能。</p>
+<h2 id="有几种方法">有几种方法</h2>
+<p>在 gRPC 中，大类可分为两种 RPC 方法，与拦截器的对应关系是：</p>
+<ul>
+<li>普通方法：一元拦截器（grpc.UnaryInterceptor）</li>
+<li>流方法：流拦截器（grpc.StreamInterceptor）</li>
+</ul>
+<h2 id="看一看">看一看</h2>
+<h3 id="grpcunaryinterceptor">grpc.UnaryInterceptor</h3>
+<pre><code>func UnaryInterceptor(i UnaryServerInterceptor) ServerOption {
+	return func(o *options) {
+		if o.unaryInt != nil {
+			panic(&quot;The unary server interceptor was already set and may not be reset.&quot;)
+		}
+		o.unaryInt = i
+	}
+}
+</code></pre><p>函数原型：</p>
+<pre><code>type UnaryServerInterceptor func(ctx context.Context, req interface{}, info *UnaryServerInfo, handler UnaryHandler) (resp interface{}, err error)
+</code></pre><p>通过查看源码可得知，要完成一个拦截器需要实现 <code>UnaryServerInterceptor</code> 方法。形参如下：</p>
+<ul>
+<li>ctx context.Context：请求上下文</li>
+<li>req interface{}：RPC 方法的请求参数</li>
+<li>info *UnaryServerInfo：RPC 方法的所有信息</li>
+<li>handler UnaryHandler：RPC 方法本身</li>
+</ul>
+<h3 id="grpcstreaminterceptor">grpc.StreamInterceptor</h3>
+<pre><code>func StreamInterceptor(i StreamServerInterceptor) ServerOption
+</code></pre><p>函数原型：</p>
+<pre><code>type StreamServerInterceptor func(srv interface{}, ss ServerStream, info *StreamServerInfo, handler StreamHandler) error
+</code></pre><p>StreamServerInterceptor 与 UnaryServerInterceptor 形参的意义是一样，不再赘述</p>
+<h3 id="如何实现多个拦截器">如何实现多个拦截器</h3>
+<p>另外，可以发现 gRPC 本身居然只能设置一个拦截器，难道所有的逻辑都只能写在一起？</p>
+<p>关于这一点，你可以放心。采用开源项目 <a href="https://github.com/grpc-ecosystem/go-grpc-middleware">go-grpc-middleware</a> 就可以解决这个问题，本章也会使用它。</p>
+<pre><code>import &quot;github.com/grpc-ecosystem/go-grpc-middleware&quot;
+
+myServer := grpc.NewServer(
+    grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+        ...
+    )),
+    grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+       ...
+    )),
+)
+</code></pre><h2 id="grpc">gRPC</h2>
+<p>从本节开始编写 gRPC interceptor 的代码，我们会将实现以下拦截器：</p>
+<ul>
+<li>logging：RPC 方法的入参出参的日志输出</li>
+<li>recover：RPC 方法的异常保护和日志输出</li>
+</ul>
+<h3 id="实现-interceptor">实现 interceptor</h3>
+<h4 id="logging">logging</h4>
+<pre><code>func LoggingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	log.Printf(&quot;gRPC method: %s, %v&quot;, info.FullMethod, req)
+	resp, err := handler(ctx, req)
+	log.Printf(&quot;gRPC method: %s, %v&quot;, info.FullMethod, resp)
+	return resp, err
+}
+</code></pre><h4 id="recover">recover</h4>
+<pre><code>func RecoveryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			debug.PrintStack()
+			err = status.Errorf(codes.Internal, &quot;Panic err: %v&quot;, e)
+		}
+	}()
+
+	return handler(ctx, req)
+}
+</code></pre><h3 id="server">Server</h3>
+<pre><code>import (
+	&quot;context&quot;
+	&quot;crypto/tls&quot;
+	&quot;crypto/x509&quot;
+	&quot;errors&quot;
+	&quot;io/ioutil&quot;
+	&quot;log&quot;
+	&quot;net&quot;
+	&quot;runtime/debug&quot;
+
+	&quot;google.golang.org/grpc&quot;
+	&quot;google.golang.org/grpc/credentials&quot;
+	&quot;google.golang.org/grpc/status&quot;
+	&quot;google.golang.org/grpc/codes&quot;
+	&quot;github.com/grpc-ecosystem/go-grpc-middleware&quot;
+
+	pb &quot;github.com/EDDYCJY/go-grpc-example/proto&quot;
+)
+
+...
+
+func main() {
+	c, err := GetTLSCredentialsByCA()
+	if err != nil {
+		log.Fatalf(&quot;GetTLSCredentialsByCA err: %v&quot;, err)
+	}
+
+	opts := []grpc.ServerOption{
+		grpc.Creds(c),
+		grpc_middleware.WithUnaryServerChain(
+			RecoveryInterceptor,
+			LoggingInterceptor,
+		),
+	}
+
+	server := grpc.NewServer(opts...)
+	pb.RegisterSearchServiceServer(server, &amp;SearchService{})
+
+	lis, err := net.Listen(&quot;tcp&quot;, &quot;:&quot;+PORT)
+	if err != nil {
+		log.Fatalf(&quot;net.Listen err: %v&quot;, err)
+	}
+
+	server.Serve(lis)
+}
+</code></pre><h2 id="验证">验证</h2>
+<h3 id="logging-1">logging</h3>
+<p>启动 simple_server/server.go，执行 simple_client/client.go 发起请求，得到结果：</p>
+<pre><code>$ go run server.go
+2018/10/02 13:46:35 gRPC method: /proto.SearchService/Search, request:&quot;gRPC&quot; 
+2018/10/02 13:46:35 gRPC method: /proto.SearchService/Search, response:&quot;gRPC Server&quot;
+</code></pre><h3 id="recover-1">recover</h3>
+<p>在 RPC 方法中人为地制造运行时错误，再重复启动 server/client.go，得到结果：</p>
+<h4 id="client">client</h4>
+<pre><code>$ go run client.go
+2018/10/02 13:19:03 client.Search err: rpc error: code = Internal desc = Panic err: assignment to entry in nil map
+exit status 1
+</code></pre><h4 id="server-1">server</h4>
+<pre><code>$ go run server.go
+goroutine 23 [running]:
+runtime/debug.Stack(0xc420223588, 0x1033da9, 0xc420001980)
+	/usr/local/Cellar/go/1.10.1/libexec/src/runtime/debug/stack.go:24 +0xa7
+runtime/debug.PrintStack()
+	/usr/local/Cellar/go/1.10.1/libexec/src/runtime/debug/stack.go:16 +0x22
+main.RecoveryInterceptor.func1(0xc420223a10)
+...
+</code></pre><p>检查服务是否仍然运行，即可知道 Recovery 是否成功生效</p>
+<h2 id="总结">总结</h2>
+<p>通过本章节，你可以学会最常见的拦截器使用方法。接下来其它“新”需求只要举一反三即可。</p>
+<h2 id="参考">参考</h2>
+<h3 id="本系列示例代码">本系列示例代码</h3>
+<ul>
+<li><a href="https://github.com/EDDYCJY/go-grpc-example">go-grpc-example</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/grpc/">grpc</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/" data-tooltip="「连载五」基于 CA 的 TLS 证书认证">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渣吧，少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/" data-tooltip="「连载五」基于 CA 的 TLS 证书认证">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200619170036.png" alt="作者的图片" />
+    
+    <h4 id="about-card-name">渣吧，少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor\/';
+          
+            this.page.identifier = '\/2020\/06\/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
