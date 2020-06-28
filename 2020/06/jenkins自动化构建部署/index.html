@@ -23,10 +23,10 @@
 <meta property="og:locale" content="zh-cn">
 
   
-    <meta property="article:published_time" content="2020-06-18T00:00:00">
+    <meta property="article:published_time" content="2020-06-18T02:00:00">
   
   
-    <meta property="article:modified_time" content="2020-06-18T00:00:00">
+    <meta property="article:modified_time" content="2020-06-18T02:00:00">
   
   
   
@@ -229,7 +229,7 @@
   
   <div class="postShorten-meta post-meta">
     
-      <time itemprop="datePublished" datetime="2020-06-18T00:00:00Z">
+      <time itemprop="datePublished" datetime="2020-06-18T02:00:00Z">
         
   
   
@@ -259,7 +259,7 @@
             <div class="main-content-wrap">
               <p>自动化构建部署。CI/CD</p>
 <blockquote>
-<p>大纲：
+<p>大纲：·
 1、jenkins插件的安装
      1.1 全局工具的配置
      1.2 jenkins插件配置
@@ -301,8 +301,8 @@ apache-maven-3.5.0-bin.tar.gz  docker-18.06.0-ce.tgz  git-2.9.5.tar.gz  jdk-8u15
 [root@tag soft]# ls
 apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz  git-2.9.5.tar.gz  jdk1.8.0_152  jdk-8u152-linux-x64.tar.gz
 </code></pre><p>配置示例如下：
-<img src="https://upload-images.jianshu.io/upload_images/7906353-986203d11bbbc344.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png">
-<img src="https://upload-images.jianshu.io/upload_images/7906353-5549b903ada132b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171457.jpg" alt="image.png">
+<img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171506.jpg" alt="image.png"></p>
 <p>####1.2  jenkins插件配置</p>
 <blockquote>
 <p>     <strong>主要安装的是：</strong>
@@ -310,30 +310,29 @@ apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz
      2. **Deploy to container：**将war包部署到tomcat所在的服务器上；
      3. **Publish Over SSH：**通过ssh推送文件，并可以执行shell命令；</p>
 </blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-a4d52c53acefc42b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="插件安装.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-cb2c85dcb92f2204.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="Maven Integration安装.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-27e8615a55d0853a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="Deploy to container.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-6e49dc08df25bc94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="Publish Over SSH.png">
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628163310.jpg" alt="插件安装.png"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628163321.jpg" alt="Maven Integration安装.png"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628163329.jpg" alt="Deploy to container.png"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628163355.jpg" alt="Publish Over SSH.png">
 ##2. 开始项目的简单配置</p>
 <h4 id="21-配置服务器的登陆用户">2.1 配置服务器的登陆用户</h4>
 <blockquote>
 <p><strong>在设置里增加所要部署的服务器的ssh连接方式</strong></p>
 </blockquote>
 <p>直接看图操作</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-35a35329e08ac52b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-7012933258f5be2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png">
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628163345.jpg" alt="image.png"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628163355.jpg" alt="image.png">
 ###<strong>这里可以配置多台不一样密码的服务器，自己慢慢去琢磨把！！！</strong></p>
 <h4 id="22-开始进行项目的配置">2.2 开始进行项目的配置</h4>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-20b54414e6343906.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="创建任务.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-37bc91efb274ff62.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-0daeae7f25880c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-f3e08824aba1b0ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-6aea196e47acbb9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-fe29e80bc93ce42a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-a6bc5a0f6803b9e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-1015debb8b7a19be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-899f5bd51a0eaa9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7906353-2623595b494894c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/750" alt="image.png"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171734.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171742.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171751.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171801.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171811.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171819.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171832.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171841.jpg" alt="img"></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171850.jpg" alt="img"></p>
 <p>##ok，到这里就部署完成了，这就是一个简单的流水线的部署。
 <strong>当然了，jenkins核心部署并不是这样的形势，但是作为一个入门或者平常的开发使用，对于博主来说目前是足够了，等有时间了再去琢磨另一种流水线的部署。</strong></p>
               
@@ -364,7 +363,7 @@ apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E4%B8%BA%E4%BB%80%E4%B9%88-redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E8%83%BD%E8%BE%BE%E5%88%B0%E7%99%BE%E4%B8%87-qps/" data-tooltip="为什么 Redis 单线程能达到百万&#43;QPS？">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -372,7 +371,7 @@ apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--disabled">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -450,7 +449,7 @@ apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E4%B8%BA%E4%BB%80%E4%B9%88-redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E8%83%BD%E8%BE%BE%E5%88%B0%E7%99%BE%E4%B8%87-qps/" data-tooltip="为什么 Redis 单线程能达到百万&#43;QPS？">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -458,7 +457,7 @@ apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--disabled">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/docker%E6%90%AD%E5%BB%BAprometheus-grafana%E7%9B%91%E6%8E%A7/" data-tooltip="docker搭建prometheus&#43;grafana监控">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
