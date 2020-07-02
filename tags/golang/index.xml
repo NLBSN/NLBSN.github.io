@@ -6,10 +6,19 @@
     <description>Recent content in golang on 帅小伙的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 24 Jun 2020 21:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jun 2020 12:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://NLBSN.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>go-astiencoder简单使用记录</title>
+      <link>https://NLBSN.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Mon, 29 Jun 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
+      <description>&lt;p&gt;​    使用ffmpeg的第三方视频编解码封装库：go-astiencoder&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>「连载十」分布式链路追踪 gRPC &#43; Opentracing &#43; Zipkin</title>

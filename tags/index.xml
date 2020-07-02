@@ -6,7 +6,7 @@
     <description>Recent content in Tags on 帅小伙的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://NLBSN.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>爱情</title>
       <link>https://NLBSN.github.io/tags/%E7%88%B1%E6%83%85/</link>
-      <pubDate>Sun, 28 Jun 2020 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>https://NLBSN.github.io/tags/%E7%88%B1%E6%83%85/</guid>
       <description></description>
@@ -23,9 +23,27 @@
     <item>
       <title>生活</title>
       <link>https://NLBSN.github.io/tags/%E7%94%9F%E6%B4%BB/</link>
-      <pubDate>Sun, 28 Jun 2020 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
       
       <guid>https://NLBSN.github.io/tags/%E7%94%9F%E6%B4%BB/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ffmpeg</title>
+      <link>https://NLBSN.github.io/tags/ffmpeg/</link>
+      <pubDate>Mon, 29 Jun 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/tags/ffmpeg/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://NLBSN.github.io/tags/golang/</link>
+      <pubDate>Mon, 29 Jun 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/tags/golang/</guid>
       <description></description>
     </item>
     
@@ -71,15 +89,6 @@
       <pubDate>Fri, 26 Jun 2020 11:00:00 +0000</pubDate>
       
       <guid>https://NLBSN.github.io/tags/%E7%9B%91%E6%8E%A7/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>golang</title>
-      <link>https://NLBSN.github.io/tags/golang/</link>
-      <pubDate>Wed, 24 Jun 2020 21:00:00 +0000</pubDate>
-      
-      <guid>https://NLBSN.github.io/tags/golang/</guid>
       <description></description>
     </item>
     

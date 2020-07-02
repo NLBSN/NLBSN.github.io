@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>c/c&#43;&#43; on 帅小伙的博客</title>
-    <link>https://NLBSN.github.io/tags/c/c&#43;&#43;/</link>
-    <description>Recent content in c/c&#43;&#43; on 帅小伙的博客</description>
+    <title>ffmpeg on 帅小伙的博客</title>
+    <link>https://NLBSN.github.io/tags/ffmpeg/</link>
+    <description>Recent content in ffmpeg on 帅小伙的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Mon, 29 Jun 2020 12:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://NLBSN.github.io/tags/c/c++/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://NLBSN.github.io/tags/ffmpeg/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,15 +18,6 @@
       
       <guid>https://NLBSN.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
       <description>&lt;p&gt;​    使用ffmpeg的第三方视频编解码封装库：go-astiencoder&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>golang中cgo的使用</title>
-      <link>https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
-      <pubDate>Sun, 21 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
-      <description>&lt;p&gt;​    Golang环境下调用c/c++&lt;/p&gt;</description>
     </item>
     
   </channel>
