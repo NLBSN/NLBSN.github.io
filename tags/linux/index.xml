@@ -6,10 +6,19 @@
     <description>Recent content in linux on 帅小伙的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 27 Jun 2020 11:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2020 11:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://NLBSN.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Linux杂谈记录-1</title>
+      <link>https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/</link>
+      <pubDate>Thu, 09 Jul 2020 11:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/</guid>
+      <description>&lt;p&gt;Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Linux系统双网卡绑定配置</title>

@@ -3,27 +3,52 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://NLBSN.github.io/2020/07/2020-07-02-%E6%90%9E%E6%9C%BA/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
+    <loc>https://NLBSN.github.io/categories/</loc>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://NLBSN.github.io/categories/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
+    <loc>https://NLBSN.github.io/tags/centos/</loc>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://NLBSN.github.io/categories/centos/</loc>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://NLBSN.github.io/tags/linux/</loc>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://NLBSN.github.io/categories/linux/</loc>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/</loc>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://NLBSN.github.io/post/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://NLBSN.github.io/tags/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://NLBSN.github.io/</loc>
+    <lastmod>2020-07-09T11:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://NLBSN.github.io/2020/07/2020-07-02-%E6%90%9E%E6%9C%BA/</loc>
     <lastmod>2020-07-02T00:00:00+00:00</lastmod>
   </url>
   
@@ -65,26 +90,6 @@
   <url>
     <loc>https://NLBSN.github.io/categories/golang/</loc>
     <lastmod>2020-06-29T12:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://NLBSN.github.io/tags/centos/</loc>
-    <lastmod>2020-06-27T11:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://NLBSN.github.io/categories/centos/</loc>
-    <lastmod>2020-06-27T11:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://NLBSN.github.io/tags/linux/</loc>
-    <lastmod>2020-06-27T11:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://NLBSN.github.io/categories/linux/</loc>
-    <lastmod>2020-06-27T11:00:00+00:00</lastmod>
   </url>
   
   <url>

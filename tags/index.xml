@@ -6,10 +6,28 @@
     <description>Recent content in Tags on 帅小伙的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2020 11:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://NLBSN.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>centos</title>
+      <link>https://NLBSN.github.io/tags/centos/</link>
+      <pubDate>Thu, 09 Jul 2020 11:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/tags/centos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://NLBSN.github.io/tags/linux/</link>
+      <pubDate>Thu, 09 Jul 2020 11:00:00 +0000</pubDate>
+      
+      <guid>https://NLBSN.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>爱情</title>
@@ -44,24 +62,6 @@
       <pubDate>Mon, 29 Jun 2020 12:00:00 +0000</pubDate>
       
       <guid>https://NLBSN.github.io/tags/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>centos</title>
-      <link>https://NLBSN.github.io/tags/centos/</link>
-      <pubDate>Sat, 27 Jun 2020 11:00:00 +0000</pubDate>
-      
-      <guid>https://NLBSN.github.io/tags/centos/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>linux</title>
-      <link>https://NLBSN.github.io/tags/linux/</link>
-      <pubDate>Sat, 27 Jun 2020 11:00:00 +0000</pubDate>
-      
-      <guid>https://NLBSN.github.io/tags/linux/</guid>
       <description></description>
     </item>
     
