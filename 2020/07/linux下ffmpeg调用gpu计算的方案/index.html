@@ -13,10 +13,10 @@
 
 <meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux杂谈记录-1">
-<meta name="twitter:title" content="Linux杂谈记录-1">
-<meta property="og:url" content="https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
-<meta property="twitter:url" content="https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+<meta property="og:title" content="Linux下ffmpeg调用gpu计算的方案">
+<meta name="twitter:title" content="Linux下ffmpeg调用gpu计算的方案">
+<meta property="og:url" content="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
 <meta property="og:site_name" content="帅小伙的博客">
 <meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
 <meta name="twitter:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
@@ -64,14 +64,14 @@
   <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
 
 
-    <title>Linux杂谈记录-1</title>
+    <title>Linux下ffmpeg调用gpu计算的方案</title>
 
     <link rel="icon" href="https://NLBSN.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+    <link rel="canonical" href="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -221,7 +221,7 @@
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      Linux杂谈记录-1
+      Linux下ffmpeg调用gpu计算的方案
     </h1>
   
   
@@ -277,7 +277,7 @@
 <h2 id="确认显卡型号">确认显卡型号</h2>
 <p>下载对应的显卡驱动https://www.nvidia.cn/Download/index.aspx</p>
 <h2 id="删除nvidia驱动禁用自带的nouveau-nvidia驱动">删除nvidia驱动，禁用自带的nouveau nvidia驱动</h2>
-<p>参考方案：</p>
+<p>参考方案：来自：https://github.com/dglt1/optimus-switch-gdm</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/sh
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>id -u<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> !<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;0&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
@@ -429,7 +429,7 @@ echo <span style="color:#e6db74">&#39;Install finished!&#39;</span>
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/07/2020-07-02-%E6%90%9E%E6%9C%BA/" data-tooltip="2020-07-02-搞机">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/07/%E5%8D%9A%E5%AE%A2%E5%AE%89%E8%A3%85%E7%9A%84%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95/" data-tooltip="博客安装的简单记录">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -447,19 +447,19 @@ echo <span style="color:#e6db74">&#39;Install finished!&#39;</span>
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
               <i class="fa fa-facebook-official"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -515,7 +515,7 @@ echo <span style="color:#e6db74">&#39;Install finished!&#39;</span>
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/07/2020-07-02-%E6%90%9E%E6%9C%BA/" data-tooltip="2020-07-02-搞机">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/07/%E5%8D%9A%E5%AE%A2%E5%AE%89%E8%A3%85%E7%9A%84%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95/" data-tooltip="博客安装的简单记录">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -533,19 +533,19 @@ echo <span style="color:#e6db74">&#39;Install finished!&#39;</span>
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
               <i class="fa fa-facebook-official"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/07/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -575,19 +575,19 @@ echo <span style="color:#e6db74">&#39;Install finished!&#39;</span>
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2Flinux%25E6%259D%2582%25E8%25B0%2588%25E8%25AE%25B0%25E5%25BD%2595-1%2F">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2Flinux%25E4%25B8%258Bffmpeg%25E8%25B0%2583%25E7%2594%25A8gpu%25E8%25AE%25A1%25E7%25AE%2597%25E7%259A%2584%25E6%2596%25B9%25E6%25A1%2588%2F">
           <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2Flinux%25E6%259D%2582%25E8%25B0%2588%25E8%25AE%25B0%25E5%25BD%2595-1%2F">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2Flinux%25E4%25B8%258Bffmpeg%25E8%25B0%2583%25E7%2594%25A8gpu%25E8%25AE%25A1%25E7%25AE%2597%25E7%259A%2584%25E6%2596%25B9%25E6%25A1%2588%2F">
           <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2Flinux%25E6%259D%2582%25E8%25B0%2588%25E8%25AE%25B0%25E5%25BD%2595-1%2F">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2Flinux%25E4%25B8%258Bffmpeg%25E8%25B0%2583%25E7%2594%25A8gpu%25E8%25AE%25A1%25E7%25AE%2597%25E7%259A%2584%25E6%2596%25B9%25E6%25A1%2588%2F">
           <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
         </a>
       </li>
@@ -679,9 +679,9 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/07\/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1\/';
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/07\/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88\/';
           
-            this.page.identifier = '\/2020\/07\/linux%E6%9D%82%E8%B0%88%E8%AE%B0%E5%BD%95-1\/'
+            this.page.identifier = '\/2020\/07\/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88\/'
           
         };
         (function() {
