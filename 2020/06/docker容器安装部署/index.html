@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
-<meta name="author" content="渣吧，少年">
+<meta name="author" content="爱喝饮料的少年">
 <meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
 <meta name="description" content="docker容器的在线以及二进制安装。以及一些简单的配置。">
 
@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="docker容器安装部署">
 <meta property="og:url" content="https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
 <meta property="twitter:url" content="https://NLBSN.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
-<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:site_name" content="爱喝饮料的少年">
 <meta property="og:description" content="docker容器的在线以及二进制安装。以及一些简单的配置。">
 <meta name="twitter:description" content="docker容器的在线以及二进制安装。以及一些简单的配置。">
 <meta property="og:locale" content="zh-cn">
@@ -96,7 +96,7 @@
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+    <a class="header-title-link" href="https://NLBSN.github.io/">爱喝饮料的少年</a>
   </div>
   
     
@@ -120,7 +120,7 @@
         <a href="https://NLBSN.github.io/#about">
           <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
         </a>
-        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
         
           <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
         
@@ -261,7 +261,15 @@
 <!-- raw HTML omitted -->
 <h1 id="在线安装">在线安装</h1>
 <p>卸载老版本的 docker 及其相关依赖</p>
-<pre><code>sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine docker-ce -y
+<pre><code>$ sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine \
+                  -y
 </code></pre><p>删除旧的docker文件</p>
 <pre><code>rm -rf /var/lib/docker
 </code></pre><p>使用yum进行安装</p>
@@ -319,9 +327,14 @@ docker-ce.x86_64            17.03.0.ce-1.el7.centos             docker-ce-stable
 Available Packages
 [root@DESKTOP-KQN1KKC ~]#
 </code></pre><p>选则其中一个包安装</p>
-<pre><code>[root@DESKTOP-KQN1KKC ~]# yum install -y docker-ce-19.03.12
+<p>默认安装：(以下命令二选一)</p>
+<pre><code>sudo yum install docker-ce
+sudo yum install docker-ce docker-ce-cli containerd.io
+</code></pre><p>指定版本安装：(以下命令二选一)</p>
+<pre><code>sudo yum install -y docker-ce-19.03.12
+sudo yum install -y docker-ce-19.03.12 docker-ce-cli-19.03.12 containerd.io
 </code></pre><h2 id="安装docker-compose">安装docker-compose</h2>
-<pre><code>sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
+<pre><code>sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
 
 sudo chmod +x /usr/local/bin/docker-compose
 
@@ -561,7 +574,7 @@ EOF
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    &copy; 2020 渣吧，少年. All Rights Reserved
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
   </span>
 </footer>
 
@@ -672,7 +685,7 @@ EOF
     
       <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
     
-    <h4 id="about-card-name">渣吧，少年</h4>
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
     
       <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
     

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
-<meta name="author" content="渣吧，少年">
+<meta name="author" content="爱喝饮料的少年">
 <meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
 <meta name="description" content="博客安装的简单思路。">
 
@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="博客安装的简单记录">
 <meta property="og:url" content="https://NLBSN.github.io/2020/07/%E5%8D%9A%E5%AE%A2%E5%AE%89%E8%A3%85%E7%9A%84%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95/">
 <meta property="twitter:url" content="https://NLBSN.github.io/2020/07/%E5%8D%9A%E5%AE%A2%E5%AE%89%E8%A3%85%E7%9A%84%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95/">
-<meta property="og:site_name" content="帅小伙的博客">
+<meta property="og:site_name" content="爱喝饮料的少年">
 <meta property="og:description" content="博客安装的简单思路。">
 <meta name="twitter:description" content="博客安装的简单思路。">
 <meta property="og:locale" content="zh-cn">
@@ -90,7 +90,7 @@
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://NLBSN.github.io/">帅小伙的博客</a>
+    <a class="header-title-link" href="https://NLBSN.github.io/">爱喝饮料的少年</a>
   </div>
   
     
@@ -114,7 +114,7 @@
         <a href="https://NLBSN.github.io/#about">
           <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
         </a>
-        <h4 class="sidebar-profile-name">渣吧，少年</h4>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
         
           <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
         
@@ -253,15 +253,31 @@
 <h1 id="背景">背景</h1>
 <h1 id="环境">环境</h1>
 <ul>
-<li>helm</li>
+<li>hugo</li>
 <li>travis</li>
+<li>PicGo</li>
+<li>typora</li>
 </ul>
-<h1 id="helm">helm</h1>
-<p>​    helm使用golang进行开发的，直接一个可执行的二进制文件就可以运行，安装简单快速。</p>
+<h1 id="hugo">hugo</h1>
+<p>​    hugo使用golang进行开发的，直接一个可执行的二进制文件就可以运行，安装简单快速。</p>
 <p>​    用helm快速生成博客所需要的模板，然后直接从github上面下载自己喜欢的主题，放到themes文件夹下面，就可以使用了</p>
-<h1 id="travis">travis</h1>
+<p>​    hugo常用命令：</p>
+<pre><code>hugo new site blog-name
+hugo server
+</code></pre><h1 id="travis">travis</h1>
 <p>​    自动编译发布博客。</p>
 <p>​    在本地或者云端编写完markdown文档，travis会自己去github上面拉取源码，然后执行相对应的编译，发布等操作。</p>
+<p>​    部署：</p>
+<ul>
+<li>先去github上面申请密钥</li>
+<li><a href="https://travis-ci.org/">https://travis-ci.org/</a>网站上面进行相关的设置</li>
+<li>在博客的源码目录下放置.travis.yml文件，配置各项参数</li>
+</ul>
+<h1 id="picgo">PIcGo</h1>
+<p>一款图床的软件。主要用来将图片方便的上传到github，gitee上面，然后markdown文档里直接引用图片的链接。</p>
+<p>下载地址：https://github.com/Molunerfinn/PicGo</p>
+<h1 id="typora">typora</h1>
+<p>文本编辑工具。</p>
               
             </div>
           </div>
@@ -359,7 +375,7 @@
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    &copy; 2020 渣吧，少年. All Rights Reserved
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
   </span>
 </footer>
 
@@ -470,7 +486,7 @@
     
       <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
     
-    <h4 id="about-card-name">渣吧，少年</h4>
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
     
       <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
     
