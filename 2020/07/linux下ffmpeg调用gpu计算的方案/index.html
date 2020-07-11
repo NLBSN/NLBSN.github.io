@@ -8,18 +8,22 @@
 <meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="爱喝饮料的少年">
 <meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
-<meta name="description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
+<meta name="description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
+[TOC]">
 
 
-<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
+<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
+[TOC]">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux下ffmpeg调用gpu计算的方案">
 <meta name="twitter:title" content="Linux下ffmpeg调用gpu计算的方案">
 <meta property="og:url" content="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
 <meta property="twitter:url" content="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
 <meta property="og:site_name" content="爱喝饮料的少年">
-<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
-<meta name="twitter:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
+<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
+[TOC]">
+<meta name="twitter:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
+[TOC]">
 <meta property="og:locale" content="zh-cn">
 
   
@@ -256,6 +260,7 @@
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
               <p>Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。</p>
+<p>[TOC]</p>
 <h1 id="背景">背景</h1>
 <p>​    服务器的使用环境是完全的离线环境，为了减少错误情况的发生，选择docker容器进行大部分安装。</p>
 <p>​    要通过ffmpeg调用gpu的的显卡进行转码计算等操作，需要去完全编译ffmpeg的源码才可以进行调用。</p>
@@ -382,19 +387,95 @@ echo <span style="color:#e6db74">&#39;you can switch to intel only mode with sud
 sleep <span style="color:#ae81ff">1</span>
 echo <span style="color:#e6db74">&#39;Install finished!&#39;</span>
 </code></pre></div><h2 id="安装下载的驱动">安装下载的驱动</h2>
-<h2 id="测试nvidia-sminvidia-settings">测试nvidia-smi/nvidia-settings</h2>
-<pre><code>nvidia-smi
-</code></pre><p>第一行为集显的信息</p>
-<p>第二行为独显的信息</p>
-<h2 id="测试">测试</h2>
+<p>研究后面的参数代表什么意思</p>
+<pre><code>./NVIDIA-Linux-x86_64-450.57.run --no-opengl-files --no-x-check --no-nouveau-check
+</code></pre><h2 id="测试nvidia-sminvidia-settings">测试nvidia-smi/nvidia-settings</h2>
+<p><strong>执行<em>nvidia-smi</em>命令，如果出现相关显卡的信息，则安装成功。</strong></p>
+<pre><code>~ &gt;&gt;&gt; nvidia-smi                                                                                                                                              
+Sat Jul 11 16:53:01 2020       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 440.82       Driver Version: 440.82       CUDA Version: 10.2     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce MX150       Off  | 00000000:01:00.0 Off |                  N/A |
+| N/A   43C    P0    N/A /  N/A |      0MiB /  2002MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+</code></pre><p>第一行：</p>
+<ul>
+<li>版本信息</li>
+</ul>
+<p>第二行：</p>
+<ul>
+<li>GPU：指第几块GPU显卡</li>
+<li>Fan：风扇转速</li>
+<li>NAME：GPU型号</li>
+<li>Temp：GPU温度</li>
+<li>Perf：GPU功率</li>
+<li>Persistence-M：是否持久化开启</li>
+<li>Pwr:Usage/Cap：</li>
+</ul>
 <h1 id="docker容器安装">docker容器安装</h1>
-<p>直接二进制安装，但是记得安装相关的依赖包(直接挂镜像，注意U盘的依赖包下载)</p>
-<p><a href="https://download.docker.com/linux/static/stable/">https://download.docker.com/linux/static/stable/</a></p>
+<p>直接二进制安装，但是记得安装相关的依赖包(直接挂镜像)</p>
+<p>docker二进制版本下载地址：https://download.docker.com/linux/static/stable/</p>
 <h1 id="nvidia-docker插件安装">nvidia-docker插件安装</h1>
 <p>关于这一块的内容网上很多，但大部分都已经过时了，或者说是官方对这一块的改动太大。</p>
-<p>官方文档2020年07月09日写的是要求docker19.03的版本；原来官方的1版本和2版本都已经不适用了，所以最好还是自己看文档去了解。</p>
-<p>cuda，cudnn等这些提供计算能力的框架/软件，由于在使用nvidia官方提供的最基础驱动时已经安装，所以在物理机上并不需要再去安装这一块内容。</p>
-<h1 id="ffmpeg带nvidia驱动的容器调用">ffmpeg带nvidia驱动的容器调用</h1>
+<p>2020年07月09日写本文章时，官方文档要求docker19.03的版本；原来官方的1版本和2版本都已经不适用了，所以最好还是自己看文档去了解。</p>
+<h2 id="官方文档的快速入门安装">官方文档的快速入门安装</h2>
+<h3 id="ubuntu-160418042004-debian-jessiestretchbuster">Ubuntu 16.04/18.04/20.04, Debian Jessie/Stretch/Buster</h3>
+<pre><code># Add the package repositories
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+sudo apt-get update &amp;&amp; sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
+</code></pre><h3 id="centos-7x8x-docker-ce-rhel-7x8x-docker-ce-amazon-linux-12">CentOS 7.X/8.X (docker-ce), RHEL 7.X/8.X (docker-ce), Amazon Linux 1/2</h3>
+<pre><code>distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+
+sudo yum install -y nvidia-container-toolkit
+sudo systemctl restart docker
+</code></pre><p>备注：cuda，cudnn等这些提供计算能力的框架/软件，由于在使用nvidia官方提供的最基础驱动时已经安装，所以在物理机上并不需要再去安装这一块内容。</p>
+<h2 id="nvidia官方文档提供的容器测试方法">nvidia官方文档提供的容器测试方法</h2>
+<pre><code>#### Test nvidia-smi with the latest official CUDA image
+docker run --gpus all nvidia/cuda:10.0-base nvidia-smi
+
+# Start a GPU enabled container on two GPUs
+docker run --gpus 2 nvidia/cuda:10.0-base nvidia-smi
+
+# Starting a GPU enabled container on specific GPUs
+docker run --gpus '&quot;device=1,2&quot;' nvidia/cuda:10.0-base nvidia-smi
+docker run --gpus '&quot;device=UUID-ABCDEF,1&quot;' nvidia/cuda:10.0-base nvidia-smi
+
+# Specifying a capability (graphics, compute, ...) for my container
+# Note this is rarely if ever used this way
+docker run --gpus all,capabilities=utility nvidia/cuda:10.0-base nvidia-smi
+</code></pre><h1 id="dcgm监控显卡信息">DCGM监控显卡信息</h1>
+<p>先把官方地址附上：https://github.com/NVIDIA/gpu-monitoring-tools         &mdash;备注：记得原来还有一个单独的dcgm-exporter的仓库来着，但找了半天没找到</p>
+<p>执行命令：</p>
+<pre><code>$ docker run -d --gpus all --rm -p 9400:9400 nvidia/dcgm-exporter:latest
+$ curl localhost:9400/metrics
+# HELP DCGM_FI_DEV_SM_CLOCK SM clock frequency (in MHz).
+# TYPE DCGM_FI_DEV_SM_CLOCK gauge
+# HELP DCGM_FI_DEV_MEM_CLOCK Memory clock frequency (in MHz).
+# TYPE DCGM_FI_DEV_MEM_CLOCK gauge
+# HELP DCGM_FI_DEV_MEMORY_TEMP Memory temperature (in C).
+# TYPE DCGM_FI_DEV_MEMORY_TEMP gauge
+...
+DCGM_FI_DEV_SM_CLOCK{gpu=&quot;0&quot;, UUID=&quot;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&quot;} 139
+DCGM_FI_DEV_MEM_CLOCK{gpu=&quot;0&quot;, UUID=&quot;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&quot;} 405
+DCGM_FI_DEV_MEMORY_TEMP{gpu=&quot;0&quot;, UUID=&quot;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&quot;} 9223372036854775794
+...
+</code></pre><h1 id="ffmpeg带nvidia驱动的容器调用">ffmpeg带nvidia驱动的容器调用</h1>
 <p><a href="https://hub.docker.com">https://hub.docker.com</a>上面有提供的镜像，直接选取带显卡驱动的进行使用即可。</p>
               
             </div>
