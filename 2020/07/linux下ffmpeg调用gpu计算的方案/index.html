@@ -283,11 +283,12 @@
 </ul>
 <h1 id="一查询自己的显卡是否支持硬件编解码如不支持那么后面的就别看了">一、查询自己的显卡是否支持硬件编解码(如不支持，那么后面的就别看了)</h1>
 <p>查询自己的显卡是否支持gpu解码：<a href="https://developer.nvidia.com/video-encode-decode-gpu-support-matrix">nvidia官网查询 链接</a></p>
-<p><strong>这个标题对于GPU硬件编码的支持列表</strong></p>
+<p><em>查询发现我的mx150编解码都不支持，有点郁闷，但还是会把后面的过程走完。之后有了新的显卡，再去做文档修改</em></p>
+<p><strong>这个表格是对GPU硬件编码的支持列表</strong></p>
 <p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200712211841.png" alt="img"></p>
 <p><strong>如果上面展开的列表中没有你的显卡，别急，在这个表格的后面有这么三个按钮，是对这个表格的补充，点击一下，又会展开一个列表，去这里寻找你的显卡型号吧</strong></p>
 <p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200712211851.png" alt="img"></p>
-<p><strong>这个标题对于GPU硬件解码的支持列表</strong></p>
+<p><strong>这个表格是对GPU硬件解码的支持列表</strong></p>
 <p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200712211856.png" alt="img"></p>
 <p>备注：如果找不到你的显卡型号，也和上面一样的操作</p>
 <h1 id="二nvidia显卡驱动安装">二、nvidia显卡驱动安装</h1>
@@ -494,7 +495,8 @@ DCGM_FI_DEV_SM_CLOCK<span style="color:#f92672">{</span>gpu<span style="color:#f
 DCGM_FI_DEV_MEM_CLOCK<span style="color:#f92672">{</span>gpu<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span>, UUID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&#34;</span><span style="color:#f92672">}</span> <span style="color:#ae81ff">405</span>
 DCGM_FI_DEV_MEMORY_TEMP<span style="color:#f92672">{</span>gpu<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span>, UUID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&#34;</span><span style="color:#f92672">}</span> <span style="color:#ae81ff">9223372036854775794</span>
 ...
-</code></pre></div><h1 id="六ffmpeg带nvidia驱动的容器调用">六、ffmpeg带nvidia驱动的容器调用</h1>
+</code></pre></div><p>备注：目前这个时间点，docker-compose还不支持gpu的调用参数，所以暂时只能用命令的形式。</p>
+<h1 id="六ffmpeg带nvidia驱动的容器调用">六、ffmpeg带nvidia驱动的容器调用</h1>
 <p><a href="https://hub.docker.com">https://hub.docker.com</a>上面有提供的镜像，直接选取带显卡驱动的进行使用即可。</p>
 <pre><code>docker run -d --gpus all --rm --entrypoint='tail' jrottenberg/ffmpeg:4.1-nvidia -f /dev/null
 </code></pre><p>通过ffprobe命令识别并输出视频信息</p>
