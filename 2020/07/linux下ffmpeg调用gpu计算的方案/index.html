@@ -8,22 +8,18 @@
 <meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="爱喝饮料的少年">
 <meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
-<meta name="description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
-[TOC]">
+<meta name="description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
 
 
-<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
-[TOC]">
+<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux下ffmpeg调用gpu计算的方案">
 <meta name="twitter:title" content="Linux下ffmpeg调用gpu计算的方案">
 <meta property="og:url" content="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
 <meta property="twitter:url" content="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/">
 <meta property="og:site_name" content="爱喝饮料的少年">
-<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
-[TOC]">
-<meta name="twitter:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。
-[TOC]">
+<meta property="og:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
+<meta name="twitter:description" content="Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。">
 <meta property="og:locale" content="zh-cn">
 
   
@@ -262,24 +258,47 @@
               <p>Linux平台显卡驱动的安装思路，以及调用ffmpeg时的一些思路。</p>
 <p>[TOC]</p>
 <h1 id="背景">背景</h1>
-<p>​    服务器的使用环境是完全的离线环境，为了减少错误情况的发生，选择docker容器进行大部分安装。</p>
-<p>​    要通过ffmpeg调用gpu的的显卡进行转码计算等操作，需要去完全编译ffmpeg的源码才可以进行调用。</p>
-<p>​    文章将分一下几个步骤进行：</p>
+<p>​		服务器的使用环境是完全的离线环境，为了减少错误情况的发生，选择docker容器进行大部分安装。</p>
+<p>​		在正常情况下，要通过ffmpeg调用gpu的的显卡进行转码计算等操作，需要在安装完显卡驱动后重新去编译ffmpeg的源码才可以进行调用。但是使用docker容器进行调用就没有这个限制。</p>
+<p>​		文章将分一下几个步骤进行：</p>
 <ul>
-<li>nvidia显卡驱动安装</li>
-<li>docker容器安装</li>
-<li>nvidia-docker插件安装</li>
-<li>ffmpeg带nvidia驱动的容器调用</li>
+<li>
+<p>查询自己的显卡是否支持硬件编解码</p>
+</li>
+<li>
+<p>nvidia显卡驱动安装</p>
+</li>
+<li>
+<p>docker容器安装</p>
+</li>
+<li>
+<p>nvidia-docker插件安装</p>
+</li>
+<li>
+<p>DCGM监控显卡信息(了解即可)</p>
+</li>
+<li>
+<p>ffmpeg带nvidia驱动的容器调用</p>
+</li>
 </ul>
-<h1 id="nvidia显卡驱动安装">nvidia显卡驱动安装</h1>
-<p>​    显卡驱动的安装大致分别以下几个步骤（具体版本的驱动安装再去查找相关的文档）：</p>
+<h1 id="一查询自己的显卡是否支持硬件编解码如不支持那么后面的就别看了">一、查询自己的显卡是否支持硬件编解码(如不支持，那么后面的就别看了)</h1>
+<p>查询自己的显卡是否支持gpu解码：<a href="https://developer.nvidia.com/video-encode-decode-gpu-support-matrix">nvidia官网查询 链接</a></p>
+<p><strong>这个标题对于GPU硬件编码的支持列表</strong></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200712211841.png" alt="img"></p>
+<p><strong>如果上面展开的列表中没有你的显卡，别急，在这个表格的后面有这么三个按钮，是对这个表格的补充，点击一下，又会展开一个列表，去这里寻找你的显卡型号吧</strong></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200712211851.png" alt="img"></p>
+<p><strong>这个标题对于GPU硬件解码的支持列表</strong></p>
+<p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200712211856.png" alt="img"></p>
+<p>备注：如果找不到你的显卡型号，也和上面一样的操作</p>
+<h1 id="二nvidia显卡驱动安装">二、nvidia显卡驱动安装</h1>
+<p>​		显卡驱动的安装大致分别以下几个步骤（具体版本的驱动安装再去查找相关的文档）：</p>
 <ul>
-<li>确认显卡型号</li>
+<li>确认显卡型号，下载对应的驱动</li>
 <li>删除nvidia驱动，禁用自带的nouveau nvidia驱动，重启系统</li>
 <li>安装下载的驱动</li>
-<li>测试nvidia-smi/nvidia-settings</li>
+<li>测试是否安装成功nvidia-smi/nvidia-settings</li>
 </ul>
-<h2 id="确认显卡型号">确认显卡型号</h2>
+<h2 id="确认显卡型号下载对应的驱动">确认显卡型号，下载对应的驱动</h2>
 <p>下载对应的显卡驱动https://www.nvidia.cn/Download/index.aspx</p>
 <h2 id="删除nvidia驱动禁用自带的nouveau-nvidia驱动">删除nvidia驱动，禁用自带的nouveau nvidia驱动</h2>
 <p>参考方案：来自：https://github.com/dglt1/optimus-switch-gdm</p>
@@ -389,7 +408,7 @@ echo <span style="color:#e6db74">&#39;Install finished!&#39;</span>
 </code></pre></div><h2 id="安装下载的驱动">安装下载的驱动</h2>
 <p>研究后面的参数代表什么意思</p>
 <pre><code>./NVIDIA-Linux-x86_64-450.57.run --no-opengl-files --no-x-check --no-nouveau-check
-</code></pre><h2 id="测试nvidia-sminvidia-settings">测试nvidia-smi/nvidia-settings</h2>
+</code></pre><h2 id="测试是否安装成功nvidia-sminvidia-settings">测试是否安装成功nvidia-smi/nvidia-settings</h2>
 <p><strong>执行<em>nvidia-smi</em>命令，如果出现相关显卡的信息，则安装成功。</strong></p>
 <pre><code>~ &gt;&gt;&gt; nvidia-smi                                                                                                                                              
 Sat Jul 11 16:53:01 2020       
@@ -421,12 +440,12 @@ Sat Jul 11 16:53:01 2020
 <li>Temp：GPU温度</li>
 <li>Perf：GPU功率</li>
 <li>Persistence-M：是否持久化开启</li>
-<li>Pwr:Usage/Cap：</li>
 </ul>
-<h1 id="docker容器安装">docker容器安装</h1>
-<p>直接二进制安装，但是记得安装相关的依赖包(直接挂镜像)</p>
+<p>备注：如有需要请自行百度</p>
+<h1 id="三docker容器安装">三、docker容器安装</h1>
+<p>直接二进制安装，但是记得安装相关的依赖包(直接挂镜像进行依赖包的安装)，参考：<a href="https://nlbsn.github.io/2020/06/docker%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">docker容器安装部署</a></p>
 <p>docker二进制版本下载地址：https://download.docker.com/linux/static/stable/</p>
-<h1 id="nvidia-docker插件安装">nvidia-docker插件安装</h1>
+<h1 id="四nvidia-docker插件安装">四、nvidia-docker插件安装</h1>
 <p>关于这一块的内容网上很多，但大部分都已经过时了，或者说是官方对这一块的改动太大。</p>
 <p>2020年07月09日写本文章时，官方文档要求docker19.03的版本；原来官方的1版本和2版本都已经不适用了，所以最好还是自己看文档去了解。</p>
 <h2 id="官方文档的快速入门安装">官方文档的快速入门安装</h2>
@@ -444,7 +463,7 @@ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.re
 
 sudo yum install -y nvidia-container-toolkit
 sudo systemctl restart docker
-</code></pre><p>备注：cuda，cudnn等这些提供计算能力的框架/软件，由于在使用nvidia官方提供的最基础驱动时已经安装，所以在物理机上并不需要再去安装这一块内容。</p>
+</code></pre><p>备注：cuda，cudnn等这些提供计算能力的框架/软件，由于在使用nvidia官方提供的最基础驱动镜像时已经安装，所以在物理机上并不需要再去安装这一块内容。</p>
 <h2 id="nvidia官方文档提供的容器测试方法">nvidia官方文档提供的容器测试方法</h2>
 <pre><code>#### Test nvidia-smi with the latest official CUDA image
 docker run --gpus all nvidia/cuda:10.0-base nvidia-smi
@@ -459,24 +478,54 @@ docker run --gpus '&quot;device=UUID-ABCDEF,1&quot;' nvidia/cuda:10.0-base nvidi
 # Specifying a capability (graphics, compute, ...) for my container
 # Note this is rarely if ever used this way
 docker run --gpus all,capabilities=utility nvidia/cuda:10.0-base nvidia-smi
-</code></pre><h1 id="dcgm监控显卡信息">DCGM监控显卡信息</h1>
+</code></pre><h1 id="五dcgm监控显卡信息了解即可">五、DCGM监控显卡信息(了解即可)</h1>
 <p>先把官方地址附上：https://github.com/NVIDIA/gpu-monitoring-tools         &mdash;备注：记得原来还有一个单独的dcgm-exporter的仓库来着，但找了半天没找到</p>
 <p>执行命令：</p>
-<pre><code>$ docker run -d --gpus all --rm -p 9400:9400 nvidia/dcgm-exporter:latest
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker run -d --gpus all --rm -p 9400:9400 nvidia/dcgm-exporter:latest
 $ curl localhost:9400/metrics
-# HELP DCGM_FI_DEV_SM_CLOCK SM clock frequency (in MHz).
-# TYPE DCGM_FI_DEV_SM_CLOCK gauge
-# HELP DCGM_FI_DEV_MEM_CLOCK Memory clock frequency (in MHz).
-# TYPE DCGM_FI_DEV_MEM_CLOCK gauge
-# HELP DCGM_FI_DEV_MEMORY_TEMP Memory temperature (in C).
-# TYPE DCGM_FI_DEV_MEMORY_TEMP gauge
+<span style="color:#75715e"># HELP DCGM_FI_DEV_SM_CLOCK SM clock frequency (in MHz).</span>
+<span style="color:#75715e"># TYPE DCGM_FI_DEV_SM_CLOCK gauge</span>
+<span style="color:#75715e"># HELP DCGM_FI_DEV_MEM_CLOCK Memory clock frequency (in MHz).</span>
+<span style="color:#75715e"># TYPE DCGM_FI_DEV_MEM_CLOCK gauge</span>
+<span style="color:#75715e"># HELP DCGM_FI_DEV_MEMORY_TEMP Memory temperature (in C).</span>
+<span style="color:#75715e"># TYPE DCGM_FI_DEV_MEMORY_TEMP gauge</span>
 ...
-DCGM_FI_DEV_SM_CLOCK{gpu=&quot;0&quot;, UUID=&quot;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&quot;} 139
-DCGM_FI_DEV_MEM_CLOCK{gpu=&quot;0&quot;, UUID=&quot;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&quot;} 405
-DCGM_FI_DEV_MEMORY_TEMP{gpu=&quot;0&quot;, UUID=&quot;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&quot;} 9223372036854775794
+DCGM_FI_DEV_SM_CLOCK<span style="color:#f92672">{</span>gpu<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span>, UUID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&#34;</span><span style="color:#f92672">}</span> <span style="color:#ae81ff">139</span>
+DCGM_FI_DEV_MEM_CLOCK<span style="color:#f92672">{</span>gpu<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span>, UUID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&#34;</span><span style="color:#f92672">}</span> <span style="color:#ae81ff">405</span>
+DCGM_FI_DEV_MEMORY_TEMP<span style="color:#f92672">{</span>gpu<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span>, UUID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;GPU-604ac76c-d9cf-fef3-62e9-d92044ab6e52&#34;</span><span style="color:#f92672">}</span> <span style="color:#ae81ff">9223372036854775794</span>
 ...
-</code></pre><h1 id="ffmpeg带nvidia驱动的容器调用">ffmpeg带nvidia驱动的容器调用</h1>
+</code></pre></div><h1 id="六ffmpeg带nvidia驱动的容器调用">六、ffmpeg带nvidia驱动的容器调用</h1>
 <p><a href="https://hub.docker.com">https://hub.docker.com</a>上面有提供的镜像，直接选取带显卡驱动的进行使用即可。</p>
+<pre><code>docker run -d --gpus all --rm --entrypoint='tail' jrottenberg/ffmpeg:4.1-nvidia -f /dev/null
+</code></pre><p>通过ffprobe命令识别并输出视频信息</p>
+<pre><code>ffprobe -v error -show_streams -print_format json &lt;input&gt;
+ffprobe -v error -show_streams -print_format json http://192.168.8.153:8888/4K-T-ara-Number9.mp4
+</code></pre><p>可以看到一共返回了4个流，其中第0个是视频流，1是音频流，2和3是附加数据，没什么用
+如果想指定分析视频流或音频流的话，可以加上参数-show_streams -v或-show_streams -a，这样就会只输出视频/音频流的分析结果。<a href="https://www.jianshu.com/p/59da3d350488">参考链接</a></p>
+<pre><code>ffmpeg -hwaccel cuvid -hwaccel_device 0 -c:v h264_cuvid -i &lt;input&gt; -c:v h264_nvenc -b:v 2048k -vf scale_npp=1280:-1 -y &lt;output&gt;
+
+ffmpeg -hwaccel cuvid -hwaccel_device 1 -c:v h264_cuvid -i &lt;input&gt; -c:v h264_nvenc -b:v 2048k -vf scale_npp=1280:-1 -y &lt;output&gt;
+</code></pre><h2 id="解码经过系统内存">解码经过系统内存</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ffmpeg -c:v h264_cuvid -i input output.mkv
+</code></pre></div><p>这种情况，解码器会将解码后的数据拷贝到系统内存。</p>
+<h2 id="完全硬件转码">完全硬件转码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ffmpeg -hwaccel cuvid -c:v h264_cuvid -i input -c:v h264_nvenc -preset slow output.mkv
+</code></pre></div><p>加了 -hwaccel cuvid之后，这种情况完全通过显卡GPU完成。</p>
+<h2 id="部分硬件转码好像是抄的官方的">部分硬件转码(好像是抄的官方的)</h2>
+<pre><code>ffmpeg -c:v h264_cuvid -i input -c:v h264_nvenc -preset slow output.mkv
+</code></pre><p>编码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ffmpeg -h encoder<span style="color:#f92672">=</span>h264_nvenc
+ffmpeg -h encoder<span style="color:#f92672">=</span>hevc_nvenc
+ffmpeg -i input -c:v h264_nvenc -profile high444p -pixel_format yuv444p -preset default output.mp4
+</code></pre></div><p>解码：</p>
+<pre><code>ffmpeg -hwaccel cuda -i input output
+
+ffmpeg -c:v h264_cuvid -i input output
+
+ffmpeg -hwaccel cuda -hwaccel_output_format cuda -i input -c:v h264_nvenc -preset slow output
+
+ffmpeg -hwaccel_device 0 -hwaccel cuda -i input -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow output.mkv
+</code></pre><p>官方链接：https://trac.ffmpeg.org/wiki/HWAccelIntro</p>
               
             </div>
           </div>
