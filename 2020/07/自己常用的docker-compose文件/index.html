@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="爱喝饮料的少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="自己常用的一些docker-compose文件的记录">
+
+
+<meta property="og:description" content="自己常用的一些docker-compose文件的记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自己常用的docker-compose文件">
+<meta name="twitter:title" content="自己常用的docker-compose文件">
+<meta property="og:url" content="https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+<meta property="twitter:url" content="https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+<meta property="og:site_name" content="爱喝饮料的少年">
+<meta property="og:description" content="自己常用的一些docker-compose文件的记录">
+<meta name="twitter:description" content="自己常用的一些docker-compose文件的记录">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-07-12T12:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-07-12T12:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="容器">
+    
+      <meta property="article:section" content="docker">
+    
+      <meta property="article:section" content="docker-compose">
+    
+  
+  
+    
+      <meta property="article:tag" content="容器">
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="docker-compose">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+
+
+    <title>自己常用的docker-compose文件</title>
+
+    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://NLBSN.github.io/">爱喝饮料的少年</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://NLBSN.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://NLBSN.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      自己常用的docker-compose文件
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-07-12T12:00:00Z">
+        
+  
+  
+  
+  
+    2020年7月12日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/%e5%ae%b9%e5%99%a8">容器</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/docker">docker</a>, 
+    
+      <a class="category-link" href="https://NLBSN.github.io/categories/docker-compose">docker-compose</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>自己常用的一些docker-compose文件的记录</p>
+<p>[TOC]</p>
+<h1 id="elasticsearch">elasticsearch</h1>
+<pre><code>version: '3.1'
+services:
+  elasticsearch:
+    image: elasticsearch:6.4.3
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - &quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&quot;
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /data/prometheus/elk/data/1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 512M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#      placement:
+#        constraints: 
+#          - node.labels.func == db
+  elasticsearch2:
+    image: elasticsearch:6.4.3
+    container_name: elasticsearch2
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - &quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&quot;
+      - &quot;discovery.zen.ping.unicast.hosts=elasticsearch&quot;
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /data/prometheus/elk/data/2:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 512M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#      placement:
+#        constraints:               
+#          - node.labels.func == db
+#volumes:
+#  esdata1:
+#    driver: local
+#  esdata2:
+#    driver: local
+
+networks:
+  esnet:
+</code></pre><h1 id="etcd">etcd</h1>
+<pre><code>version: '3.7'
+
+services:
+  etcd:
+    image: bitnami/etcd:3.3.13
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - 2379:2379
+      - 2380:2380
+    networks:
+      - app-tier
+      
+networks:
+  app-tier:
+    driver: bridge
+</code></pre><h1 id="ftpgrab">ftpgrab</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#34;3.2&#34;</span>
+
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">ftpgrab</span>:
+    <span style="color:#66d9ef">image</span>: ftpgrab/ftpgrab:<span style="color:#ae81ff">6.4.0</span>
+    <span style="color:#66d9ef">container_name</span>: ftpgrab
+    <span style="color:#66d9ef">volumes</span>:
+      - <span style="color:#e6db74">&#34;./db:/db:rw&#34;</span>
+      - <span style="color:#e6db74">&#34;./download:/download:rw&#34;</span>
+      - <span style="color:#e6db74">&#34;./ftpgrab.yml:/ftpgrab.yml:ro&#34;</span>
+    <span style="color:#66d9ef">environment</span>:
+      - <span style="color:#e6db74">&#34;TZ=Asia/Shanghai&#34;</span>
+      - <span style="color:#e6db74">&#34;SCHEDULE=*/30 * * * *&#34;</span>
+      - <span style="color:#e6db74">&#34;LOG_LEVEL=debug&#34;</span>
+      - <span style="color:#e6db74">&#34;LOG_JSON=false&#34;</span>
+    <span style="color:#66d9ef">restart</span>: always
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># cat frpgrab.yml</span>
+
+<span style="color:#66d9ef">server</span>:
+  <span style="color:#66d9ef">type</span>: ftp
+  <span style="color:#66d9ef">ftp</span>:
+    <span style="color:#66d9ef">host</span>: <span style="color:#ae81ff">10.</span>xx.xx.xx
+    <span style="color:#66d9ef">port</span>: <span style="color:#ae81ff">21</span>
+    <span style="color:#66d9ef">username</span>: xxx
+    <span style="color:#66d9ef">password</span>: <span style="color:#e6db74">&#34;xxxxxxxx&#34;</span>
+    <span style="color:#66d9ef">sources</span>:
+      - /data/test
+    <span style="color:#66d9ef">timeout</span>: 5s
+    <span style="color:#66d9ef">disable_epsv</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">tls</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">insecure_skip_verify</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">log_trace</span>: <span style="color:#66d9ef">false</span>
+
+<span style="color:#66d9ef">db</span>:
+  <span style="color:#66d9ef">enable</span>: <span style="color:#66d9ef">true</span>
+
+<span style="color:#66d9ef">download</span>:
+  <span style="color:#66d9ef">uid</span>: <span style="color:#ae81ff">0</span>
+  <span style="color:#66d9ef">gid</span>: <span style="color:#ae81ff">0</span>
+  <span style="color:#66d9ef">chmod_file</span>: <span style="color:#ae81ff">0644</span>
+  <span style="color:#66d9ef">chmod_dir</span>: <span style="color:#ae81ff">0755</span>
+  <span style="color:#66d9ef">include</span>:
+  <span style="color:#66d9ef">exclude</span>:
+  <span style="color:#66d9ef">since</span>: <span style="color:#e6db74">2020-05-18T00:00:00Z</span>
+  <span style="color:#66d9ef">retry</span>: <span style="color:#ae81ff">3</span>
+  <span style="color:#66d9ef">hide_skipped</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">create_basedir</span>: <span style="color:#66d9ef">false</span>
+
+<span style="color:#66d9ef">notif</span>:
+  <span style="color:#66d9ef">mail</span>:
+    <span style="color:#66d9ef">enable</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">host</span>: smtp.example.com
+    <span style="color:#66d9ef">port</span>: <span style="color:#ae81ff">587</span>
+    <span style="color:#66d9ef">ssl</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">insecure_skip_verify</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">username</span>: webmaster@example.com
+    <span style="color:#66d9ef">password</span>: apassword
+    <span style="color:#66d9ef">from</span>: ftpgrab@example.com
+    <span style="color:#66d9ef">to</span>: webmaster@example.com
+  <span style="color:#66d9ef">webhook</span>:
+    <span style="color:#66d9ef">enable</span>: <span style="color:#66d9ef">true</span>
+    <span style="color:#66d9ef">endpoint</span>: http://<span style="color:#ae81ff">10.</span>xx.xx.xx:<span style="color:#ae81ff">9090</span>/wis/ftpgrab/webhook
+    <span style="color:#66d9ef">method</span>: GET
+    <span style="color:#66d9ef">headers</span>:
+      <span style="color:#66d9ef">Content-Type</span>: application/json
+    <span style="color:#75715e">#  Authorization: Token123456</span>
+    <span style="color:#66d9ef">timeout</span>: 10s
+</code></pre></div><h1 id="java">java</h1>
+<pre><code>version: '3.1'
+
+services:
+  java-8-test-idv:
+    image: store/oracle/serverjre:8
+    restart: always
+    container_name: java-8-test-idv
+    volumes:
+      - /data/java:/data/java
+    command: [&quot;tail&quot;,&quot;-f&quot;,&quot;/dev/null&quot;]
+</code></pre><h1 id="mongodb">mongodb</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">mongo</span>:
+    <span style="color:#66d9ef">image</span>: mongo:<span style="color:#ae81ff">4.1.7</span>
+    <span style="color:#66d9ef">container_name</span>: mongo
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">27017</span>:<span style="color:#ae81ff">27017</span>
+    <span style="color:#66d9ef">volumes</span>:
+      - /data/mongo/data:/data/db
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">MONGO_INITDB_ROOT_USERNAME</span>: root
+      <span style="color:#66d9ef">MONGO_INITDB_ROOT_PASSWORD</span>: xxxxxx
+      <span style="color:#66d9ef">wiredTigerCacheSizeGB</span>: <span style="color:#ae81ff">1.5</span>
+<span style="color:#75715e">#      MONGO_INITDB_DATABASE: gravitee</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
+
+  <span style="color:#66d9ef">mongo-express</span>:
+    <span style="color:#66d9ef">image</span>: mongo-express:<span style="color:#ae81ff">0.49</span>
+    <span style="color:#66d9ef">container_name</span>: mongo-express
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">8087</span>:<span style="color:#ae81ff">8081</span>
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">ME_CONFIG_MONGODB_ADMINUSERNAME</span>: root
+      <span style="color:#66d9ef">ME_CONFIG_MONGODB_ADMINPASSWORD</span>: xxxxxx
+      <span style="color:#66d9ef">ME_CONFIG_MONGODB_PORT</span>: <span style="color:#ae81ff">27017</span>
+      <span style="color:#66d9ef">ME_CONFIG_MONGODB_SERVER</span>: <span style="color:#ae81ff">10.</span>xx.xx.xx
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+</code></pre></div><h1 id="mysql">mysql</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
+
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">mysql-db</span>:
+    <span style="color:#66d9ef">image</span>: mysql:<span style="color:#ae81ff">5.7</span>
+    <span style="color:#66d9ef">command</span>: --default-authentication-plugin=mysql_native_password
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">3306</span>:<span style="color:#ae81ff">3306</span>
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">MYSQL_ROOT_PASSWORD</span>: xxxxxxxxxxx
+<span style="color:#75715e">#    volumes:</span>
+<span style="color:#75715e">#      - /data/mysql/data:/var/lib/mysql</span>
+<span style="color:#75715e">#      - /data/mysql/conf:/etc/mysql/conf.d</span>
+    <span style="color:#66d9ef">networks</span>:
+      - mysql-network
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == count</span>
+
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">mysql-network</span>:
+</code></pre></div><h1 id="nginx补充">nginx(补充)</h1>
+<pre><code>version: '3.1'
+
+services:
+  nginx-web-ssh:
+    image: 10.16.48.44:5000/nginx:1.14
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+#      - /data:/usr/share/nginx/html
+    ports:
+      - &quot;8084:80&quot;
+      - &quot;388:3888&quot;
+    environment:
+      - NGINX_HOST=wis.com
+      - NGINX_PORT=80
+    networks:
+      - nginx_net
+networks:
+  nginx_net:
+</code></pre><h1 id="openmeetings">openmeetings</h1>
+<pre><code>version: '3.7'
+
+services:
+  openmeetings:
+    image: apache/openmeetings:5.0.0-M4
+    restart: always
+    ports:
+      - &quot;5443:5443&quot;
+      - &quot;8888:8888&quot;
+    container_name: openmeetings
+    networks:
+      - openmeetings
+networks:
+  openmeetings:
+</code></pre><h1 id="postgis">postgis</h1>
+<pre><code>version: '3.1'
+
+services:
+  postgres:
+    image: postgres:9.6
+    restart: always
+    container_name: db_postgis
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: traffic
+      POSTGRES_PASSWORD: &quot;xxxxxx&quot;
+    ports:
+      - 5432:5432
+    volumes:
+      - /data/database:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      placement:
+#        constraints: 
+#          - node.labels.func == db
+  
+  adminer:
+    image: adminer:4.6.3
+    restart: always
+    container_name: database_dw
+    networks:
+      - adminer-network
+    ports:
+      - 8083:8080
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+
+networks:
+  postgres-network:
+  adminer-network:
+</code></pre><h1 id="registry">registry</h1>
+<pre><code>version: '3.1'
+
+services:
+  registry:
+    image: registry:2.7
+    restart: always
+    ports:
+      - 5000:5000
+    volumes:
+      - /data/registry/docker/registry:/var/lib/registry 
+</code></pre><h1 id="jenkins">jenkins</h1>
+<pre><code>version: '3.1'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:centos
+    container_name: jenkins_wis
+    restart: always
+    ports:
+      - 8535:8080
+      - 50000:50000
+    volumes:
+      - ./data:/var/jenkins_home
+    networks:
+      - jenkins_net
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  jenkins_net:
+</code></pre><h1 id="rabbitmq">rabbitmq</h1>
+<pre><code>version: '3.1'
+services:
+  rabbitmq:
+    image: 10.16.48.44:5000/rabbitmq:3.7.15
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq 
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    ports: 
+      - 4369:4369
+      - 5671:5671
+      - 5672:5672
+      - 25672:25672
+</code></pre><h1 id="rap2">rap2</h1>
+<pre><code>version: '3.1'
+
+services:
+  rap2-delos:
+    container_name: rap2-delos
+    # build from ./Dockerfile
+#    build: .
+    # build from images
+    image: 10.16.48.44:5000/blackdog1987/rap2-delos:2.6.aa3be03
+    environment:
+      - MYSQL_URL=10.xx.xx.xxx
+      - MYSQL_PORT=3306
+      - MYSQL_USERNAME=rap2
+      - MYSQL_PASSWD=rap2@123
+      - MYSQL_SCHEMA=rap2
+      - REDIS_URL=10.xx.xx.xxx
+      - REDIS_PORT=6379
+      # production / development
+      - NODE_ENV=production
+    privileged: true
+    command: node_dispatch_js
+    ports:
+      - &quot;8090:8080&quot;
+    deploy:
+      replicas: 1
+      mode: replicated
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: 
+          - node.labels.func == data
+
+</code></pre><h1 id="redis">redis</h1>
+<pre><code>version: '3.1'
+
+services:
+  redis:
+    image: redis:4.0.11
+    restart: always
+    container_name: redis_db
+    hostname: redis
+    ports: 
+      - 6379:6379
+    #cpus: 0.5
+    #mem_limit: 50g
+    #mem_limit: 1000000000
+    #memswap_limit: 2000000000
+    #memswap_limit: 70g
+    #mem_reservation: 15g
+    #privileged: true
+ #   volumes:
+ #     - /data/redis:/data
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      placement:
+#        constraints: 
+#          - node.labels.func == db
+</code></pre><h1 id="redmine">redmine</h1>
+<p>中文乱码需要去将mysql字符换成utf-8</p>
+<pre><code>version: '3.1'
+
+services:
+
+  redmine:
+    image: redmine:4.0.3
+    restart: always
+    ports:
+      - 8098:3000
+    volumes:
+      - /data/redmine/files:/usr/src/redmine/files
+      - /data/redmine/themes:/usr/src/redmine/public/themes
+    environment:
+      REDMINE_DB_MYSQL: 10.xx.xx.xxx
+      REDMINE_DB_PORT: 3306
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: xxxxxxx@xxx
+      REDMINE_DB_DATABASE: redmine
+      REDMINE_DB_ENCODING: utf8
+    deploy:
+      replicas: 1
+      mode: replicated
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.labels.func == count
+</code></pre><h1 id="kafka">kafka</h1>
+<pre><code>version: '3.1'
+services:
+  zoo1:
+    image: zookeeper:3.6.1
+#    restart: always
+    hostname: zoo1
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.5.0
+    hostname: kafka
+    container_name: kafka
+ #   restart: always
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 10.xx.xx.xx
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zoo1
+</code></pre><h1 id="prometheus">prometheus</h1>
+<pre><code>version: '3.7'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.19.2
+    container_name: monitor_prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - ./etc/prometheus.yml:/etc/prometheus/prometheus.yml   #prometheus配置文件
+#      - /data/prometheus/prometheus/data:/prometheus/data   #prometheus数据目录
+    environment:
+      - TZ=Asia/Shanghai
+#      - /data/prometheus/prometheus/config/first_rules.yml:/etc/prometheus/first_rules.yml   #报警配置文件
+#    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries  --web.console.templates=/usr/share/prometheus/consoles --web.external-url=http://10.16.48.44:9090    #重写了启动的配置参数，其中web.external-url配置问prometheus地址是为了在报警邮件里面点击直接到prometheus的web界面
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 512M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#        order: start-first # 更新顺序为新任务启动优先
+#      placement:
+#        constraints: 
+#          - node.labels.func == db
+</code></pre><pre><code># cat prometheus.yml
+
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - &quot;first_rules.yml&quot;
+  # - &quot;second_rules.yml&quot;
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['192.168.8.153:9090']
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['192.168.8.153:9100']
+
+  - job_name: 'dcgm-exporter'
+    static_configs:
+      - targets: ['192.168.8.153:9400']
+</code></pre><pre><code>FROM prom/prometheus:v2.9.2
+
+RUN chmod -R 777 /prometheus
+</code></pre><h1 id="grafana">grafana</h1>
+<pre><code>version: '3.7'
+
+services:
+  grafana:
+    image: grafana/grafana:7.0.6
+    container_name: monitor_grafana
+    restart: always
+    ports:
+      - 3001:3000
+    environment:
+      - TZ=Asia/Shanghai
+#    volumes:
+#      - /data/prometheus/grafana/config:/etc/grafana
+#      - /data/prometheus/grafana/data:/var/lib/grafana   #prometheus数据目录
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.2&quot;
+#          memory: 200M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#        # order: start-first # 更新顺序为新任务启动优先
+#      placement:
+#        constraints: 
+#          - node.labels.func == data
+</code></pre><h1 id="node-exporter">node-exporter</h1>
+<pre><code>version: '3.7'
+
+services:
+  node-exporter:
+    image: prom/node-exporter:v1.0.1
+    container_name: monitor_node-exporter
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - 9100:9100
+#    volumes:
+#      - /data:/data
+#    deploy:
+#      mode: global
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.1&quot;
+#          memory: 64M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#        order: start-first # 更新顺序为新任务启动优先
+</code></pre><h1 id="pushgateway">pushgateway</h1>
+<pre><code>version: '3.1'
+
+services:
+  pushgateway:
+    image: prom/pushgateway:v0.8.0
+    container_name: monitor_pushgateway
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports: 
+      - 9091:9091
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 200M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#      placement:
+#        constraints:              
+#          - node.labels.func == count
+</code></pre><h1 id="cadvisor">cadvisor</h1>
+<pre><code>version: '3.1'
+
+services:
+  cadvisor:
+    image: google/cadvisor:v0.33.0
+    container_name: monitor_cadvisor
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+       - /:/rootfs:ro
+       - /var/run:/var/run:rw
+       - /sys:/sys:ro
+       - /var/lib/docker/:/var/lib/docker:ro
+    ports: 
+      - 8184:8080
+    privileged: true
+#    deploy:
+#      mode: global
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.2&quot;
+#          memory: 200M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#        order: start-first # 更新顺序为新任务启动优先
+</code></pre><h1 id="dcgm-exporter">dcgm-exporter</h1>
+<pre><code>#!/bin/bash
+
+sudo docker run -d --gpus all --rm -p 9400:9400 nvidia/dcgm-exporter:1.7.2
+</code></pre><h1 id="elasticsearch_exporter">elasticsearch_exporter</h1>
+<pre><code>version: '3.1'
+
+services:
+  elasticsearch_exporter:
+    image: justwatch/elasticsearch_exporter:1.0.2
+    container_name: monitor_elasticsearch_exporter
+    command:
+      - '-es.uri=http://10.xx.xx.xx:9200'
+    restart: always
+    ports:
+      - 9108:9108
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 100M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#      placement:
+#        constraints: 
+#          - node.labels.func == db
+</code></pre><h1 id="filebeat">filebeat</h1>
+<pre><code>version: '3.1'
+services:
+  filebeat1:
+    image: store/elastic/filebeat:7.0.0
+    restart: always
+    container_name: monitor_filebeat
+    user: root
+    volumes:
+      - /data/prometheus/filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /data/docker/data/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&quot;10.16.48.44:9200&quot;] 
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 200M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#      placement:
+#        constraints: 
+#          - node.labels.func == db
+ 
+  filebeat2:
+    image: store/elastic/filebeat:7.0.0
+    restart: always
+    container_name: monitor_filebeat
+    user: root
+    volumes:
+      - /data/prometheus/filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /data/docker/data/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&quot;10.16.48.44:9200&quot;] 
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 200M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#      placement:
+#        constraints:              
+#          - node.labels.func == data
+  
+  filebeat3:
+    image: store/elastic/filebeat:7.0.0
+    restart: always
+    container_name: monitor_filebeat
+    user: root
+    volumes:
+      - /data/prometheus/filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /data/docker/data/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&quot;10.16.48.44:9200&quot;] 
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      restart_policy:
+#        condition: on-failure
+#      resources:
+#        limits:
+#          cpus: &quot;0.5&quot;
+#          memory: 200M
+#      update_config:
+#        parallelism: 1 # 每次更新1个副本
+#        delay: 5s # 每次更新间隔 
+#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+#      placement:
+#        constraints:              
+#          - node.labels.func == data
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/docker-compose/">docker-compose</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/" data-tooltip="Linux下ffmpeg调用gpu计算的方案">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/07/linux%E4%B8%8Bffmpeg%E8%B0%83%E7%94%A8gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88/" data-tooltip="Linux下ffmpeg调用gpu计算的方案">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2F%25E8%2587%25AA%25E5%25B7%25B1%25E5%25B8%25B8%25E7%2594%25A8%25E7%259A%2584docker-compose%25E6%2596%2587%25E4%25BB%25B6%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2F%25E8%2587%25AA%25E5%25B7%25B1%25E5%25B8%25B8%25E7%2594%25A8%25E7%259A%2584docker-compose%25E6%2596%2587%25E4%25BB%25B6%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F07%2F%25E8%2587%25AA%25E5%25B7%25B1%25E5%25B8%25B8%25E7%2594%25A8%25E7%259A%2584docker-compose%25E6%2596%2587%25E4%25BB%25B6%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+    
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/07\/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6\/';
+          
+            this.page.identifier = '\/2020\/07\/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
