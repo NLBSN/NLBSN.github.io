@@ -273,34 +273,34 @@
      点击：系统管理 &ndash;&gt; 全局工具配置
      大家根据自己的实际情况配置即可
      由于本人前面使用的是数据卷的形式，所以将相关的软件cp到jenkins_data数据卷进行安装。</p>
-<pre><code>[root@tag _data]# docker volume inspect jenkins_data
-[
-    {
-        &quot;CreatedAt&quot;: &quot;2019-03-20T12:54:52+08:00&quot;,
-        &quot;Driver&quot;: &quot;local&quot;,
-        &quot;Labels&quot;: {
-            &quot;com.docker.compose.project&quot;: &quot;jenkins&quot;,
-            &quot;com.docker.compose.version&quot;: &quot;1.23.0dev&quot;,
-            &quot;com.docker.compose.volume&quot;: &quot;data&quot;
-        },
-        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/jenkins_data/_data&quot;,
-        &quot;Name&quot;: &quot;jenkins_data&quot;,
-        &quot;Options&quot;: null,
-        &quot;Scope&quot;: &quot;local&quot;
-    }
-]
-</code></pre><p>     <em>可以直接将文件复制到挂载点(Mountpoint)：/var/lib/docker/volumes/jenkins_data/_data</em></p>
-<pre><code>[root@tag _data]# mkdir -p /var/lib/docker/volumes/jenkins_data/_data/soft
-[root@tag soft]# pwd
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>root@tag _data<span style="color:#f92672">]</span><span style="color:#75715e"># docker volume inspect jenkins_data</span>
+<span style="color:#f92672">[</span>
+    <span style="color:#f92672">{</span>
+        <span style="color:#e6db74">&#34;CreatedAt&#34;</span>: <span style="color:#e6db74">&#34;2019-03-20T12:54:52+08:00&#34;</span>,
+        <span style="color:#e6db74">&#34;Driver&#34;</span>: <span style="color:#e6db74">&#34;local&#34;</span>,
+        <span style="color:#e6db74">&#34;Labels&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;com.docker.compose.project&#34;</span>: <span style="color:#e6db74">&#34;jenkins&#34;</span>,
+            <span style="color:#e6db74">&#34;com.docker.compose.version&#34;</span>: <span style="color:#e6db74">&#34;1.23.0dev&#34;</span>,
+            <span style="color:#e6db74">&#34;com.docker.compose.volume&#34;</span>: <span style="color:#e6db74">&#34;data&#34;</span>
+        <span style="color:#f92672">}</span>,
+        <span style="color:#e6db74">&#34;Mountpoint&#34;</span>: <span style="color:#e6db74">&#34;/var/lib/docker/volumes/jenkins_data/_data&#34;</span>,
+        <span style="color:#e6db74">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;jenkins_data&#34;</span>,
+        <span style="color:#e6db74">&#34;Options&#34;</span>: null,
+        <span style="color:#e6db74">&#34;Scope&#34;</span>: <span style="color:#e6db74">&#34;local&#34;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">]</span>
+</code></pre></div><p>     <em>可以直接将文件复制到挂载点(Mountpoint)：/var/lib/docker/volumes/jenkins_data/_data</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>root@tag _data<span style="color:#f92672">]</span><span style="color:#75715e"># mkdir -p /var/lib/docker/volumes/jenkins_data/_data/soft</span>
+<span style="color:#f92672">[</span>root@tag soft<span style="color:#f92672">]</span><span style="color:#75715e"># pwd</span>
 /var/lib/docker/volumes/jenkins_data/_data/soft
-[root@tag soft]# ls
+<span style="color:#f92672">[</span>root@tag soft<span style="color:#f92672">]</span><span style="color:#75715e"># ls</span>
 apache-maven-3.5.0-bin.tar.gz  docker-18.06.0-ce.tgz  git-2.9.5.tar.gz  jdk-8u152-linux-x64.tar.gz
-[root@tag soft]# tar -zxvf apache-maven-3.5.0-bin.tar.gz 
-[root@tag soft]# tar -zxvf docker-18.06.0-ce.tgz
-[root@tag soft]# tar -zxvf jdk-8u152-linux-x64.tar.gz
-[root@tag soft]# ls
+<span style="color:#f92672">[</span>root@tag soft<span style="color:#f92672">]</span><span style="color:#75715e"># tar -zxvf apache-maven-3.5.0-bin.tar.gz</span> 
+<span style="color:#f92672">[</span>root@tag soft<span style="color:#f92672">]</span><span style="color:#75715e"># tar -zxvf docker-18.06.0-ce.tgz</span>
+<span style="color:#f92672">[</span>root@tag soft<span style="color:#f92672">]</span><span style="color:#75715e"># tar -zxvf jdk-8u152-linux-x64.tar.gz</span>
+<span style="color:#f92672">[</span>root@tag soft<span style="color:#f92672">]</span><span style="color:#75715e"># ls</span>
 apache-maven-3.5.0  apache-maven-3.5.0-bin.tar.gz  docker  docker-18.06.0-ce.tgz  git-2.9.5.tar.gz  jdk1.8.0_152  jdk-8u152-linux-x64.tar.gz
-</code></pre><p>配置示例如下：
+</code></pre></div><p>配置示例如下：
 <img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171457.jpg" alt="image.png">
 <img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628171506.jpg" alt="image.png"></p>
 <p>####1.2  jenkins插件配置</p>

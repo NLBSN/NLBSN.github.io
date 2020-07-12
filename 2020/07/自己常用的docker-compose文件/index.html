@@ -264,102 +264,102 @@
               <p>自己常用的一些docker-compose文件的记录</p>
 <p>[TOC]</p>
 <h1 id="elasticsearch">elasticsearch</h1>
-<pre><code>version: '3.1'
-services:
-  elasticsearch:
-    image: elasticsearch:6.4.3
-    container_name: elasticsearch
-    environment:
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">elasticsearch</span>:
+    <span style="color:#66d9ef">image</span>: elasticsearch:<span style="color:#ae81ff">6.4.3</span>
+    <span style="color:#66d9ef">container_name</span>: elasticsearch
+    <span style="color:#66d9ef">environment</span>:
       - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - &quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&quot;
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - /data/prometheus/elk/data/1:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-    networks:
+      - bootstrap.memory_lock=<span style="color:#66d9ef">true</span>
+      - <span style="color:#e6db74">&#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&#34;</span>
+    <span style="color:#66d9ef">ulimits</span>:
+      <span style="color:#66d9ef">memlock</span>:
+        <span style="color:#66d9ef">soft</span>: -<span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">hard</span>: -<span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">volumes</span>:
+      - /data/prometheus/elk/data/<span style="color:#ae81ff">1</span>:/usr/share/elasticsearch/data
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">9200</span>:<span style="color:#ae81ff">9200</span>
+    <span style="color:#66d9ef">networks</span>:
       - esnet
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 512M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#      placement:
-#        constraints: 
-#          - node.labels.func == db
-  elasticsearch2:
-    image: elasticsearch:6.4.3
-    container_name: elasticsearch2
-    environment:
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 512M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
+  <span style="color:#66d9ef">elasticsearch2</span>:
+    <span style="color:#66d9ef">image</span>: elasticsearch:<span style="color:#ae81ff">6.4.3</span>
+    <span style="color:#66d9ef">container_name</span>: elasticsearch2
+    <span style="color:#66d9ef">environment</span>:
       - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - &quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&quot;
-      - &quot;discovery.zen.ping.unicast.hosts=elasticsearch&quot;
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - /data/prometheus/elk/data/2:/usr/share/elasticsearch/data
-    networks:
+      - bootstrap.memory_lock=<span style="color:#66d9ef">true</span>
+      - <span style="color:#e6db74">&#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&#34;</span>
+      - <span style="color:#e6db74">&#34;discovery.zen.ping.unicast.hosts=elasticsearch&#34;</span>
+    <span style="color:#66d9ef">ulimits</span>:
+      <span style="color:#66d9ef">memlock</span>:
+        <span style="color:#66d9ef">soft</span>: -<span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">hard</span>: -<span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">volumes</span>:
+      - /data/prometheus/elk/data/<span style="color:#ae81ff">2</span>:/usr/share/elasticsearch/data
+    <span style="color:#66d9ef">networks</span>:
       - esnet
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 512M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#      placement:
-#        constraints:               
-#          - node.labels.func == db
-#volumes:
-#  esdata1:
-#    driver: local
-#  esdata2:
-#    driver: local
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 512M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints:               </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
+<span style="color:#75715e">#volumes:</span>
+<span style="color:#75715e">#  esdata1:</span>
+<span style="color:#75715e">#    driver: local</span>
+<span style="color:#75715e">#  esdata2:</span>
+<span style="color:#75715e">#    driver: local</span>
 
-networks:
-  esnet:
-</code></pre><h1 id="etcd">etcd</h1>
-<pre><code>version: '3.7'
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">esnet</span>:
+</code></pre></div><h1 id="etcd">etcd</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.7&#39;</span>
 
-services:
-  etcd:
-    image: bitnami/etcd:3.3.13
-    environment:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">etcd</span>:
+    <span style="color:#66d9ef">image</span>: bitnami/etcd:<span style="color:#ae81ff">3.3.13</span>
+    <span style="color:#66d9ef">environment</span>:
       - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
-    ports:
-      - 2379:2379
-      - 2380:2380
-    networks:
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:<span style="color:#ae81ff">2379</span>
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">2379</span>:<span style="color:#ae81ff">2379</span>
+      - <span style="color:#ae81ff">2380</span>:<span style="color:#ae81ff">2380</span>
+    <span style="color:#66d9ef">networks</span>:
       - app-tier
       
-networks:
-  app-tier:
-    driver: bridge
-</code></pre><h1 id="ftpgrab">ftpgrab</h1>
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">app-tier</span>:
+    <span style="color:#66d9ef">driver</span>: bridge
+</code></pre></div><h1 id="ftpgrab">ftpgrab</h1>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#34;3.2&#34;</span>
 
 <span style="color:#66d9ef">services</span>:
@@ -428,17 +428,17 @@ networks:
     <span style="color:#75715e">#  Authorization: Token123456</span>
     <span style="color:#66d9ef">timeout</span>: 10s
 </code></pre></div><h1 id="java">java</h1>
-<pre><code>version: '3.1'
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  java-8-test-idv:
-    image: store/oracle/serverjre:8
-    restart: always
-    container_name: java-8-test-idv
-    volumes:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">java-8-test-idv</span>:
+    <span style="color:#66d9ef">image</span>: store/oracle/serverjre:<span style="color:#ae81ff">8</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">container_name</span>: java<span style="color:#ae81ff">-8</span>-test-idv
+    <span style="color:#66d9ef">volumes</span>:
       - /data/java:/data/java
-    command: [&quot;tail&quot;,&quot;-f&quot;,&quot;/dev/null&quot;]
-</code></pre><h1 id="mongodb">mongodb</h1>
+    <span style="color:#66d9ef">command</span>: [<span style="color:#e6db74">&#34;tail&#34;</span>,<span style="color:#e6db74">&#34;-f&#34;</span>,<span style="color:#e6db74">&#34;/dev/null&#34;</span>]
+</code></pre></div><h1 id="mongodb">mongodb</h1>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 <span style="color:#66d9ef">services</span>:
   <span style="color:#66d9ef">mongo</span>:
@@ -508,564 +508,564 @@ services:
 <span style="color:#66d9ef">networks</span>:
   <span style="color:#66d9ef">mysql-network</span>:
 </code></pre></div><h1 id="nginx补充">nginx(补充)</h1>
-<pre><code>version: '3.1'
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  nginx-web-ssh:
-    image: 10.16.48.44:5000/nginx:1.14
-    restart: always
-    volumes:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">nginx-web-ssh</span>:
+    <span style="color:#66d9ef">image</span>: <span style="color:#ae81ff">10.16.48.44</span>:<span style="color:#ae81ff">5000</span>/nginx:<span style="color:#ae81ff">1.14</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">volumes</span>:
       - ./nginx.conf:/etc/nginx/nginx.conf
-#      - /data:/usr/share/nginx/html
-    ports:
-      - &quot;8084:80&quot;
-      - &quot;388:3888&quot;
-    environment:
+<span style="color:#75715e">#      - /data:/usr/share/nginx/html</span>
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#e6db74">&#34;8084:80&#34;</span>
+      - <span style="color:#e6db74">&#34;388:3888&#34;</span>
+    <span style="color:#66d9ef">environment</span>:
       - NGINX_HOST=wis.com
-      - NGINX_PORT=80
-    networks:
+      - NGINX_PORT=<span style="color:#ae81ff">80</span>
+    <span style="color:#66d9ef">networks</span>:
       - nginx_net
-networks:
-  nginx_net:
-</code></pre><h1 id="openmeetings">openmeetings</h1>
-<pre><code>version: '3.7'
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">nginx_net</span>:
+</code></pre></div><h1 id="openmeetings">openmeetings</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.7&#39;</span>
 
-services:
-  openmeetings:
-    image: apache/openmeetings:5.0.0-M4
-    restart: always
-    ports:
-      - &quot;5443:5443&quot;
-      - &quot;8888:8888&quot;
-    container_name: openmeetings
-    networks:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">openmeetings</span>:
+    <span style="color:#66d9ef">image</span>: apache/openmeetings:<span style="color:#ae81ff">5.0.0</span>-M4
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#e6db74">&#34;5443:5443&#34;</span>
+      - <span style="color:#e6db74">&#34;8888:8888&#34;</span>
+    <span style="color:#66d9ef">container_name</span>: openmeetings
+    <span style="color:#66d9ef">networks</span>:
       - openmeetings
-networks:
-  openmeetings:
-</code></pre><h1 id="postgis">postgis</h1>
-<pre><code>version: '3.1'
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">openmeetings</span>:
+</code></pre></div><h1 id="postgis">postgis</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  postgres:
-    image: postgres:9.6
-    restart: always
-    container_name: db_postgis
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_DB: traffic
-      POSTGRES_PASSWORD: &quot;xxxxxx&quot;
-    ports:
-      - 5432:5432
-    volumes:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">postgres</span>:
+    <span style="color:#66d9ef">image</span>: postgres:<span style="color:#ae81ff">9.6</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">container_name</span>: db_postgis
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">POSTGRES_USER</span>: root
+      <span style="color:#66d9ef">POSTGRES_DB</span>: traffic
+      <span style="color:#66d9ef">POSTGRES_PASSWORD</span>: <span style="color:#e6db74">&#34;xxxxxx&#34;</span>
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">5432</span>:<span style="color:#ae81ff">5432</span>
+    <span style="color:#66d9ef">volumes</span>:
       - /data/database:/var/lib/postgresql/data
-    networks:
+    <span style="color:#66d9ef">networks</span>:
       - postgres-network
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      placement:
-#        constraints: 
-#          - node.labels.func == db
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
   
-  adminer:
-    image: adminer:4.6.3
-    restart: always
-    container_name: database_dw
-    networks:
+  <span style="color:#66d9ef">adminer</span>:
+    <span style="color:#66d9ef">image</span>: adminer:<span style="color:#ae81ff">4.6.3</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">container_name</span>: database_dw
+    <span style="color:#66d9ef">networks</span>:
       - adminer-network
-    ports:
-      - 8083:8080
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">8083</span>:<span style="color:#ae81ff">8080</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
 
-networks:
-  postgres-network:
-  adminer-network:
-</code></pre><h1 id="registry">registry</h1>
-<pre><code>version: '3.1'
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">postgres-network</span>:
+  <span style="color:#66d9ef">adminer-network</span>:
+</code></pre></div><h1 id="registry">registry</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  registry:
-    image: registry:2.7
-    restart: always
-    ports:
-      - 5000:5000
-    volumes:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">registry</span>:
+    <span style="color:#66d9ef">image</span>: registry:<span style="color:#ae81ff">2.7</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">5000</span>:<span style="color:#ae81ff">5000</span>
+    <span style="color:#66d9ef">volumes</span>:
       - /data/registry/docker/registry:/var/lib/registry 
-</code></pre><h1 id="jenkins">jenkins</h1>
-<pre><code>version: '3.1'
+</code></pre></div><h1 id="jenkins">jenkins</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  jenkins:
-    image: jenkins/jenkins:centos
-    container_name: jenkins_wis
-    restart: always
-    ports:
-      - 8535:8080
-      - 50000:50000
-    volumes:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">jenkins</span>:
+    <span style="color:#66d9ef">image</span>: jenkins/jenkins:centos
+    <span style="color:#66d9ef">container_name</span>: jenkins_wis
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">8535</span>:<span style="color:#ae81ff">8080</span>
+      - <span style="color:#ae81ff">50000</span>:<span style="color:#ae81ff">50000</span>
+    <span style="color:#66d9ef">volumes</span>:
       - ./data:/var/jenkins_home
-    networks:
+    <span style="color:#66d9ef">networks</span>:
       - jenkins_net
 
-volumes:
-  data:
-    driver: local
+<span style="color:#66d9ef">volumes</span>:
+  <span style="color:#66d9ef">data</span>:
+    <span style="color:#66d9ef">driver</span>: local
 
-networks:
-  jenkins_net:
-</code></pre><h1 id="rabbitmq">rabbitmq</h1>
-<pre><code>version: '3.1'
-services:
-  rabbitmq:
-    image: 10.16.48.44:5000/rabbitmq:3.7.15
-    restart: always
-    environment:
-      RABBITMQ_DEFAULT_USER: rabbitmq 
-      RABBITMQ_DEFAULT_PASS: rabbitmq
-    ports: 
-      - 4369:4369
-      - 5671:5671
-      - 5672:5672
-      - 25672:25672
-</code></pre><h1 id="rap2">rap2</h1>
-<pre><code>version: '3.1'
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">jenkins_net</span>:
+</code></pre></div><h1 id="rabbitmq">rabbitmq</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">rabbitmq</span>:
+    <span style="color:#66d9ef">image</span>: <span style="color:#ae81ff">10.16.48.44</span>:<span style="color:#ae81ff">5000</span>/rabbitmq:<span style="color:#ae81ff">3.7.15</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">RABBITMQ_DEFAULT_USER</span>: rabbitmq 
+      <span style="color:#66d9ef">RABBITMQ_DEFAULT_PASS</span>: rabbitmq
+    <span style="color:#66d9ef">ports</span>: 
+      - <span style="color:#ae81ff">4369</span>:<span style="color:#ae81ff">4369</span>
+      - <span style="color:#ae81ff">5671</span>:<span style="color:#ae81ff">5671</span>
+      - <span style="color:#ae81ff">5672</span>:<span style="color:#ae81ff">5672</span>
+      - <span style="color:#ae81ff">25672</span>:<span style="color:#ae81ff">25672</span>
+</code></pre></div><h1 id="rap2">rap2</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  rap2-delos:
-    container_name: rap2-delos
-    # build from ./Dockerfile
-#    build: .
-    # build from images
-    image: 10.16.48.44:5000/blackdog1987/rap2-delos:2.6.aa3be03
-    environment:
-      - MYSQL_URL=10.xx.xx.xxx
-      - MYSQL_PORT=3306
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">rap2-delos</span>:
+    <span style="color:#66d9ef">container_name</span>: rap2-delos
+    <span style="color:#75715e"># build from ./Dockerfile</span>
+<span style="color:#75715e">#    build: .</span>
+    <span style="color:#75715e"># build from images</span>
+    <span style="color:#66d9ef">image</span>: <span style="color:#ae81ff">10.16.48.44</span>:<span style="color:#ae81ff">5000</span>/blackdog1987/rap2-delos:<span style="color:#ae81ff">2.6</span>.aa3be03
+    <span style="color:#66d9ef">environment</span>:
+      - MYSQL_URL=<span style="color:#ae81ff">10.</span>xx.xx.xxx
+      - MYSQL_PORT=<span style="color:#ae81ff">3306</span>
       - MYSQL_USERNAME=rap2
-      - MYSQL_PASSWD=rap2@123
+      - MYSQL_PASSWD=rap2@<span style="color:#ae81ff">123</span>
       - MYSQL_SCHEMA=rap2
-      - REDIS_URL=10.xx.xx.xxx
-      - REDIS_PORT=6379
-      # production / development
+      - REDIS_URL=<span style="color:#ae81ff">10.</span>xx.xx.xxx
+      - REDIS_PORT=<span style="color:#ae81ff">6379</span>
+      <span style="color:#75715e"># production / development</span>
       - NODE_ENV=production
-    privileged: true
-    command: node_dispatch_js
-    ports:
-      - &quot;8090:8080&quot;
-    deploy:
-      replicas: 1
-      mode: replicated
-      restart_policy:
-        condition: on-failure
-      placement:
-        constraints: 
+    <span style="color:#66d9ef">privileged</span>: <span style="color:#66d9ef">true</span>
+    <span style="color:#66d9ef">command</span>: node_dispatch_js
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#e6db74">&#34;8090:8080&#34;</span>
+    <span style="color:#66d9ef">deploy</span>:
+      <span style="color:#66d9ef">replicas</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#66d9ef">mode</span>: replicated
+      <span style="color:#66d9ef">restart_policy</span>:
+        <span style="color:#66d9ef">condition</span>: on-failure
+      <span style="color:#66d9ef">placement</span>:
+        <span style="color:#66d9ef">constraints</span>: 
           - node.labels.func == data
 
-</code></pre><h1 id="redis">redis</h1>
-<pre><code>version: '3.1'
+</code></pre></div><h1 id="redis">redis</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  redis:
-    image: redis:4.0.11
-    restart: always
-    container_name: redis_db
-    hostname: redis
-    ports: 
-      - 6379:6379
-    #cpus: 0.5
-    #mem_limit: 50g
-    #mem_limit: 1000000000
-    #memswap_limit: 2000000000
-    #memswap_limit: 70g
-    #mem_reservation: 15g
-    #privileged: true
- #   volumes:
- #     - /data/redis:/data
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      placement:
-#        constraints: 
-#          - node.labels.func == db
-</code></pre><h1 id="redmine">redmine</h1>
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">redis</span>:
+    <span style="color:#66d9ef">image</span>: redis:<span style="color:#ae81ff">4.0.11</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">container_name</span>: redis_db
+    <span style="color:#66d9ef">hostname</span>: redis
+    <span style="color:#66d9ef">ports</span>: 
+      - <span style="color:#ae81ff">6379</span>:<span style="color:#ae81ff">6379</span>
+    <span style="color:#75715e">#cpus: 0.5</span>
+    <span style="color:#75715e">#mem_limit: 50g</span>
+    <span style="color:#75715e">#mem_limit: 1000000000</span>
+    <span style="color:#75715e">#memswap_limit: 2000000000</span>
+    <span style="color:#75715e">#memswap_limit: 70g</span>
+    <span style="color:#75715e">#mem_reservation: 15g</span>
+    <span style="color:#75715e">#privileged: true</span>
+ <span style="color:#75715e">#   volumes:</span>
+ <span style="color:#75715e">#     - /data/redis:/data</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
+</code></pre></div><h1 id="redmine">redmine</h1>
 <p>中文乱码需要去将mysql字符换成utf-8</p>
-<pre><code>version: '3.1'
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
+<span style="color:#66d9ef">services</span>:
 
-  redmine:
-    image: redmine:4.0.3
-    restart: always
-    ports:
-      - 8098:3000
-    volumes:
+  <span style="color:#66d9ef">redmine</span>:
+    <span style="color:#66d9ef">image</span>: redmine:<span style="color:#ae81ff">4.0.3</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">8098</span>:<span style="color:#ae81ff">3000</span>
+    <span style="color:#66d9ef">volumes</span>:
       - /data/redmine/files:/usr/src/redmine/files
       - /data/redmine/themes:/usr/src/redmine/public/themes
-    environment:
-      REDMINE_DB_MYSQL: 10.xx.xx.xxx
-      REDMINE_DB_PORT: 3306
-      REDMINE_DB_USERNAME: redmine
-      REDMINE_DB_PASSWORD: xxxxxxx@xxx
-      REDMINE_DB_DATABASE: redmine
-      REDMINE_DB_ENCODING: utf8
-    deploy:
-      replicas: 1
-      mode: replicated
-      restart_policy:
-        condition: on-failure
-      placement:
-        constraints:
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">REDMINE_DB_MYSQL</span>: <span style="color:#ae81ff">10.</span>xx.xx.xxx
+      <span style="color:#66d9ef">REDMINE_DB_PORT</span>: <span style="color:#ae81ff">3306</span>
+      <span style="color:#66d9ef">REDMINE_DB_USERNAME</span>: redmine
+      <span style="color:#66d9ef">REDMINE_DB_PASSWORD</span>: xxxxxxx@xxx
+      <span style="color:#66d9ef">REDMINE_DB_DATABASE</span>: redmine
+      <span style="color:#66d9ef">REDMINE_DB_ENCODING</span>: utf8
+    <span style="color:#66d9ef">deploy</span>:
+      <span style="color:#66d9ef">replicas</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#66d9ef">mode</span>: replicated
+      <span style="color:#66d9ef">restart_policy</span>:
+        <span style="color:#66d9ef">condition</span>: on-failure
+      <span style="color:#66d9ef">placement</span>:
+        <span style="color:#66d9ef">constraints</span>:
           - node.labels.func == count
-</code></pre><h1 id="kafka">kafka</h1>
-<pre><code>version: '3.1'
-services:
-  zoo1:
-    image: zookeeper:3.6.1
-#    restart: always
-    hostname: zoo1
-    ports:
-      - 2181:2181
-    environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181
+</code></pre></div><h1 id="kafka">kafka</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">zoo1</span>:
+    <span style="color:#66d9ef">image</span>: zookeeper:<span style="color:#ae81ff">3.6.1</span>
+<span style="color:#75715e">#    restart: always</span>
+    <span style="color:#66d9ef">hostname</span>: zoo1
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">2181</span>:<span style="color:#ae81ff">2181</span>
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">ZOO_MY_ID</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#66d9ef">ZOO_SERVERS</span>: server<span style="color:#ae81ff">.1</span>=<span style="color:#ae81ff">0.0.0.0</span>:<span style="color:#ae81ff">2888</span>:<span style="color:#ae81ff">3888</span>;<span style="color:#ae81ff">2181</span>
 
-  kafka:
-    image: wurstmeister/kafka:2.12-2.5.0
-    hostname: kafka
-    container_name: kafka
- #   restart: always
-    ports:
-      - 9092:9092
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: 10.xx.xx.xx
-      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
-      KAFKA_BROKER_ID: 1
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
+  <span style="color:#66d9ef">kafka</span>:
+    <span style="color:#66d9ef">image</span>: wurstmeister/kafka:<span style="color:#ae81ff">2.12-2.5.0</span>
+    <span style="color:#66d9ef">hostname</span>: kafka
+    <span style="color:#66d9ef">container_name</span>: kafka
+ <span style="color:#75715e">#   restart: always</span>
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">9092</span>:<span style="color:#ae81ff">9092</span>
+    <span style="color:#66d9ef">environment</span>:
+      <span style="color:#66d9ef">KAFKA_ADVERTISED_HOST_NAME</span>: <span style="color:#ae81ff">10.</span>xx.xx.xx
+      <span style="color:#66d9ef">KAFKA_ZOOKEEPER_CONNECT</span>: zoo1:<span style="color:#ae81ff">2181</span>
+      <span style="color:#66d9ef">KAFKA_BROKER_ID</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#66d9ef">KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR</span>: <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">depends_on</span>:
       - zoo1
-</code></pre><h1 id="prometheus">prometheus</h1>
-<pre><code>version: '3.7'
+</code></pre></div><h1 id="prometheus">prometheus</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.7&#39;</span>
 
-services:
-  prometheus:
-    image: prom/prometheus:v2.19.2
-    container_name: monitor_prometheus
-    restart: always
-    ports:
-      - 9090:9090
-    volumes:
-      - ./etc/prometheus.yml:/etc/prometheus/prometheus.yml   #prometheus配置文件
-#      - /data/prometheus/prometheus/data:/prometheus/data   #prometheus数据目录
-    environment:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">prometheus</span>:
+    <span style="color:#66d9ef">image</span>: prom/prometheus:v2<span style="color:#ae81ff">.19.2</span>
+    <span style="color:#66d9ef">container_name</span>: monitor_prometheus
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">9090</span>:<span style="color:#ae81ff">9090</span>
+    <span style="color:#66d9ef">volumes</span>:
+      - ./etc/prometheus.yml:/etc/prometheus/prometheus.yml   <span style="color:#75715e">#prometheus配置文件</span>
+<span style="color:#75715e">#      - /data/prometheus/prometheus/data:/prometheus/data   #prometheus数据目录</span>
+    <span style="color:#66d9ef">environment</span>:
       - TZ=Asia/Shanghai
-#      - /data/prometheus/prometheus/config/first_rules.yml:/etc/prometheus/first_rules.yml   #报警配置文件
-#    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries  --web.console.templates=/usr/share/prometheus/consoles --web.external-url=http://10.16.48.44:9090    #重写了启动的配置参数，其中web.external-url配置问prometheus地址是为了在报警邮件里面点击直接到prometheus的web界面
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 512M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#        order: start-first # 更新顺序为新任务启动优先
-#      placement:
-#        constraints: 
-#          - node.labels.func == db
-</code></pre><pre><code># cat prometheus.yml
+<span style="color:#75715e">#      - /data/prometheus/prometheus/config/first_rules.yml:/etc/prometheus/first_rules.yml   #报警配置文件</span>
+<span style="color:#75715e">#    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries  --web.console.templates=/usr/share/prometheus/consoles --web.external-url=http://10.16.48.44:9090    #重写了启动的配置参数，其中web.external-url配置问prometheus地址是为了在报警邮件里面点击直接到prometheus的web界面</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 512M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#        order: start-first # 更新顺序为新任务启动优先</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># cat prometheus.yml</span>
 
-# my global config
-global:
-  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
-  # scrape_timeout is set to the global default (10s).
+<span style="color:#75715e"># my global config</span>
+<span style="color:#66d9ef">global</span>:
+  <span style="color:#66d9ef">scrape_interval</span>:     15s <span style="color:#75715e"># Set the scrape interval to every 15 seconds. Default is every 1 minute.</span>
+  <span style="color:#66d9ef">evaluation_interval</span>: 15s <span style="color:#75715e"># Evaluate rules every 15 seconds. The default is every 1 minute.</span>
+  <span style="color:#75715e"># scrape_timeout is set to the global default (10s).</span>
 
-# Alertmanager configuration
-alerting:
-  alertmanagers:
-  - static_configs:
-    - targets:
-      # - alertmanager:9093
+<span style="color:#75715e"># Alertmanager configuration</span>
+<span style="color:#66d9ef">alerting</span>:
+  <span style="color:#66d9ef">alertmanagers</span>:
+  - <span style="color:#66d9ef">static_configs</span>:
+    - <span style="color:#66d9ef">targets</span>:
+      <span style="color:#75715e"># - alertmanager:9093</span>
 
-# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
-rule_files:
-  # - &quot;first_rules.yml&quot;
-  # - &quot;second_rules.yml&quot;
+<span style="color:#75715e"># Load rules once and periodically evaluate them according to the global &#39;evaluation_interval&#39;.</span>
+<span style="color:#66d9ef">rule_files</span>:
+  <span style="color:#75715e"># - &#34;first_rules.yml&#34;</span>
+  <span style="color:#75715e"># - &#34;second_rules.yml&#34;</span>
 
-# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
-scrape_configs:
-  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['192.168.8.153:9090']
+<span style="color:#75715e"># A scrape configuration containing exactly one endpoint to scrape:</span>
+<span style="color:#75715e"># Here it&#39;s Prometheus itself.</span>
+<span style="color:#66d9ef">scrape_configs</span>:
+  <span style="color:#75715e"># The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</span>
+  - <span style="color:#66d9ef">job_name</span>: <span style="color:#e6db74">&#39;prometheus&#39;</span>
+    <span style="color:#66d9ef">static_configs</span>:
+      - <span style="color:#66d9ef">targets</span>: [<span style="color:#e6db74">&#39;192.168.8.153:9090&#39;</span>]
 
-  - job_name: 'node-exporter'
-    static_configs:
-      - targets: ['192.168.8.153:9100']
+  - <span style="color:#66d9ef">job_name</span>: <span style="color:#e6db74">&#39;node-exporter&#39;</span>
+    <span style="color:#66d9ef">static_configs</span>:
+      - <span style="color:#66d9ef">targets</span>: [<span style="color:#e6db74">&#39;192.168.8.153:9100&#39;</span>]
 
-  - job_name: 'dcgm-exporter'
-    static_configs:
-      - targets: ['192.168.8.153:9400']
-</code></pre><pre><code>FROM prom/prometheus:v2.9.2
+  - <span style="color:#66d9ef">job_name</span>: <span style="color:#e6db74">&#39;dcgm-exporter&#39;</span>
+    <span style="color:#66d9ef">static_configs</span>:
+      - <span style="color:#66d9ef">targets</span>: [<span style="color:#e6db74">&#39;192.168.8.153:9400&#39;</span>]
+</code></pre></div><pre><code>FROM prom/prometheus:v2.9.2
 
 RUN chmod -R 777 /prometheus
 </code></pre><h1 id="grafana">grafana</h1>
-<pre><code>version: '3.7'
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.7&#39;</span>
 
-services:
-  grafana:
-    image: grafana/grafana:7.0.6
-    container_name: monitor_grafana
-    restart: always
-    ports:
-      - 3001:3000
-    environment:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">grafana</span>:
+    <span style="color:#66d9ef">image</span>: grafana/grafana:<span style="color:#ae81ff">7.0.6</span>
+    <span style="color:#66d9ef">container_name</span>: monitor_grafana
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">3001</span>:<span style="color:#ae81ff">3000</span>
+    <span style="color:#66d9ef">environment</span>:
       - TZ=Asia/Shanghai
-#    volumes:
-#      - /data/prometheus/grafana/config:/etc/grafana
-#      - /data/prometheus/grafana/data:/var/lib/grafana   #prometheus数据目录
-#    deploy:
-#      replicas: 1
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.2&quot;
-#          memory: 200M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#        # order: start-first # 更新顺序为新任务启动优先
-#      placement:
-#        constraints: 
-#          - node.labels.func == data
-</code></pre><h1 id="node-exporter">node-exporter</h1>
-<pre><code>version: '3.7'
+<span style="color:#75715e">#    volumes:</span>
+<span style="color:#75715e">#      - /data/prometheus/grafana/config:/etc/grafana</span>
+<span style="color:#75715e">#      - /data/prometheus/grafana/data:/var/lib/grafana   #prometheus数据目录</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.2&#34;</span>
+<span style="color:#75715e">#          memory: 200M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#        # order: start-first # 更新顺序为新任务启动优先</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == data</span>
+</code></pre></div><h1 id="node-exporter">node-exporter</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.7&#39;</span>
 
-services:
-  node-exporter:
-    image: prom/node-exporter:v1.0.1
-    container_name: monitor_node-exporter
-    restart: always
-    environment:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">node-exporter</span>:
+    <span style="color:#66d9ef">image</span>: prom/node-exporter:v1<span style="color:#ae81ff">.0.1</span>
+    <span style="color:#66d9ef">container_name</span>: monitor_node-exporter
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">environment</span>:
       - TZ=Asia/Shanghai
-    ports:
-      - 9100:9100
-#    volumes:
-#      - /data:/data
-#    deploy:
-#      mode: global
-#      replicas: 1
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.1&quot;
-#          memory: 64M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#        order: start-first # 更新顺序为新任务启动优先
-</code></pre><h1 id="pushgateway">pushgateway</h1>
-<pre><code>version: '3.1'
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">9100</span>:<span style="color:#ae81ff">9100</span>
+<span style="color:#75715e">#    volumes:</span>
+<span style="color:#75715e">#      - /data:/data</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      mode: global</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.1&#34;</span>
+<span style="color:#75715e">#          memory: 64M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#        order: start-first # 更新顺序为新任务启动优先</span>
+</code></pre></div><h1 id="pushgateway">pushgateway</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  pushgateway:
-    image: prom/pushgateway:v0.8.0
-    container_name: monitor_pushgateway
-    restart: always
-    environment:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">pushgateway</span>:
+    <span style="color:#66d9ef">image</span>: prom/pushgateway:v0<span style="color:#ae81ff">.8.0</span>
+    <span style="color:#66d9ef">container_name</span>: monitor_pushgateway
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">environment</span>:
       - TZ=Asia/Shanghai
-    ports: 
-      - 9091:9091
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 200M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#      placement:
-#        constraints:              
-#          - node.labels.func == count
-</code></pre><h1 id="cadvisor">cadvisor</h1>
-<pre><code>version: '3.1'
+    <span style="color:#66d9ef">ports</span>: 
+      - <span style="color:#ae81ff">9091</span>:<span style="color:#ae81ff">9091</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 200M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints:              </span>
+<span style="color:#75715e">#          - node.labels.func == count</span>
+</code></pre></div><h1 id="cadvisor">cadvisor</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  cadvisor:
-    image: google/cadvisor:v0.33.0
-    container_name: monitor_cadvisor
-    restart: always
-    environment:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">cadvisor</span>:
+    <span style="color:#66d9ef">image</span>: google/cadvisor:v0<span style="color:#ae81ff">.33.0</span>
+    <span style="color:#66d9ef">container_name</span>: monitor_cadvisor
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">environment</span>:
       - TZ=Asia/Shanghai
-    volumes:
+    <span style="color:#66d9ef">volumes</span>:
        - /:/rootfs:ro
        - /var/run:/var/run:rw
        - /sys:/sys:ro
        - /var/lib/docker/:/var/lib/docker:ro
-    ports: 
-      - 8184:8080
-    privileged: true
-#    deploy:
-#      mode: global
-#      replicas: 1
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.2&quot;
-#          memory: 200M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#        order: start-first # 更新顺序为新任务启动优先
-</code></pre><h1 id="dcgm-exporter">dcgm-exporter</h1>
-<pre><code>#!/bin/bash
-
+    <span style="color:#66d9ef">ports</span>: 
+      - <span style="color:#ae81ff">8184</span>:<span style="color:#ae81ff">8080</span>
+    <span style="color:#66d9ef">privileged</span>: <span style="color:#66d9ef">true</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      mode: global</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.2&#34;</span>
+<span style="color:#75715e">#          memory: 200M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#        order: start-first # 更新顺序为新任务启动优先</span>
+</code></pre></div><h1 id="dcgm-exporter">dcgm-exporter</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>
 sudo docker run -d --gpus all --rm -p 9400:9400 nvidia/dcgm-exporter:1.7.2
-</code></pre><h1 id="elasticsearch_exporter">elasticsearch_exporter</h1>
-<pre><code>version: '3.1'
+</code></pre></div><h1 id="elasticsearch_exporter">elasticsearch_exporter</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
 
-services:
-  elasticsearch_exporter:
-    image: justwatch/elasticsearch_exporter:1.0.2
-    container_name: monitor_elasticsearch_exporter
-    command:
-      - '-es.uri=http://10.xx.xx.xx:9200'
-    restart: always
-    ports:
-      - 9108:9108
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 100M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#      placement:
-#        constraints: 
-#          - node.labels.func == db
-</code></pre><h1 id="filebeat">filebeat</h1>
-<pre><code>version: '3.1'
-services:
-  filebeat1:
-    image: store/elastic/filebeat:7.0.0
-    restart: always
-    container_name: monitor_filebeat
-    user: root
-    volumes:
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">elasticsearch_exporter</span>:
+    <span style="color:#66d9ef">image</span>: justwatch/elasticsearch_exporter:<span style="color:#ae81ff">1.0.2</span>
+    <span style="color:#66d9ef">container_name</span>: monitor_elasticsearch_exporter
+    <span style="color:#66d9ef">command</span>:
+      - <span style="color:#e6db74">&#39;-es.uri=http://10.xx.xx.xx:9200&#39;</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#ae81ff">9108</span>:<span style="color:#ae81ff">9108</span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 100M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
+</code></pre></div><h1 id="filebeat">filebeat</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.1&#39;</span>
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">filebeat1</span>:
+    <span style="color:#66d9ef">image</span>: store/elastic/filebeat:<span style="color:#ae81ff">7.0.0</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">container_name</span>: monitor_filebeat
+    <span style="color:#66d9ef">user</span>: root
+    <span style="color:#66d9ef">volumes</span>:
       - /data/prometheus/filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
       - /data/docker/data/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&quot;10.16.48.44:9200&quot;] 
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 200M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#      placement:
-#        constraints: 
-#          - node.labels.func == db
+<span style="color:#75715e">#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&#34;10.16.48.44:9200&#34;] </span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 200M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints: </span>
+<span style="color:#75715e">#          - node.labels.func == db</span>
  
-  filebeat2:
-    image: store/elastic/filebeat:7.0.0
-    restart: always
-    container_name: monitor_filebeat
-    user: root
-    volumes:
+  <span style="color:#66d9ef">filebeat2</span>:
+    <span style="color:#66d9ef">image</span>: store/elastic/filebeat:<span style="color:#ae81ff">7.0.0</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">container_name</span>: monitor_filebeat
+    <span style="color:#66d9ef">user</span>: root
+    <span style="color:#66d9ef">volumes</span>:
       - /data/prometheus/filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
       - /data/docker/data/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&quot;10.16.48.44:9200&quot;] 
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 200M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#      placement:
-#        constraints:              
-#          - node.labels.func == data
+<span style="color:#75715e">#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&#34;10.16.48.44:9200&#34;] </span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 200M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints:              </span>
+<span style="color:#75715e">#          - node.labels.func == data</span>
   
-  filebeat3:
-    image: store/elastic/filebeat:7.0.0
-    restart: always
-    container_name: monitor_filebeat
-    user: root
-    volumes:
+  <span style="color:#66d9ef">filebeat3</span>:
+    <span style="color:#66d9ef">image</span>: store/elastic/filebeat:<span style="color:#ae81ff">7.0.0</span>
+    <span style="color:#66d9ef">restart</span>: always
+    <span style="color:#66d9ef">container_name</span>: monitor_filebeat
+    <span style="color:#66d9ef">user</span>: root
+    <span style="color:#66d9ef">volumes</span>:
       - /data/prometheus/filebeat/config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
       - /data/docker/data/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&quot;10.16.48.44:9200&quot;] 
-#    deploy:
-#      replicas: 1
-#      mode: replicated
-#      restart_policy:
-#        condition: on-failure
-#      resources:
-#        limits:
-#          cpus: &quot;0.5&quot;
-#          memory: 200M
-#      update_config:
-#        parallelism: 1 # 每次更新1个副本
-#        delay: 5s # 每次更新间隔 
-#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-#      placement:
-#        constraints:              
-#          - node.labels.func == data
-</code></pre>
+<span style="color:#75715e">#    command: filebeat -e -strict.perms=false -E output.elasticsearch.hosts=[&#34;10.16.48.44:9200&#34;] </span>
+<span style="color:#75715e">#    deploy:</span>
+<span style="color:#75715e">#      replicas: 1</span>
+<span style="color:#75715e">#      mode: replicated</span>
+<span style="color:#75715e">#      restart_policy:</span>
+<span style="color:#75715e">#        condition: on-failure</span>
+<span style="color:#75715e">#      resources:</span>
+<span style="color:#75715e">#        limits:</span>
+<span style="color:#75715e">#          cpus: &#34;0.5&#34;</span>
+<span style="color:#75715e">#          memory: 200M</span>
+<span style="color:#75715e">#      update_config:</span>
+<span style="color:#75715e">#        parallelism: 1 # 每次更新1个副本</span>
+<span style="color:#75715e">#        delay: 5s # 每次更新间隔 </span>
+<span style="color:#75715e">#        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败</span>
+<span style="color:#75715e">#        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率</span>
+<span style="color:#75715e">#      placement:</span>
+<span style="color:#75715e">#        constraints:              </span>
+<span style="color:#75715e">#          - node.labels.func == data</span>
+</code></pre></div>
               
             </div>
           </div>
