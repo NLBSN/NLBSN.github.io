@@ -528,6 +528,19 @@ ffmpeg -hwaccel cuda -hwaccel_output_format cuda -i input -c:v h264_nvenc -prese
 
 ffmpeg -hwaccel_device 0 -hwaccel cuda -i input -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow output.mkv
 </code></pre><p>官方链接：https://trac.ffmpeg.org/wiki/HWAccelIntro</p>
+<p>生成每隔60秒的视频切片，csv格式索引文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ffmpeg -re -i input.mp4 -c copy -f segment -segment_format mp4 -segment_time <span style="color:#ae81ff">60</span> -segment_list_type csv -segment_list filelist.csv test_output-%d.mp4
+
+ffmpeg -re -i 4K-T-ara-Number9.mp4 -c copy -f segment -segment_format mp4 -segment_times <span style="color:#ae81ff">60</span> -segment_list_type csv -segment_list filelist.csv test_output-%d.mp4
+</code></pre></div><p>生成csv格式索引文件：时间点位60,90,120,剩下的</p>
+<pre><code>ffmpeg -re -i input.mp4 -c copy -f segment -segment_format mp4 -segment_time 60 -segment_list_type csv -segment_list filelist.csv test_output-%d.mp4
+
+ffmpeg -re -i 4K-T-ara-Number9.mp4 -c copy -f segment -segment_format mp4 -segment_times 60,90,120 -segment_list_type csv -segment_list filelist.csv test_output-%d.mp4
+</code></pre><p>查看切片的最后的时间戳：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ffprobe -v quiet -show_packets -select_streams v input.mp4 2&gt; x |grep pts_time | tail -n <span style="color:#ae81ff">3</span>
+</code></pre></div><p>查看切片的最开始的时间戳：</p>
+<pre><code>ffprobe -v quiet -show_packets -select_streams v input.mp4 2&gt; x |grep pts_time | head -n 3
+</code></pre>
               
             </div>
           </div>
