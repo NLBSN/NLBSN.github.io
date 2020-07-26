@@ -289,6 +289,7 @@
 </ul>
 <h1 id="一查询自己的显卡是否支持硬件编解码如不支持那么后面的就别看了">一、查询自己的显卡是否支持硬件编解码(如不支持，那么后面的就别看了)</h1>
 <p>查询自己的显卡是否支持gpu解码：<a href="https://developer.nvidia.com/video-encode-decode-gpu-support-matrix">nvidia官网查询 链接</a></p>
+<p>如果你的显卡支持编解码操作，那么重点来了，<strong>一定一定一定要看&quot;MAX # of concurrent sessions&quot;这一列的参数</strong>，这个参数是指，支持你同时编解码的最大进程数(应该可以这么说)。举例：你想同时运行5个编解码进程，那么不好意思，看看你的显卡最多支持几个。但是可以通过某些手段去做破解。</p>
 <p><em>查询发现我的mx150编解码都不支持，有点郁闷，但还是会把后面的过程走完。之后有了新的显卡，再去做文档修改</em></p>
 <p><strong>这个表格是对GPU硬件编码的支持列表</strong></p>
 <p><img src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200712211841.png" alt="img"></p>
