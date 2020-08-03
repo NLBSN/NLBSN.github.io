@@ -138,6 +138,11 @@
   </url>
   
   <url>
+    <loc>https://NLBSN.github.io/tags/cgo/</loc>
+    <lastmod>2020-06-29T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://NLBSN.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2020-06-29T12:00:00+00:00</lastmod>
   </url>
@@ -319,10 +324,6 @@
   
   <url>
     <loc>https://NLBSN.github.io/archives/</loc>
-  </url>
-  
-  <url>
-    <loc>https://NLBSN.github.io/tags/c/c&#43;&#43;/</loc>
   </url>
   
 </urlset>
