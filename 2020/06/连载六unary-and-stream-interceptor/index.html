@@ -15,8 +15,8 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="「连载六」Unary and Stream interceptor">
 <meta name="twitter:title" content="「连载六」Unary and Stream interceptor">
-<meta property="og:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
-<meta property="twitter:url" content="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+<meta property="og:url" content="https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+<meta property="twitter:url" content="https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
 <meta property="og:site_name" content="爱喝饮料的少年">
 <meta property="og:description" content="​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。">
 <meta name="twitter:description" content="​    服务端代码中，每个服务的方法都需要添加Check(ctx)来验证Token，这样十分麻烦。gRPC拦截器，能很好地解决这个问题。gRPC拦截器功能类似中间件，拦截器收到请求后，先进行一些操作，然后才进入服务的代码处理。">
@@ -66,12 +66,12 @@
 
     <title>「连载六」Unary and Stream interceptor</title>
 
-    <link rel="icon" href="https://NLBSN.github.io/favicon.png">
+    <link rel="icon" href="https://nlbsn.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+    <link rel="canonical" href="https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -79,7 +79,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://NLBSN.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    <link rel="stylesheet" href="https://nlbsn.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
     
     
 
@@ -94,12 +94,12 @@
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://NLBSN.github.io/">爱喝饮料的少年</a>
+    <a class="header-title-link" href="https://nlbsn.github.io/">爱喝饮料的少年</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="https://NLBSN.github.io/#about">
+         href="https://nlbsn.github.io/#about">
     
     
     
@@ -115,7 +115,7 @@
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="https://NLBSN.github.io/#about">
+        <a href="https://nlbsn.github.io/#about">
           <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
         </a>
         <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
@@ -128,7 +128,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://NLBSN.github.io/">
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -138,7 +138,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://NLBSN.github.io/categories">
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -148,7 +148,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://NLBSN.github.io/tags">
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -158,7 +158,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://NLBSN.github.io/archives">
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -168,7 +168,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://NLBSN.github.io/#about">
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -196,7 +196,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://NLBSN.github.io/index.xml">
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/index.xml">
     
       <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
       
@@ -243,9 +243,9 @@
   
     <span>发布在</span>
     
-      <a class="category-link" href="https://NLBSN.github.io/categories/golang">golang</a>, 
+      <a class="category-link" href="https://nlbsn.github.io/categories/golang">golang</a>, 
     
-      <a class="category-link" href="https://NLBSN.github.io/categories/grpc">grpc</a>
+      <a class="category-link" href="https://nlbsn.github.io/categories/grpc">grpc</a>
     
   
 
@@ -423,9 +423,9 @@ main.RecoveryInterceptor.func1(0xc420223a10)
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">标签</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/golang/">golang</a>
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/golang/">golang</a>
 
-  <a class="tag tag--primary tag--small" href="https://NLBSN.github.io/tags/grpc/">grpc</a>
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/grpc/">grpc</a>
 
                   </div>
                 
@@ -438,7 +438,7 @@ main.RecoveryInterceptor.func1(0xc420223a10)
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -446,7 +446,7 @@ main.RecoveryInterceptor.func1(0xc420223a10)
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/" data-tooltip="「连载五」基于 CA 的 TLS 证书认证">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/" data-tooltip="「连载五」基于 CA 的 TLS 证书认证">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -464,19 +464,19 @@ main.RecoveryInterceptor.func1(0xc420223a10)
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
               <i class="fa fa-facebook-official"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -524,7 +524,7 @@ main.RecoveryInterceptor.func1(0xc420223a10)
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%B8%83%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%90%8C%E6%97%B6%E6%8F%90%E4%BE%9B-http-%E6%8E%A5%E5%8F%A3/" data-tooltip="「连载七」让你的服务同时提供 HTTP 接口">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -532,7 +532,7 @@ main.RecoveryInterceptor.func1(0xc420223a10)
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/" data-tooltip="「连载五」基于 CA 的 TLS 证书认证">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E4%BA%94%E5%9F%BA%E4%BA%8E-ca-%E7%9A%84-tls-%E8%AF%81%E4%B9%A6%E8%AE%A4%E8%AF%81/" data-tooltip="「连载五」基于 CA 的 TLS 证书认证">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -550,19 +550,19 @@ main.RecoveryInterceptor.func1(0xc420223a10)
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
               <i class="fa fa-facebook-official"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://NLBSN.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/06/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -592,19 +592,19 @@ main.RecoveryInterceptor.func1(0xc420223a10)
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnlbsn.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
           <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnlbsn.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
           <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FNLBSN.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnlbsn.github.io%2F2020%2F06%2F%25E8%25BF%259E%25E8%25BD%25BD%25E5%2585%25ADunary-and-stream-interceptor%2F">
           <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
         </a>
       </li>
@@ -648,7 +648,7 @@ main.RecoveryInterceptor.func1(0xc420223a10)
     
   
     
-      <div id="cover" style="background-image:url('https://NLBSN.github.io/images/cover.jpg');"></div>
+      <div id="cover" style="background-image:url('https://nlbsn.github.io/images/cover.jpg');"></div>
     
   
 
@@ -661,7 +661,7 @@ main.RecoveryInterceptor.func1(0xc420223a10)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://NLBSN.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+<script src="https://nlbsn.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
 
 
 <script lang="javascript">
@@ -696,7 +696,7 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/NLBSN.github.io\/2020\/06\/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor\/';
+          this.page.url = 'https:\/\/nlbsn.github.io\/2020\/06\/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor\/';
           
             this.page.identifier = '\/2020\/06\/%E8%BF%9E%E8%BD%BD%E5%85%ADunary-and-stream-interceptor\/'
           

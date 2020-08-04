@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cgo on 爱喝饮料的少年</title>
-    <link>https://NLBSN.github.io/tags/cgo/</link>
+    <link>https://nlbsn.github.io/tags/cgo/</link>
     <description>Recent content in cgo on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 29 Jun 2020 12:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://NLBSN.github.io/tags/cgo/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://nlbsn.github.io/tags/cgo/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>go-astiencoder简单使用记录</title>
-      <link>https://NLBSN.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
+      <link>https://nlbsn.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
       <pubDate>Mon, 29 Jun 2020 12:00:00 +0000</pubDate>
       
-      <guid>https://NLBSN.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
+      <guid>https://nlbsn.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
       <description>&lt;p&gt;​    使用ffmpeg的第三方视频编解码封装库：go-astiencoder&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>golang中cgo的使用</title>
-      <link>https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
+      <link>https://nlbsn.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
       <pubDate>Sun, 21 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://NLBSN.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
+      <guid>https://nlbsn.github.io/2020/06/golang%E4%B8%ADcgo%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
       <description>&lt;p&gt;​    Golang环境下调用c/c++&lt;/p&gt;</description>
     </item>
     
