@@ -4,7 +4,77 @@
   
   <url>
     <loc>https://nlbsn.github.io/categories/</loc>
-    <lastmod>2020-07-12T12:00:00+00:00</lastmod>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/tags/cgo/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/tags/golang/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/categories/golang/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/tags/netcdf/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/post/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/tags/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/</loc>
+    <lastmod>2020-08-03T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/bak/2020-08-02-new-point/</loc>
+    <lastmod>2020-08-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/bak/</loc>
+    <lastmod>2020-08-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/categories/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2020-08-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/tags/%E7%88%B1%E6%83%85/</loc>
+    <lastmod>2020-08-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/tags/%E7%94%9F%E6%B4%BB/</loc>
+    <lastmod>2020-08-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlbsn.github.io/categories/%E7%94%9F%E6%B4%BB/</loc>
+    <lastmod>2020-08-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -28,27 +98,12 @@
   </url>
   
   <url>
-    <loc>https://nlbsn.github.io/post/</loc>
-    <lastmod>2020-07-12T12:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/tags/</loc>
-    <lastmod>2020-07-12T12:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://nlbsn.github.io/tags/%E5%AE%B9%E5%99%A8/</loc>
     <lastmod>2020-07-12T12:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://nlbsn.github.io/categories/%E5%AE%B9%E5%99%A8/</loc>
-    <lastmod>2020-07-12T12:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/</loc>
     <lastmod>2020-07-12T12:00:00+00:00</lastmod>
   </url>
   
@@ -113,42 +168,7 @@
   </url>
   
   <url>
-    <loc>https://nlbsn.github.io/categories/%E6%97%A5%E5%B8%B8/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/tags/%E7%88%B1%E6%83%85/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/tags/%E7%94%9F%E6%B4%BB/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/categories/%E7%94%9F%E6%B4%BB/</loc>
-    <lastmod>2020-07-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/tags/cgo/</loc>
-    <lastmod>2020-06-29T12:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://nlbsn.github.io/2020/06/go-astiencoder%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</loc>
-    <lastmod>2020-06-29T12:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/tags/golang/</loc>
-    <lastmod>2020-06-29T12:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://nlbsn.github.io/categories/golang/</loc>
     <lastmod>2020-06-29T12:00:00+00:00</lastmod>
   </url>
   

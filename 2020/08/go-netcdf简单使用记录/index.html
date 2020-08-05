@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="爱喝饮料的少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="​		使用netcdf的第三方封装库：github.com/fhs/go-netcdf">
+
+
+<meta property="og:description" content="​		使用netcdf的第三方封装库：github.com/fhs/go-netcdf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go-netcdf简单使用记录">
+<meta name="twitter:title" content="go-netcdf简单使用记录">
+<meta property="og:url" content="https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+<meta property="twitter:url" content="https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+<meta property="og:site_name" content="爱喝饮料的少年">
+<meta property="og:description" content="​		使用netcdf的第三方封装库：github.com/fhs/go-netcdf">
+<meta name="twitter:description" content="​		使用netcdf的第三方封装库：github.com/fhs/go-netcdf">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-08-03T12:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-08-03T12:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="golang">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="cgo">
+    
+      <meta property="article:tag" content="netcdf">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622200041.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622200041.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+
+
+    <title>go-netcdf简单使用记录</title>
+
+    <link rel="icon" href="https://nlbsn.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://nlbsn.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nlbsn.github.io/">爱喝饮料的少年</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://nlbsn.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nlbsn.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      go-netcdf简单使用记录
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-08-03T12:00:00Z">
+        
+  
+  
+  
+  
+    2020年8月3日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://nlbsn.github.io/categories/golang">golang</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>​		使用netcdf的第三方封装库：github.com/fhs/go-netcdf</p>
+<h1 id="1简介">1、简介：</h1>
+<p>软件包netcdf是netCDF C库的Go绑定。如果在C库中启用了netCDF 4支持，则此软件包支持netCDF版本3和版本4。</p>
+<h1 id="2安装">2、安装：</h1>
+<p>首先，请确保您已经安装了netCDF C库。大多数Linux发行版都提供了一个软件包：<code>libnetcdf-dev</code>在Ubuntu/Debian，<code>netcdf</code>ArchLinux等中。您还可以从<a href="https://www.unidata.ucar.edu/downloads/netcdf/index.jsp">Unidata</a>下载源代码，进行编译和安装。</p>
+<p>然后，要安装go-netcdf，请运行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go get github.com/fhs/go-netcdf/netcdf
+</code></pre></div><h1 id="3个人使用小总结">3、个人使用小总结</h1>
+<p>​		开始写文档才注意到作者已经提供了netcdf的使用环境简介。我自己测试时使用的是自己2年前基于centos7做的一个镜像，明天去了公司有空了测试一下作者提供的方法，测试成功将自己的Dockerfile文件奉上。</p>
+<h2 id="31netcdf-文件格式简介">3.1、netcdf 文件格式简介</h2>
+<p>netcdf是一种气象领域存储数据专用的格式，可以将3千万个点的数据存储到一个120m左右的文件中。</p>
+<p><strong>（个人总结，有不对的地方，还请发邮件1042038872@qq.com指正，多谢）</strong></p>
+<p>netcdf的格式中涉及到几个概念：</p>
+<ul>
+<li>维度</li>
+<li>属性</li>
+<li>变量</li>
+</ul>
+<p>可以用一个形象的比喻来解释这几个变量。</p>
+<p><em><strong>如何在地球上确定你的地理位置，各种信息。</strong></em></p>
+<h3 id="311维度">3.1.1、维度</h3>
+<p>​		在nc文件中根据一个或多个维度的信息获取变量的值。</p>
+<p>​		要在地球上确定你的地理位置，你可能第一时间想到的是根据 <strong>经度</strong> 和 <strong>纬度</strong> 进行确定，如果你此刻正在坐飞机，那么是不是最好再加一个 <strong>时间</strong>。</p>
+<p>​		根据<strong>时间</strong>、<strong>经度</strong>、<strong>纬度</strong>		就基本可以确定你在地球上的大概位置了。这里的<strong>时间</strong>，<strong>经度</strong>，<strong>纬度</strong>就是在气象数据中的<strong>维度</strong>概念。</p>
+<h3 id="312属性"><strong>3.1.2、属性</strong></h3>
+<p>​		在nc文件中对文件以及变量的说明。</p>
+<p>​		属性分为 <strong>全局属性</strong> 和 <strong>局部属性</strong>。</p>
+<p>​		<strong>全局属性</strong>：在这个比喻中可以不恰当的可以说成是：地球的基础信息，比如地球的直径，自转等</p>
+<p>​		<strong>局部属性</strong>：指的是在变量中的属性</p>
+<h3 id="313变量">3.1.3、变量</h3>
+<p>​		每一个变量都有自己特有的属性信息，可以根据维度信息获取对应<strong>变量</strong>的值。</p>
+<p>​		<strong>变量</strong>在这个小的比喻中，可以指：人，飞机等。用来描述人所处位置的<strong>时间、经度、维度</strong>就是维度信息、用来描述人的<strong>身高 单位、体重单位</strong>等基础信息就是属性信息，具体的<strong>身高值，体重值</strong>可以看成是变量的值。</p>
+<p>​		<em>比喻可能有些不恰当，具体的可以参考百度等第三方说明。</em></p>
+<h2 id="32使用nc文件的基础环境">3.2、使用nc文件的基础环境</h2>
+<p>​		使用nc文件要安装unidata提供的软件环境。详情自己去百度</p>
+<h3 id="321golang语言使用nc文件">3.2.1、golang语言使用nc文件</h3>
+<p>​		由于unidata官方并没有提供goalng语言的包，所以要使用golang去处理nc文件，需要调用unidata官方的c/c++的包。我这里采用的是<strong>github.com/fhs/go-netcdf/netcdf</strong></p>
+<h3 id="322python语言使用nc文件">3.2.2、python语言使用nc文件</h3>
+<p>​		直接安装python的相关包就可以</p>
+<h3 id="323java语言使用nc文件">3.2.3、java语言使用nc文件</h3>
+<p>​		maven仓库中搜索netcdf，好像我当时使用的是netcdf4的一个包</p>
+<h2 id="33go-netcdf包的使用思路-读">3.3、go-netcdf包的使用思路-读</h2>
+<p>读nc文件很简单</p>
+<h4 id="331打开nc文件">3.3.1、打开nc文件</h4>
+<h4 id="332获取全局属性信息的数量然后根据角标进行遍历属性信息">3.3.2、获取全局属性信息的数量，然后根据角标进行遍历属性信息</h4>
+<h4 id="333获取全局变量的数量">3.3.3、获取全局变量的数量</h4>
+<ul>
+<li>根据角标获取到某一个变量</li>
+<li>获取变量的名称</li>
+<li>获取变量的数据类型</li>
+<li>获取变量的维度信息（遍历获取每个维度的名称和大小）</li>
+<li>获取变量的属性信息（遍历获取每个属性的名称和值信息）</li>
+<li>获取变量的长度，然后创建同等大小的数组</li>
+<li>根据变量的数据类型，获取变量的值，并将值读到刚刚创建的数组中</li>
+<li>关闭读取流</li>
+</ul>
+<p>备注：是不是发现并没有去读取全局维度信息，其实维度信息是根据所有变量提取出来，然后生成的（吹）</p>
+<h3 id="34go-netcdf包的使用思路-写">3.4、go-netcdf包的使用思路-写</h3>
+<p>写nc有点复杂。</p>
+<p>首先，这个包没有使用二维、三维这样的数组去存放多维度的数据，而是使用的一维数组。</p>
+<p>思路：</p>
+<ul>
+<li>打开一个写入流</li>
+<li>写入全局属性信息（获取属性的数据类型，然后写入）</li>
+<li>循环写入变量信息（注意是循环）</li>
+<li>创建变量所对应的维度信息，添加到写入流</li>
+<li>创建变量，将变量的数据类型和维度信息传入进去</li>
+<li>将变量的属性信息写入进去</li>
+<li>根据变量的数据类型，将变量值得一维数组写入进行</li>
+<li>关闭写入流</li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/cgo/">cgo</a>
+
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/netcdf/">netcdf</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/" data-tooltip="自己常用的docker-compose文件">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/07/%E8%87%AA%E5%B7%B1%E5%B8%B8%E7%94%A8%E7%9A%84docker-compose%E6%96%87%E4%BB%B6/" data-tooltip="自己常用的docker-compose文件">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnlbsn.github.io%2F2020%2F08%2Fgo-netcdf%25E7%25AE%2580%25E5%258D%2595%25E4%25BD%25BF%25E7%2594%25A8%25E8%25AE%25B0%25E5%25BD%2595%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnlbsn.github.io%2F2020%2F08%2Fgo-netcdf%25E7%25AE%2580%25E5%258D%2595%25E4%25BD%25BF%25E7%2594%25A8%25E8%25AE%25B0%25E5%25BD%2595%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnlbsn.github.io%2F2020%2F08%2Fgo-netcdf%25E7%25AE%2580%25E5%258D%2595%25E4%25BD%25BF%25E7%2594%25A8%25E8%25AE%25B0%25E5%25BD%2595%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+    
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://nlbsn.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://nlbsn.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nlbsn.github.io\/2020\/08\/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95\/';
+          
+            this.page.identifier = '\/2020\/08\/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

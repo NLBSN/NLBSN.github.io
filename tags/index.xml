@@ -6,10 +6,55 @@
     <description>Recent content in Tags on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 12 Jul 2020 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 03 Aug 2020 12:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nlbsn.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>cgo</title>
+      <link>https://nlbsn.github.io/tags/cgo/</link>
+      <pubDate>Mon, 03 Aug 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/tags/cgo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://nlbsn.github.io/tags/golang/</link>
+      <pubDate>Mon, 03 Aug 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>netcdf</title>
+      <link>https://nlbsn.github.io/tags/netcdf/</link>
+      <pubDate>Mon, 03 Aug 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/tags/netcdf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>爱情</title>
+      <link>https://nlbsn.github.io/tags/%E7%88%B1%E6%83%85/</link>
+      <pubDate>Sun, 02 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/tags/%E7%88%B1%E6%83%85/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>生活</title>
+      <link>https://nlbsn.github.io/tags/%E7%94%9F%E6%B4%BB/</link>
+      <pubDate>Sun, 02 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/tags/%E7%94%9F%E6%B4%BB/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>docker</title>
@@ -71,42 +116,6 @@
       <pubDate>Sun, 05 Jul 2020 11:00:00 +0000</pubDate>
       
       <guid>https://nlbsn.github.io/tags/78/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>爱情</title>
-      <link>https://nlbsn.github.io/tags/%E7%88%B1%E6%83%85/</link>
-      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/tags/%E7%88%B1%E6%83%85/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>生活</title>
-      <link>https://nlbsn.github.io/tags/%E7%94%9F%E6%B4%BB/</link>
-      <pubDate>Thu, 02 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/tags/%E7%94%9F%E6%B4%BB/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>cgo</title>
-      <link>https://nlbsn.github.io/tags/cgo/</link>
-      <pubDate>Mon, 29 Jun 2020 12:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/tags/cgo/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>golang</title>
-      <link>https://nlbsn.github.io/tags/golang/</link>
-      <pubDate>Mon, 29 Jun 2020 12:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/tags/golang/</guid>
       <description></description>
     </item>
     

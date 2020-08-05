@@ -6,10 +6,19 @@
     <description>Recent content in cgo on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Jun 2020 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 03 Aug 2020 12:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nlbsn.github.io/tags/cgo/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>go-netcdf简单使用记录</title>
+      <link>https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Mon, 03 Aug 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
+      <description>&lt;p&gt;​		使用netcdf的第三方封装库：github.com/fhs/go-netcdf&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>go-astiencoder简单使用记录</title>
