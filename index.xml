@@ -6,10 +6,19 @@
     <description>Recent content on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Aug 2020 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Sep 2020 11:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nlbsn.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>忙里偷闲记点事</title>
+      <link>https://nlbsn.github.io/2020/09/%E5%BF%99%E9%87%8C%E5%81%B7%E9%97%B2%E8%AE%B0%E7%82%B9%E4%BA%8B/</link>
+      <pubDate>Tue, 01 Sep 2020 11:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/2020/09/%E5%BF%99%E9%87%8C%E5%81%B7%E9%97%B2%E8%AE%B0%E7%82%B9%E4%BA%8B/</guid>
+      <description>&lt;p&gt;新一段恋情的开始&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>go-netcdf简单使用记录</title>
