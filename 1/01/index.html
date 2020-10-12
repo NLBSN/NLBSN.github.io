@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="爱喝饮料的少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="MySQL学习笔记 摘抄：https://www.yuque.com/flipped-aurora/gqbcfk/ih6bw9
+DML语言  DML语言 : 数据操作语言 数据库意义 : 数据存储、数据管理 用于操作数据库对象中所包含的数据 包括 :  INSERT (添加数据语句) UPDATE (更新数据语句) DELETE(删除外键)     Insert 语法  添加单条数据  语法: INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)    INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)  添加多条数据  语法:INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;), (&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)...    -- 例如 INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;),(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;) 注意事项  字段和字段之间使用英文逗号隔开 字段是可以省略的,但是后面的值必须要一一对应,不能少   Update 语法 UPDATE 表名 SET column=value [,column=value2,.">
+
+
+<meta property="og:description" content="MySQL学习笔记 摘抄：https://www.yuque.com/flipped-aurora/gqbcfk/ih6bw9
+DML语言  DML语言 : 数据操作语言 数据库意义 : 数据存储、数据管理 用于操作数据库对象中所包含的数据 包括 :  INSERT (添加数据语句) UPDATE (更新数据语句) DELETE(删除外键)     Insert 语法  添加单条数据  语法: INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)    INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)  添加多条数据  语法:INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;), (&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)...    -- 例如 INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;),(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;) 注意事项  字段和字段之间使用英文逗号隔开 字段是可以省略的,但是后面的值必须要一一对应,不能少   Update 语法 UPDATE 表名 SET column=value [,column=value2,.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爱喝饮料的少年">
+<meta name="twitter:title" content="爱喝饮料的少年">
+<meta property="og:url" content="https://nlbsn.github.io/1/01/">
+<meta property="twitter:url" content="https://nlbsn.github.io/1/01/">
+<meta property="og:site_name" content="爱喝饮料的少年">
+<meta property="og:description" content="MySQL学习笔记 摘抄：https://www.yuque.com/flipped-aurora/gqbcfk/ih6bw9
+DML语言  DML语言 : 数据操作语言 数据库意义 : 数据存储、数据管理 用于操作数据库对象中所包含的数据 包括 :  INSERT (添加数据语句) UPDATE (更新数据语句) DELETE(删除外键)     Insert 语法  添加单条数据  语法: INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)    INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)  添加多条数据  语法:INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;), (&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)...    -- 例如 INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;),(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;) 注意事项  字段和字段之间使用英文逗号隔开 字段是可以省略的,但是后面的值必须要一一对应,不能少   Update 语法 UPDATE 表名 SET column=value [,column=value2,.">
+<meta name="twitter:description" content="MySQL学习笔记 摘抄：https://www.yuque.com/flipped-aurora/gqbcfk/ih6bw9
+DML语言  DML语言 : 数据操作语言 数据库意义 : 数据存储、数据管理 用于操作数据库对象中所包含的数据 包括 :  INSERT (添加数据语句) UPDATE (更新数据语句) DELETE(删除外键)     Insert 语法  添加单条数据  语法: INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)    INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)  添加多条数据  语法:INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;), (&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)...    -- 例如 INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;),(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;) 注意事项  字段和字段之间使用英文逗号隔开 字段是可以省略的,但是后面的值必须要一一对应,不能少   Update 语法 UPDATE 表名 SET column=value [,column=value2,.">
+<meta property="og:locale" content="zh-cn">
+
+  
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+
+
+    <title>爱喝饮料的少年</title>
+
+    <link rel="icon" href="https://nlbsn.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://nlbsn.github.io/1/01/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://nlbsn.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nlbsn.github.io/">爱喝饮料的少年</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://nlbsn.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nlbsn.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="0001-01-01T00:00:00Z">
+        
+  
+  
+  
+  
+    0001年1月1日
+  
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <h1 id="mysql学习笔记">MySQL学习笔记</h1>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<p>摘抄：https://www.yuque.com/flipped-aurora/gqbcfk/ih6bw9</p>
+<h2 id="dml语言">DML语言</h2>
+<ul>
+<li><strong>DML语言 : 数据操作语言</strong></li>
+<li>数据库意义 : 数据存储、数据管理</li>
+<li>用于操作数据库对象中所包含的数据</li>
+<li>包括 :
+<ul>
+<li>INSERT (添加数据语句)</li>
+<li>UPDATE (更新数据语句)</li>
+<li>DELETE(删除外键)
+<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ul>
+</li>
+</ul>
+<h3 id="insert">Insert</h3>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="语法">语法</h4>
+<ul>
+<li>添加单条数据
+<ul>
+<li>语法: <code>INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES('值1','值2','值3')</code></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#f92672">`</span>users<span style="color:#f92672">`</span>(<span style="color:#f92672">`</span>username<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>password<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>avatar<span style="color:#f92672">`</span>) <span style="color:#66d9ef">VALUES</span> (<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>)
+</code></pre></div><ul>
+<li>添加多条数据
+<ul>
+<li>语法:<code>INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES('值1','值2','值3'), ('值1','值2','值3')...</code></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 例如
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#f92672">`</span>users<span style="color:#f92672">`</span>(<span style="color:#f92672">`</span>username<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>password<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>avatar<span style="color:#f92672">`</span>)
+<span style="color:#66d9ef">VALUES</span> (<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>),(<span style="color:#e6db74">&#39;1&#39;</span>, <span style="color:#e6db74">&#39;2&#39;</span>, <span style="color:#e6db74">&#39;3&#39;</span>)
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="注意事项">注意事项</h4>
+<ul>
+<li>字段和字段之间使用英文逗号隔开</li>
+<li>字段是可以省略的,但是后面的值必须要一一对应,不能少
+<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ul>
+<h3 id="update">Update</h3>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="语法-1">语法</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">UPDATE</span> <span style="color:#960050;background-color:#1e0010">表名</span> <span style="color:#66d9ef">SET</span> <span style="color:#66d9ef">column</span><span style="color:#f92672">=</span>value [,<span style="color:#66d9ef">column</span><span style="color:#f92672">=</span>value2,...] <span style="color:#66d9ef">WHERE</span> [<span style="color:#960050;background-color:#1e0010">条件</span>];
+</code></pre></div><ul>
+<li>column:要更改的数据列</li>
+<li>value 为修改后的数据 , 可以为变量 , 具体指 , 表达式或者嵌套的SELECT结果</li>
+<li>condition 为筛选条件 , 如不指定则修改该表的所有列数据
+<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ul>
+<h4 id="where-条件子句">Where 条件子句</h4>
+<ul>
+<li>有条件地从表中筛选数据
+| 运算符 | 含义 | 范围 | 结果 |
+| :&mdash;: | :&mdash;: | :&mdash;: | :&mdash;: |
+| = | 等于 | 5=6 | false |
+| &lt;&gt; 或 != | 不等于 | 5!=6 | true |
+| &gt; | 大于 | 5&gt;6 | false |
+| &lt; | 小于 | 5&lt;6 | true |
+| &gt;= | 大于等于 | 5&gt;=6 | false |
+| &lt;= | 小于等于 | 5&lt;=6 | true |
+| BETWEEN | 在某个范围之间 | BETWEEN 5 AND 10 |  |
+| AND | 并且(&amp;&amp;) | 5 &gt; 1 AND 1 &gt; 2 | false |
+| OR | 或(||) | 5 &gt; 1 OR 1 &gt; 2 | true |</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="注意事项-1">注意事项</h4>
+<ul>
+<li>column是数据库的列,尽量带上``</li>
+<li>条件,筛选的条件,如果没有指定,则会修改所有的列</li>
+<li>value,可以是一个具体的值,也可以是一个变量</li>
+<li>多个设置的属性之间,使用英文逗号隔开
+<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ul>
+<h3 id="delete-truncate">Delete &amp;&amp;Truncate</h3>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="delete语法">Delete语法</h4>
+<ul>
+<li><code>DELETE FROM 表名 WHERE [条件];</code></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  <span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">FROM</span> <span style="color:#f92672">`</span>users<span style="color:#f92672">`</span> <span style="color:#66d9ef">WHERE</span> id<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="truncate语法">TRUNCATE语法</h4>
+<ul>
+<li><code>TRUNCATE [TABLE] table_name;</code></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  <span style="color:#66d9ef">TRUNCATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>users<span style="color:#f92672">`</span>
+</code></pre></div><blockquote>
+<p><strong>Delete 与 Truncate 的区别</strong></p>
+</blockquote>
+<ul>
+<li>相同:
+<ul>
+<li>都能删除数据,不删除表结构,但是TRUNCATE速度更快</li>
+</ul>
+</li>
+<li>不同
+<ul>
+<li>使用TRUNCATE TABLE 重新设置AUTO_INCREMENT计数器</li>
+<li>使用TRUNCATE TABLE 不会对事务有影响</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Delete删除的问题</strong> 重启数据库现象</p>
+</blockquote>
+<ul>
+<li>InnoDB 自增列会从1开始(存在内存中的,断电即失)</li>
+<li>MyISAM 继续从上一个自增量开始(存在文件中的,不会丢失)
+<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ul>
+<h2 id="dql语言">DQL语言</h2>
+<ul>
+<li>(Data Query Language: 数据查询语言)</li>
+<li>所有的查询操作都要用它 <code>Select</code></li>
+<li>简单的查询,复杂的查询都能做~</li>
+<li></li>
+<li>使用频率最高的语句</li>
+</ul>
+<blockquote>
+<p>SELECT语法</p>
+</blockquote>
+<ul>
+<li><strong>[] 括号代表可选的 , {}括号代表必选得</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span> [<span style="color:#66d9ef">ALL</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">DISTINCT</span>]
+	<span style="color:#960050;background-color:#1e0010">{</span><span style="color:#f92672">*</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">table</span>.<span style="color:#f92672">*</span> <span style="color:#f92672">|</span> [<span style="color:#66d9ef">table</span>.field1[<span style="color:#66d9ef">as</span> alias1][,<span style="color:#66d9ef">table</span>.field2[<span style="color:#66d9ef">as</span> alias2]][,...]]<span style="color:#960050;background-color:#1e0010">}</span> 
+<span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">table_name</span> [<span style="color:#66d9ef">as</span> table_alias]
+    [<span style="color:#66d9ef">left</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">right</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> table_name2] <span style="color:#75715e">-- 联合查询 [WHERE ...] -- 指定结果需满足的条件
+</span><span style="color:#75715e"></span>    [<span style="color:#66d9ef">GROUP</span> <span style="color:#66d9ef">BY</span> ...] <span style="color:#75715e">-- 指定结果按照哪几个字段来分组 [HAVING] -- 过滤分组的记录必须满足的次要条件
+</span><span style="color:#75715e"></span>    [<span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> ...] <span style="color:#75715e">-- 指定查询记录按一个或多个条件排序
+</span><span style="color:#75715e"></span>    [<span style="color:#66d9ef">LIMIT</span> <span style="color:#960050;background-color:#1e0010">{</span>[<span style="color:#66d9ef">offset</span>,]<span style="color:#66d9ef">row_count</span> <span style="color:#f92672">|</span> row_countOFFSET <span style="color:#66d9ef">offset</span><span style="color:#960050;background-color:#1e0010">}</span>]; 
+    <span style="color:#75715e">-- 指定查询的记录从哪条至哪条
+</span></code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="指定查询字段">指定查询字段</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查询student表的全部数据
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> student
+
+<span style="color:#75715e">-- 查询指定字段
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">FROM</span> student
+</code></pre></div><blockquote>
+<p>AS 字句作为别名</p>
+</blockquote>
+<ul>
+<li>可给数据列取一个新别名</li>
+<li>可给表取一个新别名</li>
+<li>可吧经计算或者总结果用另一个新名称来代替</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 为列去别名, AS可以省略
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span> <span style="color:#66d9ef">AS</span> <span style="color:#960050;background-color:#1e0010">学号</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">AS</span> <span style="color:#960050;background-color:#1e0010">姓名</span> <span style="color:#66d9ef">FROM</span> studenS
+
+<span style="color:#75715e">-- 为表取别名
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span> <span style="color:#66d9ef">As</span> <span style="color:#960050;background-color:#1e0010">学号</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">AS</span> <span style="color:#960050;background-color:#1e0010">姓名</span> <span style="color:#66d9ef">FROM</span> student <span style="color:#66d9ef">AS</span> s
+
+<span style="color:#75715e">-- 为查询结果取一个新名字, CONCAT()函数拼接字符串
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> CONCAT(<span style="color:#e6db74">&#39;姓名：&#39;</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> ) <span style="color:#66d9ef">AS</span> <span style="color:#960050;background-color:#1e0010">新名字</span> <span style="color:#66d9ef">FROM</span> student
+</code></pre></div><blockquote>
+<p>DISTINCT 去重关键字</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查询result表所有的数据
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span>;
+
+<span style="color:#75715e">-- 查询result表的StudentNo字段
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> r.StudentNo <span style="color:#66d9ef">From</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r;
+
+<span style="color:#75715e">-- DISTINCT 去除重复项 , (默认是ALL)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">DISTINCT</span> r.StudentNo <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r;
+</code></pre></div><blockquote>
+<p>使用表达式的列</p>
+</blockquote>
+<p><!-- raw HTML omitted --><strong>数据库中的表达式:一般由文本值,列值,NULL,函数和操作符等组成</strong><!-- raw HTML omitted -->应用场景:<!-- raw HTML omitted --></p>
+<ul>
+<li>SELECT语句返回的结果列中使用</li>
+<li>SELECT语句中的ORDER BY, HAVING等字句中使用</li>
+<li>DML语句中的Where条件语句中使用表达式</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查询系统版本(函数)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">VERSION</span>();
+<span style="color:#75715e">-- 计算7*7-1(表达式)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#ae81ff">7</span><span style="color:#f92672">*</span><span style="color:#ae81ff">7</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">AS</span> <span style="color:#960050;background-color:#1e0010">计算结果</span>;
+<span style="color:#75715e">-- 查询自增的步长(变量)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">@@</span>auto_increment_increment
+
+<span style="color:#75715e">-- 学院考试成绩+1分查看
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentResult<span style="color:#f92672">`</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">AS</span> <span style="color:#960050;background-color:#1e0010">提分后</span> <span style="color:#66d9ef">FROM</span> <span style="color:#f92672">`</span><span style="color:#66d9ef">result</span><span style="color:#f92672">`</span> <span style="color:#66d9ef">AS</span> r
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="where条件语句">Where条件语句</h3>
+<p><!-- raw HTML omitted -->作用: 用于检索数据表中符合条件的记录<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->搜索条件可由一个或多个逻辑表达式组成,结果一般为真或假<!-- raw HTML omitted --></p>
+<blockquote>
+<p>逻辑操作符</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>语法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AND 或 &amp;&amp;</td>
+<td>a AND b 或 a &amp;&amp; b</td>
+<td>逻辑与，同时为真结果才为真</td>
+</tr>
+<tr>
+<td>OR 或 ||</td>
+<td>a OR b 或 a || b</td>
+<td>逻辑或，只要一个为真，则结果为真</td>
+</tr>
+<tr>
+<td>NOT 或 !</td>
+<td>NOT a 或 !a</td>
+<td>逻辑非，若操作数为假，则结果为真!</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 示例SQL语句
+</span><span style="color:#75715e">-- 查询result表的学号与学生成绩
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentResult<span style="color:#f92672">`</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span>;
+<span style="color:#75715e">-- 查询成绩在95-100之间的
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentResult<span style="color:#f92672">`</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">WHERE</span> StudentResult <span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">95</span> <span style="color:#66d9ef">AND</span> StudentResult <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>;
+<span style="color:#75715e">-- AND也可以写成&amp;&amp;
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentResult<span style="color:#f92672">`</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">WHERE</span> StudentResult <span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">95</span> <span style="color:#f92672">&amp;&amp;</span> StudentResult <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>;
+<span style="color:#75715e">-- 模糊查询(区间)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentResult<span style="color:#f92672">`</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">WHERE</span> StudentResult <span style="color:#66d9ef">BETWEEN</span> <span style="color:#ae81ff">95</span> <span style="color:#66d9ef">AND</span> <span style="color:#ae81ff">100</span>;
+<span style="color:#75715e">-- 查询除了1000号同学的成绩
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentResult<span style="color:#f92672">`</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">NOT</span> StudentNo <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>;
+<span style="color:#75715e">-- NOT也可以写成!
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentResult<span style="color:#f92672">`</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">WHERE</span> StudentNo <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1000</span>;
+</code></pre></div><blockquote>
+<p>模糊查询:比较操作符</p>
+</blockquote>
+<ul>
+<li>数值数据类型的记录之就按才能进行算术运算;</li>
+<li>相同数据类型的数据之间才能进行比较;
+| <strong>操作符名称</strong> | <strong>语法</strong> | <strong>描述</strong> |
+| &mdash; | &mdash; | &mdash; |
+| IS NULL | a IS NULL | 若操作符为NULL，则结果为真 |
+| IS NOT NULL | a IS NOT NULL | 若操作符不为NULL，则结果为真 |
+| BETWEEN | a BETWEEN b AND c | 若 a 范围在 b 与 c 之间，则结果为真 |
+| <strong>LIKE</strong> | a LIKE b | SQL 模式匹配，若a匹配b，则结果为真 |
+| <strong>IN</strong> | a IN (a1，a2，a3，&hellip;&hellip;) | 若 a 等于 a1,a2&hellip;.. 中的某一个，则结果为真 |</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ======= like =======
+</span><span style="color:#75715e">-- like结合 %(代表0到任意个字符) _(一个字符)
+</span><span style="color:#75715e">-- 查询姓刘的同学
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;刘%&#39;</span>;
+<span style="color:#75715e">-- 查询姓刘的同学，名字后面只有一个字的
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;刘_&#39;</span>;
+<span style="color:#75715e">-- 查询姓刘的同学，名字后面只有两个字的
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;刘__&#39;</span>;
+<span style="color:#75715e">-- 查询名字中间有嘉字的同学
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;%嘉%&#39;</span>;
+
+<span style="color:#75715e">-- ======= in =======
+</span><span style="color:#75715e">-- 查询 1001，1002，1003号学员
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> StudentNo <span style="color:#66d9ef">in</span> (<span style="color:#ae81ff">1001</span>,<span style="color:#ae81ff">1002</span>,<span style="color:#ae81ff">1003</span>);
+<span style="color:#75715e">-- 查询 地址在北京，南京，河南洛阳的学生
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentNo<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span>, <span style="color:#f92672">`</span>Address<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> Address <span style="color:#66d9ef">in</span> (<span style="color:#e6db74">&#39;北京&#39;</span>, <span style="color:#e6db74">&#39;南京&#39;</span>, <span style="color:#e6db74">&#39;河南洛阳&#39;</span>);
+
+<span style="color:#75715e">-- ======= null/not null =======
+</span><span style="color:#75715e">-- 查询出生日期没有填写的同学
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> BornDate <span style="color:#66d9ef">is</span> <span style="color:#66d9ef">null</span>;
+<span style="color:#75715e">-- 查询出生日期填写了的同学
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> BornDate <span style="color:#66d9ef">is</span> <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>;
+<span style="color:#75715e">-- 查询没有写家庭地址的同学(空字符串不等于null)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">`</span>StudentName<span style="color:#f92672">`</span> <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> Address<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">or</span> Address <span style="color:#66d9ef">is</span> <span style="color:#66d9ef">null</span>;
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="连接查询">连接查询</h3>
+<blockquote>
+<p>Join 对比</p>
+</blockquote>
+<ul>
+<li>
+<p><code>join on</code>:连接查询</p>
+</li>
+<li>
+<p><code>where</code>:等值查询
+| 操作符名称 | 描述 |
+| &mdash; | &mdash; |
+| inner join | 如果表中有至少一个匹配,则返回行 |
+| right join | 左边中返回所有的值,即使右表中没有匹配数据 |
+| left join | 右边中返回所有的值,即使左表中没有匹配数据 |</p>
+</li>
+<li>
+<p>基础使用</p>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ======= inner join =======
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, StudentName, SubjectNo, StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo;
+
+<span style="color:#75715e">-- ======= right join =======
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, StudentName, SubjectNo, StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">right</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r <span style="color:#66d9ef">on</span> s.StudentNo<span style="color:#f92672">=</span>r.StudentNo
+
+<span style="color:#75715e">-- ======= left join =======
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, StudentName, SubjectNo, StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">left</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r <span style="color:#66d9ef">on</span> s.StudentNo<span style="color:#f92672">=</span>r.StudentNo
+</code></pre></div><ul>
+<li>进阶使用</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查询缺考的同学(左连接应用场景)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, StudentName, SubjectNo, StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">left</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r <span style="color:#66d9ef">on</span> s.StudentNo<span style="color:#f92672">=</span>r.StudentNo
+<span style="color:#66d9ef">where</span> StudentResult <span style="color:#66d9ef">is</span> <span style="color:#66d9ef">null</span>;
+
+<span style="color:#75715e">-- 思考题:查询参加了考试的同学信息(学号,学生姓名,科目名,分数)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName, r.StudentResult, sub.SubjectName
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">right</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject <span style="color:#66d9ef">as</span> sub <span style="color:#66d9ef">on</span> r.SubjectNo <span style="color:#f92672">=</span> sub.SubjectNo
+</code></pre></div><blockquote>
+<p>自连接(了解)</p>
+</blockquote>
+<ul>
+<li>数据表与自身进行连接</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 编写SQL语句,将栏目的父子关系呈现出来 (父栏目名称,子栏目名称)
+</span><span style="color:#75715e">-- 核心思想:把一张表看成两张一模一样的表,然后将这两张表连接查询(自连接)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> a.categoryName <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;父栏目&#39;</span>, b.categoryName <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;子栏目&#39;</span>
+<span style="color:#66d9ef">from</span> category <span style="color:#66d9ef">as</span> a, category <span style="color:#66d9ef">as</span> b
+<span style="color:#66d9ef">where</span> a.categoryid <span style="color:#f92672">=</span> b.pid;
+
+<span style="color:#75715e">-- 思考题:查询参加了考试的同学信息(学号,学生姓名,科目名,分数)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName,s2.SubjectName,r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> r.SubjectNo <span style="color:#f92672">=</span> s2.SubjectNo;
+
+<span style="color:#75715e">-- 查询学员及所属的年级(学号,学生姓名,年级名)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName,<span style="color:#66d9ef">g</span>.GradeName
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> grade <span style="color:#66d9ef">g</span> <span style="color:#66d9ef">on</span> s.GradeId <span style="color:#f92672">=</span> <span style="color:#66d9ef">g</span>.GradeID;
+
+<span style="color:#75715e">-- 查询科目及所属的年级(科目名称,年级名称)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.SubjectName, <span style="color:#66d9ef">g</span>.GradeName
+<span style="color:#66d9ef">from</span> subject <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> grade <span style="color:#66d9ef">g</span> <span style="color:#66d9ef">on</span> <span style="color:#66d9ef">g</span>.GradeID <span style="color:#f92672">=</span> s.GradeID;
+
+<span style="color:#75715e">-- 查询 数据库结构-1 的所有考试结果(学号 学生姓名 科目名称 成绩)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName,s2.SubjectName,r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> s.GradeId <span style="color:#f92672">=</span> s2.GradeID
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">where</span> s2.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;数据库结构-1&#39;</span>;
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="分页">分页</h3>
+<ul>
+<li>语法:<code>[LIMIT {[offset,] row_count | row_count OFFSET offset}];</code></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  <span style="color:#75715e">-- 第N页 : limit (PageNo-1)*PageSize,
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">-- PageSzie [PageNo:页码,PageSize:单页面显示条数]
+</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 每页显示5条数据
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName,s2.SubjectName,r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> s.GradeId <span style="color:#f92672">=</span> s2.GradeID
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">where</span> s2.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;数据库结构-1&#39;</span>
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> r.StudentResult <span style="color:#66d9ef">asc</span>
+<span style="color:#66d9ef">limit</span> <span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">5</span>;
+
+<span style="color:#75715e">-- 查询 JAVA第一学年 课程成绩前10名并且分数大于80的学生信息(学号,姓名,课程名,分数)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo,s.StudentName,s2.SubjectName,r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> r.SubjectNo <span style="color:#f92672">=</span> s2.SubjectNo
+<span style="color:#66d9ef">where</span> s2.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;JAVA第一学年&#39;</span>
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> r.StudentResult <span style="color:#66d9ef">desc</span>
+<span style="color:#66d9ef">limit</span> <span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">10</span>;
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="排序">排序</h3>
+<ul>
+<li>语法:<code>order by [字段名] [desc/asc]</code></li>
+<li>desc:降序,由大到小</li>
+<li>asc:升序,由小到大</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查询 数据库结构-1 的所有考试结果(学号 学生姓名 科目名称 成绩) 降序
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName,s2.SubjectName,r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> s.GradeId <span style="color:#f92672">=</span> s2.GradeID
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">where</span> s2.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;数据库结构-1&#39;</span>
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> r.StudentResult <span style="color:#66d9ef">desc</span> ;
+
+<span style="color:#75715e">-- 查询 数据库结构-1 的所有考试结果(学号 学生姓名 科目名称 成绩) 升序
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName,s2.SubjectName,r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> s.GradeId <span style="color:#f92672">=</span> s2.GradeID
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">where</span> s2.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;数据库结构-1&#39;</span>
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> r.StudentResult <span style="color:#66d9ef">asc</span> ;
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="子查询">子查询</h3>
+<ul>
+<li>在查询语句中的WHERE条件子句中,又嵌套了另一个查询语句</li>
+<li>嵌套查询可由多个子查询组成,求解的方式是由里及外</li>
+<li>子查询返回的结果一般都是集合,故而建议使用IN关键字</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查询 数据库结构-1 的所有考试结果(学号，科目编号，成绩)，降序排列
+</span><span style="color:#75715e">-- 方式一
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> r.StudentNo, s.SubjectName, r.StudentResult
+<span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r
+         <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s <span style="color:#66d9ef">on</span> r.SubjectNo <span style="color:#f92672">=</span> s.SubjectNo
+<span style="color:#66d9ef">where</span> s.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;数据库结构-1&#39;</span>
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> r.StudentResult <span style="color:#66d9ef">desc</span>;
+
+<span style="color:#75715e">-- 方式二:使用子查询(执行顺序:由里及外)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> r.StudentNo, r.SubjectNo, r.StudentResult
+<span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r
+<span style="color:#66d9ef">where</span> SubjectNo <span style="color:#f92672">=</span> (
+    <span style="color:#66d9ef">select</span> SubjectNo
+    <span style="color:#66d9ef">from</span> subject
+    <span style="color:#66d9ef">where</span> SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;数据库结构-1&#39;</span>
+)
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> r.StudentResult <span style="color:#66d9ef">desc</span>;
+<span style="color:#75715e">-- 方法一:使用连接查询
+</span><span style="color:#75715e">-- 查询课程为 高等数学-2 且分数不小于80分的学生的学号和姓名
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName, s2.SubjectName, r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+         <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+         <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> r.SubjectNo <span style="color:#f92672">=</span> s2.SubjectNo
+<span style="color:#66d9ef">where</span> s2.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;高等数学-2&#39;</span>
+  <span style="color:#66d9ef">and</span> r.StudentResult <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span>;
+
+<span style="color:#75715e">-- 方法二:使用连接查询+子查询
+</span><span style="color:#75715e">-- 分数不小于80分的学生的学号和姓名
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName, s2.SubjectName, r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+         <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+         <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s2 <span style="color:#66d9ef">on</span> s.GradeId <span style="color:#f92672">=</span> s2.GradeID
+<span style="color:#66d9ef">where</span> StudentResult <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span>;
+
+<span style="color:#75715e">-- 在上面SQL基础上,添加需求:课程为 高等数学-2
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName, r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+         <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">where</span> StudentResult <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span>
+  <span style="color:#66d9ef">and</span> r.SubjectNo <span style="color:#f92672">=</span> (
+    <span style="color:#66d9ef">select</span> SubjectNo
+    <span style="color:#66d9ef">from</span> subject
+    <span style="color:#66d9ef">where</span> SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;高等数学-2&#39;</span>
+);
+
+
+<span style="color:#75715e">-- 方法三:使用子查询
+</span><span style="color:#75715e">-- 分步写简单sql语句,然后将其嵌套起来
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo,s.StudentName
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+<span style="color:#66d9ef">where</span> StudentNo <span style="color:#66d9ef">in</span> (
+    <span style="color:#66d9ef">select</span> r.StudentNo
+    <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r
+    <span style="color:#66d9ef">where</span> r.StudentResult <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span>
+      <span style="color:#66d9ef">AND</span> r.SubjectNo <span style="color:#f92672">=</span> (
+        <span style="color:#66d9ef">select</span> sub.SubjectNo
+        <span style="color:#66d9ef">from</span> subject <span style="color:#66d9ef">as</span> sub
+        <span style="color:#66d9ef">where</span> sub.SubjectName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;高等数学-2&#39;</span>
+    )
+);
+
+<span style="color:#75715e">/* 
+</span><span style="color:#75715e">练习题目:
+</span><span style="color:#75715e">	查 C语言-1 的前5名学生的成绩信息(学号,姓名,分数)
+</span><span style="color:#75715e">	使用子查询,查询郭靖同学所在的年级名称 
+</span><span style="color:#75715e">*/</span>
+
+<span style="color:#75715e">-- C语言-1 的前5名学生的成绩信息(学号,姓名,分数)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.StudentNo, s.StudentName, r.StudentResult
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+         <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> <span style="color:#66d9ef">result</span> r <span style="color:#66d9ef">on</span> s.StudentNo <span style="color:#f92672">=</span> r.StudentNo
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> r.StudentResult <span style="color:#66d9ef">desc</span>
+<span style="color:#66d9ef">limit</span> <span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">5</span>
+;
+
+<span style="color:#75715e">-- 使用子查询,查询周丹同学所在的年级名称
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">g</span>.GradeName
+<span style="color:#66d9ef">from</span> grade <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">g</span>
+<span style="color:#66d9ef">where</span> GradeID <span style="color:#f92672">=</span> (
+    <span style="color:#66d9ef">select</span> s.GradeId
+    <span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">as</span> s
+    <span style="color:#66d9ef">where</span> StudentName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;周丹&#39;</span>
+);
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="分组和过滤">分组和过滤</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查询不同课程的平均分,最高分,最低分 
+</span><span style="color:#75715e">-- 前提:根据不同的课程进行分组
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s.SubjectName, <span style="color:#66d9ef">avg</span>(r.StudentResult) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">平均分</span>, <span style="color:#66d9ef">max</span>(r.StudentResult) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">最高分</span>, <span style="color:#66d9ef">min</span>(r.StudentResult) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">最低分</span>
+<span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r
+<span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> subject s <span style="color:#66d9ef">on</span> r.SubjectNo <span style="color:#f92672">=</span> s.SubjectNo
+<span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> r.SubjectNo
+<span style="color:#66d9ef">having</span>  <span style="color:#960050;background-color:#1e0010">平均分</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">80</span>
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="mysql函数">MySQL函数</h2>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="常用函数">常用函数</h3>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="数据函数">数据函数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ======= 数学运算 =======
+</span><span style="color:#75715e">-- 绝对值
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">abs</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">8</span>);
+<span style="color:#75715e">-- 向上取整
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> ceiling(<span style="color:#ae81ff">9</span>.<span style="color:#ae81ff">4</span>);
+<span style="color:#75715e">-- 向下取整
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> floor(<span style="color:#ae81ff">9</span>.<span style="color:#ae81ff">4</span>);
+<span style="color:#75715e">-- 返回一个0~1之间的整数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> rand();
+<span style="color:#75715e">-- 判断一个数的符号，负数返回1，正数返回1，0返回0
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> sign(<span style="color:#ae81ff">10</span>);
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="字符串函数">字符串函数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ======= 字符串函数 =======
+</span><span style="color:#75715e">-- 字符串长度
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">char_length</span>(<span style="color:#e6db74">&#39;你猜我猜不猜你猜不猜&#39;</span>);
+<span style="color:#75715e">-- 拼接字符串
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> concat(<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>);
+<span style="color:#75715e">-- 查询，从某个位置开始替换某个长度
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">insert</span>(<span style="color:#e6db74">&#39;我爱Golang&#39;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#39;SliverHorn&#39;</span>);
+<span style="color:#75715e">-- 小写字母
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">lower</span>(<span style="color:#e6db74">&#39;SliverHorn&#39;</span>);
+<span style="color:#75715e">-- 大写字母
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">UPPER</span>(<span style="color:#e6db74">&#39;SliverHorn&#39;</span>);
+<span style="color:#75715e">-- 返回第一次出现的索引
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> instr(<span style="color:#e6db74">&#39;SliverHorn&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>);
+<span style="color:#75715e">-- 替换出现的指定字符串
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">replace</span>(<span style="color:#e6db74">&#39;SliverHorn说SliverHorn&#39;</span>, <span style="color:#e6db74">&#39;说&#39;</span>, <span style="color:#e6db74">&#39;--&gt;&#39;</span>);
+<span style="color:#75715e">-- 返回制定本的子字符串(源字符串，截取的位置，截取的长度)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> substr(<span style="color:#e6db74">&#39;SliverHorn&#39;</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">6</span>);
+<span style="color:#75715e">-- 字符串反转
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> reverse(<span style="color:#e6db74">&#39;SliverHorn&#39;</span>);
+
+<span style="color:#75715e">-- 查询姓周的同学,改成邹
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">replace</span>(StudentName, <span style="color:#e6db74">&#39;周&#39;</span>, <span style="color:#e6db74">&#39;邹&#39;</span>) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">名字</span>
+<span style="color:#66d9ef">from</span> student <span style="color:#66d9ef">where</span> StudentName <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;周%&#39;</span>;
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="日期和时间函数">日期和时间函数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ======= 日期和时间函数 =======
+</span><span style="color:#75715e">-- 获取当前日期
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">current_date</span>();
+<span style="color:#75715e">-- 获取当前日期
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> curdate();
+<span style="color:#75715e">-- 获取当前的时间
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> now();
+<span style="color:#75715e">-- 获取本地时间
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">localtime</span>();
+<span style="color:#75715e">-- 获取系统时间
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> sysdate();
+
+<span style="color:#75715e">-- 获取当前年份
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">year</span>(now());
+<span style="color:#75715e">-- 获取当前月份
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">month</span>(now());
+<span style="color:#75715e">-- 获取当前日
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">day</span>(now());
+<span style="color:#75715e">-- 获取当前时
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> hour(now());
+<span style="color:#75715e">-- 获取当前的分
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">minute</span>(now());
+<span style="color:#75715e">-- 获取当前秒
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">second</span>(now());
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="系统信息函数">系统信息函数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ======= 系统信息函数 =======
+</span><span style="color:#75715e">-- 版本
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">version</span>();
+<span style="color:#75715e">-- 用户
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">user</span>();
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h4 id="聚合函数">聚合函数</h4>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>COUNT()</strong></td>
+<td>返回满足Select条件的记录总和数，如 select count(_) 【不建议使用 _，效率低】</td>
+</tr>
+<tr>
+<td>SUM()</td>
+<td>返回数字字段或表达式列作统计，返回一列的总和。</td>
+</tr>
+<tr>
+<td>AVG()</td>
+<td>通常为数值字段或表达列作统计，返回一列的平均值</td>
+</tr>
+<tr>
+<td>MAX()</td>
+<td>可以为数值字段，字符字段或表达式列作统计，返回最大的值。</td>
+</tr>
+<tr>
+<td>MIN()</td>
+<td>可以为数值字段，字符字段或表达式列作统计，返回最小的值。</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ======= 聚合函数 =======
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(StudentName) <span style="color:#66d9ef">from</span> student;
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> student;
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">from</span> student;
+<span style="color:#75715e">-- 从含义上讲，count(1) 与 count(*) 都表示对全部数据行的查询。
+</span><span style="color:#75715e">-- count(字段) 会统计该字段在表中出现的次数，忽略字段为null 的情况。即不统计字段为null 的记录。
+</span><span style="color:#75715e">-- count(*) 包括了所有的列，相当于行数，在统计结果的时候，包含字段为null 的记录;
+</span><span style="color:#75715e">-- count(1) 用1代表代码行，在统计结果的时候，包含字段为null 的记录 。
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">/* 很多人认为count(1)执行的效率会比count(*)高，原因是count(*)会存在全表扫描，而count(1) 可以针对一个字段进行查询。其实不然，count(1)和count(*)都会对全表进行扫描，统计所有记录的 条数，包括那些为null的记录，因此，它们的效率可以说是相差无几。而count(字段)则与前两者不 同，它会统计该字段不为null的记录条数。
+</span><span style="color:#75715e">下面它们之间的一些对比:
+</span><span style="color:#75715e">1)在表没有主键时，count(1)比count(*)快 2)有主键时，主键作为计算条件，count(主键)效率最高; 3)若表格只有一个字段，则count(*)效率较高。
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">sum</span>(r.StudentResult) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">总和</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r;
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">avg</span>(r.StudentResult) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">平均分</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r;
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">max</span>(r.StudentResult) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">最高分</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r;
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">min</span>(r.StudentResult) <span style="color:#66d9ef">as</span> <span style="color:#960050;background-color:#1e0010">最低分</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">result</span> <span style="color:#66d9ef">as</span> r;
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="事务">事务</h2>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="概述">概述</h3>
+<blockquote>
+<p>什么是事务</p>
+</blockquote>
+<ul>
+<li>事务就是将一组SQL语句放在同一批次内去执行</li>
+<li>如果一个SQL出错,则改批次内的所有SQL都将被取消执行</li>
+<li>MySQL事务处理只支持InnoDB和BDB数据表类型</li>
+</ul>
+<blockquote>
+<p>事务的ACID原则</p>
+</blockquote>
+<p><!-- raw HTML omitted -->**原子性(Atomic)**<!-- raw HTML omitted --></p>
+<ul>
+<li>整个事务中的所有操作,要么全部完成,要么全部失败,不可能停滞在中间的某个环节.事务在执行过后才能中发生错误,会被回滚(Rollback) 到事务开始前的状态,就像这个事务从来没有执行过一样.</li>
+</ul>
+<p><!-- raw HTML omitted -->**一致性(Consist)**<!-- raw HTML omitted --></p>
+<ul>
+<li>一个事务可以封装状态改变(除非它是一个只读的).事务必须始终保持系统处于一致的状态,不管在任何给定的时间并发事务有多少.如果事务是并发多个,系统也必须如同串行事务一样的操作,其主要特征是保护性和不变性(Presering an lnvarriant).
+<ul>
+<li>以转账案例为例,假如有五个账户,每个账户余额是100元,那么五个账户总额是500元,如果在这个5个账户之间同事发生多个转账,无论并发多少个,比如在A与B账户之间转账5元,在C与D账户之间转账10元,在B与E之间转账15元.五个账户的总额也应该还是500,这就是保护性和不变性.</li>
+</ul>
+</li>
+</ul>
+<p><!-- raw HTML omitted -->**隔离性(isolated)**<!-- raw HTML omitted --></p>
+<ul>
+<li>隔离状态执行事务,是它们好像是系统在给定时间内执行的唯一操作.如果有两个事务,运行在相同的时间内,执行相同的功能,事务的隔离性将确保每一事务在系统中认为只有该事务在使用系统.这种属性有时称为串行化,为了防止事务操作的混淆,必须串行化或者序列化请求,使得在同一时间仅有一个请求用于同一数据.</li>
+</ul>
+<p><!-- raw HTML omitted -->**持久性(Durable)**<!-- raw HTML omitted --></p>
+<ul>
+<li>在事务完成后,该事务对数据库所作的更改,持久的保存在数据库之中,并不会被回滚</li>
+</ul>
+<blockquote>
+<p>事务实现:基本语法</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- mysql 是默认开启事务，自动提交
+</span><span style="color:#75715e">-- 关闭自动提交
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">set</span> autocommit <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+<span style="color:#75715e">-- 开启自动提交
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">set</span> autocommit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+
+<span style="color:#75715e">-- 手动处理事务
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">set</span> autocommit <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+
+<span style="color:#75715e">-- 事务开启：标记一个事务的开始，从这个之后的sql都在同一个事务内
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">start</span> <span style="color:#66d9ef">transaction</span>;
+
+
+<span style="color:#75715e">-- 提交：持久化到磁盘(成功)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">commit</span>;
+
+<span style="color:#75715e">-- 回滚：回到原来的样子(失败！)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">rollback</span>;
+
+<span style="color:#75715e">-- 事务结束开启自动提交
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">set</span> autocommit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+
+<span style="color:#75715e">-- 设置一个事务的保存点
+</span><span style="color:#75715e"></span>savepoint <span style="color:#960050;background-color:#1e0010">保存点名称</span>;
+
+<span style="color:#75715e">-- 回滚到保存点
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">rollback</span> <span style="color:#66d9ef">to</span> savepoint <span style="color:#960050;background-color:#1e0010">保存点名称</span>;
+
+<span style="color:#75715e">-- 删除保存点
+</span><span style="color:#75715e"></span>release savepoint <span style="color:#960050;background-color:#1e0010">保存点名称</span>;
+</code></pre></div><blockquote>
+<p>事务实现:测试题目</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">/*
+</span><span style="color:#75715e">课堂测试题目
+</span><span style="color:#75715e">A在线买一款价格为500元商品,网上银行转账. A的银行卡余额为2000,然后给商家B支付500. 商家B一开始的银行卡余额为10000
+</span><span style="color:#75715e">创建数据库shop和创建表account并插入2条数据 */</span>
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span> <span style="color:#f92672">`</span>shop<span style="color:#f92672">`</span>CHARACTER <span style="color:#66d9ef">SET</span> utf8 <span style="color:#66d9ef">COLLATE</span> utf8_general_ci; USE <span style="color:#f92672">`</span>shop<span style="color:#f92672">`</span>;
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>account<span style="color:#f92672">`</span> (
+	<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> INT(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT, <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> VARCHAR(<span style="color:#ae81ff">32</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>cash<span style="color:#f92672">`</span> DECIMAL(<span style="color:#ae81ff">9</span>,<span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>, <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>)
+) ENGINE<span style="color:#f92672">=</span>INNODB <span style="color:#66d9ef">DEFAULT</span> CHARSET<span style="color:#f92672">=</span>utf8 <span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> account (<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>,<span style="color:#f92672">`</span>cash<span style="color:#f92672">`</span>)
+<span style="color:#66d9ef">VALUES</span>(<span style="color:#e6db74">&#39;A&#39;</span>,<span style="color:#ae81ff">2000</span>.<span style="color:#ae81ff">00</span>),(<span style="color:#e6db74">&#39;B&#39;</span>,<span style="color:#ae81ff">10000</span>.<span style="color:#ae81ff">00</span>)
+<span style="color:#75715e">-- 转账实现
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SET</span> autocommit <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">-- 关闭自动提交
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">START</span> <span style="color:#66d9ef">TRANSACTION</span>; <span style="color:#75715e">-- 开始一个事务,标记事务的起始点 UPDATE account SET cash=cash-500 WHERE `name`=&#39;A&#39;; UPDATE account SET cash=cash+500 WHERE `name`=&#39;B&#39;; COMMIT; -- 提交事务
+</span><span style="color:#75715e"></span><span style="color:#f92672">#</span> <span style="color:#66d9ef">rollback</span>;
+<span style="color:#66d9ef">SET</span> autocommit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">-- 恢复自动提交
+</span></code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="索引">索引</h2>
+<blockquote>
+<p>MySQL官方对索引的定义为：</p>
+<ul>
+<li><strong>索引(Index)是帮助MySQL高效获取数据的数据结构。</strong></li>
+<li>提取句子主干，就可以得到索引的本质：索引是数据结构。</li>
+</ul>
+</blockquote>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="索引分类">索引分类</h3>
+<blockquote>
+<p>索引的作用</p>
+</blockquote>
+<ul>
+<li>提高查询速度</li>
+<li>确保数据的唯一性</li>
+<li>可以加速表和表之间的连接,实现表和表之间的参照完整性</li>
+<li>使用分组和排序字句进行数据检索时,可以显著减少分组和排序的时间</li>
+<li>全文检索字段进行搜索优化</li>
+</ul>
+<blockquote>
+<p>索引的分类</p>
+</blockquote>
+<ul>
+<li>主键索引(Primary Key)</li>
+<li>唯一索引(Unique)</li>
+<li>常规索引(Index)</li>
+<li>全文索引(FullText)</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="主键索引">主键索引</h3>
+<p><!-- raw HTML omitted -->主键:某一属性组能唯一标识一条记录<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->特点:<!-- raw HTML omitted --></p>
+<ul>
+<li>最常见的索引类型</li>
+<li>确保数据记录的唯一性</li>
+<li>确定特定数据记录子在数据库中的位置</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="唯一索引">唯一索引</h3>
+<p><!-- raw HTML omitted -->作用:避免同一个表中数据列中的值重复<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->与主键索引的区别是<!-- raw HTML omitted --></p>
+<ul>
+<li>主键索引只能有一个</li>
+<li>唯一索引可能有多个</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="常规索引">常规索引</h3>
+<p><!-- raw HTML omitted -->作用:快速定位特定数据<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->注意:<!-- raw HTML omitted --></p>
+<ul>
+<li>index和key关键字都可以设置常规索引</li>
+<li>应加在查询找条件的字段</li>
+<li>不宜添加太多常规索引,影响数据的插入,删除和修改操作</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="全文索引">全文索引</h2>
+<p><!-- raw HTML omitted -->作用:快速定位特定的数据<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->注意:<!-- raw HTML omitted --></p>
+<ul>
+<li>MySQL5.6版本开始支持InnoDB引擎的全文索引</li>
+<li>只能用于CHAR , VARCHAR , TEXT数据列类型</li>
+<li>适合大型数据集</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="索引准则">索引准则</h3>
+<ul>
+<li>索引不是越多越好</li>
+<li>不要对经常变动的数据加索引</li>
+<li>小数据量的表建议不要加索引</li>
+<li>索引一般应加载查找条件的字段</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="索引的数据结构">索引的数据结构</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 我们可以在创建上述索引的时候，为其指定索引类型，分两类 hash类型的索引:查询单条快，范围查询慢 btree类型的索引:b+树，层数越多，数据量指数级增长(我们就用它，因为innodb默认支持它)
+</span><span style="color:#75715e">-- 不同的存储引擎支持的索引类型也不一样
+</span><span style="color:#75715e"></span>InnoDB <span style="color:#960050;background-color:#1e0010">支持事务，支持行级别锁定，支持</span> B<span style="color:#f92672">-</span>tree<span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">Full</span><span style="color:#f92672">-</span>text <span style="color:#960050;background-color:#1e0010">等索引，不支持</span> Hash <span style="color:#960050;background-color:#1e0010">索引</span>; 
+MyISAM <span style="color:#960050;background-color:#1e0010">不支持事务，支持表级别锁定，支持</span> B<span style="color:#f92672">-</span>tree<span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">Full</span><span style="color:#f92672">-</span>text <span style="color:#960050;background-color:#1e0010">等索引，不支持</span> Hash <span style="color:#960050;background-color:#1e0010">索引</span>; 
+Memory <span style="color:#960050;background-color:#1e0010">不支持事务，支持表级别锁定，支持</span> B<span style="color:#f92672">-</span>tree<span style="color:#960050;background-color:#1e0010">、</span>Hash <span style="color:#960050;background-color:#1e0010">等索引，不支持</span> <span style="color:#66d9ef">Full</span><span style="color:#f92672">-</span>text <span style="color:#960050;background-color:#1e0010">索引</span>; 
+NDB <span style="color:#960050;background-color:#1e0010">支持事务，支持行级别锁定，支持</span> Hash <span style="color:#960050;background-color:#1e0010">索引，不支持</span> B<span style="color:#f92672">-</span>tree<span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">Full</span><span style="color:#f92672">-</span>text <span style="color:#960050;background-color:#1e0010">等索引</span>; 
+Archive <span style="color:#960050;background-color:#1e0010">不支持事务，支持表级别锁定，不支持</span> B<span style="color:#f92672">-</span>tree<span style="color:#960050;background-color:#1e0010">、</span>Hash<span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">Full</span><span style="color:#f92672">-</span>text <span style="color:#960050;background-color:#1e0010">等索引</span>;
+</code></pre></div><p><!-- raw HTML omitted -->关于索引的本质:<a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html">http://blog.codinglabs.org/articles/theory-of-mysql-index.html</a><!-- raw HTML omitted --></p>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="权限管理">权限管理</h2>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="用户管理">用户管理</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">/* 用户和权限管理 */</span> <span style="color:#75715e">------------------ 用户信息表:mysql.user
+</span><span style="color:#75715e">-- 刷新权限
+</span><span style="color:#75715e"></span>FLUSH <span style="color:#66d9ef">PRIVILEGES</span>
+<span style="color:#75715e">-- 增加用户 CREATE USER kuangshen IDENTIFIED BY &#39;123456&#39; CREATE USER 用户名 IDENTIFIED BY [PASSWORD] 密码(字符串)
+</span><span style="color:#75715e"></span><span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">必须拥有</span>mysql数据库的全局CREATE USER权限<span style="color:#960050;background-color:#1e0010">，或拥有</span>INSERT权限<span style="color:#960050;background-color:#1e0010">。</span> <span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">只能创建用户，不能赋予权限。</span>
+<span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">用户名，注意引号</span>:<span style="color:#960050;background-color:#1e0010">如</span> <span style="color:#e6db74">&#39;user_name&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;192.168.1.1&#39;</span>
+<span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">密码也需引号，纯数字密码也要加引号</span>
+<span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">要在纯文本中指定密码，需忽略</span>PASSWORD关键词<span style="color:#960050;background-color:#1e0010">。要把密码指定为由</span>PASSWORD()<span style="color:#960050;background-color:#1e0010">函数返回的</span> <span style="color:#960050;background-color:#1e0010">混编值，需包含关键字</span>PASSWORD
+<span style="color:#75715e">-- 重命名用户 RENAME USER kuangshen TO kuangshen2 RENAME USER old_user TO new_user
+</span><span style="color:#75715e">-- 设置密码
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SET</span> PASSWORD <span style="color:#f92672">=</span> PASSWORD(<span style="color:#e6db74">&#39;密码&#39;</span>) <span style="color:#75715e">-- 为当前用户设置密码
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SET</span> PASSWORD <span style="color:#66d9ef">FOR</span> <span style="color:#960050;background-color:#1e0010">用户名</span> <span style="color:#f92672">=</span> PASSWORD(<span style="color:#e6db74">&#39;密码&#39;</span>) <span style="color:#75715e">-- 为指定用户设置密码
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">-- 删除用户 DROP USER kuangshen2 DROP USER 用户名
+</span><span style="color:#75715e">-- 分配权限/添加用户
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">GRANT</span> <span style="color:#960050;background-color:#1e0010">权限列表</span> <span style="color:#66d9ef">ON</span> <span style="color:#960050;background-color:#1e0010">表名</span> <span style="color:#66d9ef">TO</span> <span style="color:#960050;background-color:#1e0010">用户名</span> [IDENTIFIED <span style="color:#66d9ef">BY</span> [PASSWORD] <span style="color:#e6db74">&#39;password&#39;</span>]
+<span style="color:#f92672">-</span> <span style="color:#66d9ef">all</span> <span style="color:#66d9ef">privileges</span> <span style="color:#960050;background-color:#1e0010">表示所有权限</span> <span style="color:#f92672">-</span> <span style="color:#f92672">*</span>.<span style="color:#f92672">*</span> <span style="color:#960050;background-color:#1e0010">表示所有库的所有表</span>
+<span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">库名</span>.<span style="color:#960050;background-color:#1e0010">表名</span> <span style="color:#960050;background-color:#1e0010">表示某库下面的某表</span>
+<span style="color:#75715e">-- 查看权限 SHOW GRANTS FOR root@localhost; SHOW GRANTS FOR 用户名
+</span><span style="color:#75715e">-- 查看当前用户权限
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SHOW</span> GRANTS; <span style="color:#960050;background-color:#1e0010">或</span> <span style="color:#66d9ef">SHOW</span> GRANTS <span style="color:#66d9ef">FOR</span> <span style="color:#66d9ef">CURRENT_USER</span>; <span style="color:#960050;background-color:#1e0010">或</span> <span style="color:#66d9ef">SHOW</span> GRANTS <span style="color:#66d9ef">FOR</span> <span style="color:#66d9ef">CURRENT_USER</span>();
+<span style="color:#75715e">-- 撤消权限
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">REVOKE</span> <span style="color:#960050;background-color:#1e0010">权限列表</span> <span style="color:#66d9ef">ON</span> <span style="color:#960050;background-color:#1e0010">表名</span> <span style="color:#66d9ef">FROM</span> <span style="color:#960050;background-color:#1e0010">用户名</span>
+<span style="color:#66d9ef">REVOKE</span> <span style="color:#66d9ef">ALL</span> <span style="color:#66d9ef">PRIVILEGES</span>, <span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">OPTION</span> <span style="color:#66d9ef">FROM</span> <span style="color:#960050;background-color:#1e0010">用户名</span> <span style="color:#75715e">-- 撤销所有权限
+</span></code></pre></div><blockquote>
+<p>权限解释</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 权限列表
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">ALL</span> [<span style="color:#66d9ef">PRIVILEGES</span>] <span style="color:#75715e">-- 设置除GRANT OPTION之外的所有简单权限
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">ALTER</span> <span style="color:#75715e">-- 允许使用ALTER TABLE
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">ROUTINE</span> <span style="color:#75715e">-- 更改或取消已存储的子程序
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">CREATE</span> <span style="color:#75715e">-- 允许使用CREATE TABLE
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">ROUTINE</span> <span style="color:#75715e">-- 创建已存储的子程序
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TEMPORARY</span> TABLES <span style="color:#75715e">-- 允许使用CREATE TEMPORARY TABLE
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">USER</span> <span style="color:#75715e">-- 允许使用CREATE USER, DROP USER, RENAME USER和REVOKE ALL PRIVILEGES。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">VIEW</span> <span style="color:#75715e">-- 允许使用CREATE VIEW
+</span><span style="color:#75715e">-- 允许使用DELETE -- 允许使用DROP TABLE
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">DELETE</span>
+<span style="color:#66d9ef">DROP</span>
+<span style="color:#66d9ef">EXECUTE</span>
+FILE
+<span style="color:#66d9ef">INDEX</span>
+<span style="color:#66d9ef">INSERT</span>
+<span style="color:#66d9ef">LOCK</span> TABLES
+PROCESS
+<span style="color:#66d9ef">REFERENCES</span>
+RELOAD
+REPLICATION CLIENT <span style="color:#75715e">-- 允许用户询问从属服务器或主服务器的地址
+</span><span style="color:#75715e"></span>REPLICATION SLAVE <span style="color:#75715e">-- 用于复制型从属服务器(从主服务器中读取二进制日志事件) SELECT -- 允许使用SELECT
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SHOW</span> DATABASES <span style="color:#75715e">-- 显示所有数据库
+</span><span style="color:#75715e">-- 允许用户运行已存储的子程序
+</span><span style="color:#75715e">-- 允许使用SELECT...INTO OUTFILE和LOAD DATA INFILE
+</span><span style="color:#75715e">-- 允许使用CREATE INDEX和DROP INDEX -- 允许使用INSERT
+</span><span style="color:#75715e">-- 允许对您拥有SELECT权限的表使用LOCK TABLES -- 允许使用SHOW FULL PROCESSLIST
+</span><span style="color:#75715e">-- 未被实施 -- 允许使用FLUSH
+</span><span style="color:#75715e">-- 允许使用SHOW CREATE VIEW -- 允许使用mysqladmin shutdown
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SHOW</span> <span style="color:#66d9ef">VIEW</span>
+SHUTDOWN
+SUPER
+mysqladmin debug命令;<span style="color:#960050;background-color:#1e0010">允许您连接</span>(<span style="color:#960050;background-color:#1e0010">一次</span>)<span style="color:#960050;background-color:#1e0010">，即使已达到</span>max_connections<span style="color:#960050;background-color:#1e0010">。</span> <span style="color:#66d9ef">UPDATE</span> <span style="color:#75715e">-- 允许使用UPDATE
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">USAGE</span> <span style="color:#75715e">-- “无权限”的同义词 GRANT OPTION -- 允许授予权限
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">/* 表维护 */</span>
+<span style="color:#75715e">-- 分析和存储表的关键字分布
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">ANALYZE</span> [<span style="color:#66d9ef">LOCAL</span> <span style="color:#f92672">|</span> NO_WRITE_TO_BINLOG] <span style="color:#66d9ef">TABLE</span> <span style="color:#960050;background-color:#1e0010">表名</span> ...
+<span style="color:#75715e">-- 检查一个或多个表是否有错误
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">CHECK</span> <span style="color:#66d9ef">TABLE</span> tbl_name [, tbl_name] ... [<span style="color:#66d9ef">option</span>] ...
+<span style="color:#66d9ef">option</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">{</span>QUICK <span style="color:#f92672">|</span> FAST <span style="color:#f92672">|</span> MEDIUM <span style="color:#f92672">|</span> EXTENDED <span style="color:#f92672">|</span> CHANGED<span style="color:#960050;background-color:#1e0010">}</span>
+<span style="color:#75715e">-- 整理数据文件的碎片
+</span><span style="color:#75715e"></span>OPTIMIZE [<span style="color:#66d9ef">LOCAL</span> <span style="color:#f92672">|</span> NO_WRITE_TO_BINLOG] <span style="color:#66d9ef">TABLE</span> tbl_name [, tbl_name] ...
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="mysql备份">MySQL备份</h3>
+<p><!-- raw HTML omitted -->数据库备份必要性<!-- raw HTML omitted --></p>
+<ul>
+<li>保证重要数据不丢失</li>
+<li>数据转移</li>
+</ul>
+<p><!-- raw HTML omitted -->MySQL数据库备份方法<!-- raw HTML omitted --></p>
+<ul>
+<li>mysqldump备份工具</li>
+<li>数据库管理工具,如SQLyog</li>
+<li>直接拷贝数据库文件和相关配置文件</li>
+</ul>
+<p><!-- raw HTML omitted --><strong>mysqldump客户端</strong><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->作用 :<!-- raw HTML omitted --></p>
+<ul>
+<li>转储数据库</li>
+<li>搜集数据库进行备份</li>
+<li>将数据转移到另一个SQL服务器,不一定是MySQL服务器</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 导出
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">1</span>. <span style="color:#960050;background-color:#1e0010">导出一张表</span> <span style="color:#75715e">-- mysqldump -uroot -p123456 school student &gt;D:/a.sql
+</span><span style="color:#75715e"></span>	mysqldump <span style="color:#f92672">-</span>u用户名 <span style="color:#f92672">-</span>p密码 <span style="color:#960050;background-color:#1e0010">库名</span> <span style="color:#960050;background-color:#1e0010">表名</span> <span style="color:#f92672">&gt;</span> <span style="color:#960050;background-color:#1e0010">文件名</span>(D:<span style="color:#f92672">/</span>a.<span style="color:#66d9ef">sql</span>)
+<span style="color:#ae81ff">2</span>. <span style="color:#960050;background-color:#1e0010">导出多张表</span> <span style="color:#75715e">-- mysqldump -uroot -p123456 school student result &gt;D:/a.sql
+</span><span style="color:#75715e"></span>	mysqldump <span style="color:#f92672">-</span>u用户名 <span style="color:#f92672">-</span>p密码 <span style="color:#960050;background-color:#1e0010">库名</span> <span style="color:#960050;background-color:#1e0010">表</span><span style="color:#ae81ff">1</span> <span style="color:#960050;background-color:#1e0010">表</span><span style="color:#ae81ff">2</span> <span style="color:#960050;background-color:#1e0010">表</span><span style="color:#ae81ff">3</span> <span style="color:#f92672">&gt;</span> <span style="color:#960050;background-color:#1e0010">文件名</span>(D:<span style="color:#f92672">/</span>a.<span style="color:#66d9ef">sql</span>) <span style="color:#ae81ff">3</span>. <span style="color:#960050;background-color:#1e0010">导出所有表</span> <span style="color:#75715e">-- mysqldump -uroot -p123456 school &gt;D:/a.sql
+</span><span style="color:#75715e"></span>	mysqldump <span style="color:#f92672">-</span>u用户名 <span style="color:#f92672">-</span>p密码 <span style="color:#960050;background-color:#1e0010">库名</span> <span style="color:#f92672">&gt;</span> <span style="color:#960050;background-color:#1e0010">文件名</span>(D:<span style="color:#f92672">/</span>a.<span style="color:#66d9ef">sql</span>)
+<span style="color:#ae81ff">4</span>. <span style="color:#960050;background-color:#1e0010">导出一个库</span> <span style="color:#75715e">-- mysqldump -uroot -p123456 -B school &gt;D:/a.sql
+</span><span style="color:#75715e"></span>	mysqldump <span style="color:#f92672">-</span>u用户名 <span style="color:#f92672">-</span>p密码 <span style="color:#f92672">-</span>B <span style="color:#960050;background-color:#1e0010">库名</span> <span style="color:#f92672">&gt;</span> <span style="color:#960050;background-color:#1e0010">文件名</span>(D:<span style="color:#f92672">/</span>a.<span style="color:#66d9ef">sql</span>) <span style="color:#960050;background-color:#1e0010">可以</span><span style="color:#f92672">-</span>w携带备份条件
+
+<span style="color:#960050;background-color:#1e0010">可以</span><span style="color:#f92672">-</span>w携带备份条件
+<span style="color:#75715e">-- 导入
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">1</span>. <span style="color:#960050;background-color:#1e0010">在登录</span>mysql的情况下: <span style="color:#75715e">-- source D:/a.sql
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">source</span> <span style="color:#960050;background-color:#1e0010">备份文件</span> <span style="color:#ae81ff">2</span>. <span style="color:#960050;background-color:#1e0010">在不登录的情况下</span>
+mysql <span style="color:#f92672">-</span>u用户名 <span style="color:#f92672">-</span>p密码 <span style="color:#960050;background-color:#1e0010">库名</span> <span style="color:#f92672">&lt;</span> <span style="color:#960050;background-color:#1e0010">备份文件</span>
+</code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="规范化数据库设计">规范化数据库设计</h2>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="为什么需要数据库设计">为什么需要数据库设计</h3>
+<p><!-- raw HTML omitted --><strong>当数据库比较复杂时我们需要设计数据库</strong><!-- raw HTML omitted -->
+<!-- raw HTML omitted --><strong>糟糕的数据库设计</strong> **:**<!-- raw HTML omitted --></p>
+<ul>
+<li>数据冗余,存储空间浪费</li>
+<li>数据更新和插入的异常</li>
+<li>程序性能差</li>
+</ul>
+<p><!-- raw HTML omitted --><strong>良好的数据库设计</strong> **:**<!-- raw HTML omitted --></p>
+<ul>
+<li>节省数据的存储空间</li>
+<li>能够保证数据的完整性</li>
+<li>方便进行数据库应用系统的开发</li>
+</ul>
+<p><!-- raw HTML omitted --><strong>软件项目开发周期中数据库设计</strong> **:**<!-- raw HTML omitted --></p>
+<ul>
+<li>需求分析阶段: 分析客户的业务和数据处理需求</li>
+<li>概要设计阶段:设计数据库的E-R模型图 , 确认需求信息的正确和完整.</li>
+</ul>
+<p><!-- raw HTML omitted --><strong>设计数据库步骤</strong><!-- raw HTML omitted --></p>
+<ul>
+<li>收集信息
+<ul>
+<li>与该系统有关人员进行交流 , 座谈 , 充分了解用户需求 , 理解数据库需要完成的任务.</li>
+</ul>
+</li>
+<li>标识实体[Entity]
+<ul>
+<li>标识数据库要管理的关键对象或实体,实体一般是名词</li>
+</ul>
+</li>
+<li>标识每个实体需要存储的详细信息[Attribute]</li>
+<li>标识实体之间的关系[Relationship]</li>
+</ul>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="三大范式">三大范式</h3>
+<p><!-- raw HTML omitted -->不合规范的表设计会导致的问题:<!-- raw HTML omitted --></p>
+<ul>
+<li>信息重复</li>
+<li>更新异常</li>
+<li>插入异常
+<ul>
+<li>无法正确表示信息</li>
+</ul>
+</li>
+<li>删除异常</li>
+<li>丢失有效信息</li>
+</ul>
+<blockquote>
+<p><strong>三大范式</strong></p>
+</blockquote>
+<p><!-- raw HTML omitted -->**第一范式 (1st NF)**<!-- raw HTML omitted --></p>
+<ul>
+<li>第一范式的目标是确保每列的原子性,如果每列都是不可再分的最小数据单元,则满足第一范式</li>
+</ul>
+<p><!-- raw HTML omitted -->**第二范式(2nd NF)**<!-- raw HTML omitted --></p>
+<ul>
+<li>第二范式(2NF)是在第一范式(1NF)的基础上建立起来的，即满足第二范式(2NF)必须先满足第一 范式(1NF)。</li>
+<li>第二范式要求每个表只描述一件事情</li>
+</ul>
+<p><!-- raw HTML omitted -->**第三范式(3rd NF)**<!-- raw HTML omitted --></p>
+<ul>
+<li>如果一个关系满足第二范式,并且除了主键以外的其他列都不传递依赖于主键列,则满足第三范式.</li>
+<li>第三范式需要确保数据表中的每一列数据都和主键直接相关，而不能间接相关。</li>
+</ul>
+<p><!-- raw HTML omitted --><strong>规范化和性能的关系</strong><!-- raw HTML omitted --></p>
+<ul>
+<li>为满足某种商业目标 , 数据库性能比规范化数据库更重要</li>
+<li>在数据规范化的同时 , 要综合考虑数据库的性能</li>
+<li>通过在给定的表中添加额外的字段,以大量减少需要从中搜索信息所需的时间</li>
+<li>通过在给定的表中插入计算列,以方便查询</li>
+</ul>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/06/%E5%8D%9A%E5%AE%A2%E5%BC%80%E7%AF%87/" data-tooltip="博客开篇">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/1/01/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/1/01/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/1/01/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/06/%E5%8D%9A%E5%AE%A2%E5%BC%80%E7%AF%87/" data-tooltip="博客开篇">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/1/01/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/1/01/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/1/01/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnlbsn.github.io%2F1%2F01%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnlbsn.github.io%2F1%2F01%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnlbsn.github.io%2F1%2F01%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+    
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://nlbsn.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://nlbsn.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nlbsn.github.io\/1\/01\/';
+          
+            this.page.identifier = '\/1\/01\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

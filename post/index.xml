@@ -288,5 +288,15 @@
       <description>&lt;p&gt;​    加油！！！&lt;/p&gt;</description>
     </item>
     
+    <item>
+      <title></title>
+      <link>https://nlbsn.github.io/1/01/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/1/01/</guid>
+      <description>MySQL学习笔记 摘抄：https://www.yuque.com/flipped-aurora/gqbcfk/ih6bw9
+DML语言  DML语言 : 数据操作语言 数据库意义 : 数据存储、数据管理 用于操作数据库对象中所包含的数据 包括 :  INSERT (添加数据语句) UPDATE (更新数据语句) DELETE(删除外键)     Insert 语法  添加单条数据  语法: INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)    INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;)  添加多条数据  语法:INSERT INTO 表名[(字段1,字段2,字段3,...)] VALUES(&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;), (&#39;值1&#39;,&#39;值2&#39;,&#39;值3&#39;)...    -- 例如 INSERT INTO `users`(`username`, `password`, `avatar`) VALUES (&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;),(&amp;#39;1&amp;#39;, &amp;#39;2&amp;#39;, &amp;#39;3&amp;#39;) 注意事项  字段和字段之间使用英文逗号隔开 字段是可以省略的,但是后面的值必须要一一对应,不能少   Update 语法 UPDATE 表名 SET column=value [,column=value2,.</description>
+    </item>
+    
   </channel>
 </rss>
