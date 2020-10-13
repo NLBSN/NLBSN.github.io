@@ -271,12 +271,12 @@
                   docker-engine \
                   -y
 </code></pre><p>删除旧的docker文件</p>
-<pre><code>rm -rf /var/lib/docker
+<pre><code>sudo rm -rf /var/lib/docker
 </code></pre><p>使用yum进行安装</p>
 <p># step 1: 安装必要的一些系统工具</p>
 <pre><code>sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 </code></pre><p>安装仓库地址</p>
-<pre><code>yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+<pre><code>sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 </code></pre><p>查看仓库内可选的版本包</p>
 <pre><code>[root@DESKTOP-KQN1KKC ~]# yum list docker-ce --showduplicates | sort -r
  * updates: mirrors.huaweicloud.com
