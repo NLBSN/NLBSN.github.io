@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="爱喝饮料的少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="Sampler是一个用于shell命令执行，可视化和告警的工具。其配置使用的是一个简单的YAML文件。">
+
+
+<meta property="og:description" content="Sampler是一个用于shell命令执行，可视化和告警的工具。其配置使用的是一个简单的YAML文件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sampler：Shell命令执行可视化和告警工具">
+<meta name="twitter:title" content="Sampler：Shell命令执行可视化和告警工具">
+<meta property="og:url" content="https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+<meta property="twitter:url" content="https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+<meta property="og:site_name" content="爱喝饮料的少年">
+<meta property="og:description" content="Sampler是一个用于shell命令执行，可视化和告警的工具。其配置使用的是一个简单的YAML文件。">
+<meta name="twitter:description" content="Sampler是一个用于shell命令执行，可视化和告警的工具。其配置使用的是一个简单的YAML文件。">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-12-03T11:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-12-03T11:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="linux">
+    
+      <meta property="article:section" content="shell">
+    
+  
+  
+    
+      <meta property="article:tag" content="linux">
+    
+      <meta property="article:tag" content="shell">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628112608.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628112608.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+
+
+    <title>Sampler：Shell命令执行可视化和告警工具</title>
+
+    <link rel="icon" href="https://nlbsn.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://nlbsn.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nlbsn.github.io/">爱喝饮料的少年</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://nlbsn.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nlbsn.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Sampler：Shell命令执行可视化和告警工具
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-12-03T11:00:00Z">
+        
+  
+  
+  
+  
+    2020年12月3日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://nlbsn.github.io/categories/linux">linux</a>, 
+    
+      <a class="category-link" href="https://nlbsn.github.io/categories/shell">shell</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><strong>Sampler是一个用于shell命令执行，可视化和告警的工具。其配置使用的是一个简单的YAML文件。</strong></p>
+<p><strong>Sampler是一个用于shell命令执行，可视化和告警的工具。其配置使用的是一个简单的YAML文件。</strong></p>
+<p><strong><img src="https://image.3001.net/images/20190829/1567053962_5d67588a44abc.jpg!small" alt="img"></strong></p>
+<h2 id="为什么我需要它">为什么我需要它？</h2>
+<p>你可以直接从终端对任意动态进程进行采样 - 观察数据库中的更改，监控MQ动态消息（in-flight messages），触发部署脚本并在完成后获取通知。</p>
+<p>如果有一种方法可以使用shell命令获取指标（metric），那么可以使用Sampler立即对其进行可视化。</p>
+<h2 id="安装">安装</h2>
+<h3 id="macos">macOS</h3>
+<pre><code>brew cask install sampler
+</code></pre><p>或</p>
+<pre><code>sudo curl -Lo /usr/local/bin/sampler https://github.com/sqshq/sampler/releases/download/v1.0.3/sampler-1.0.3-darwin-amd64
+sudo chmod +x /usr/local/bin/sampler
+</code></pre><h3 id="linux"><strong>Linux</strong></h3>
+<pre><code>sudo wget https://github.com/sqshq/sampler/releases/download/v1.0.3/sampler-1.0.3-linux-amd64 -O /usr/local/bin/sampler
+sudo chmod +x /usr/local/bin/sampler
+</code></pre><p>**注意：**需要为Sampler安装libasound2-dev系统库用以播放<a href="https://github.com/sqshq/sampler#triggers">触发器</a>声音。通常库已安装在相应位置，但如果没有 - 你可以使用你习惯的包管理器进行安装，例如apt install libasound2-dev</p>
+<h3 id="windows实验"><strong>Windows（实验）</strong></h3>
+<p>建议在高级控制台模拟器下使用，如<a href="https://cmder.net/">Cmder</a></p>
+<blockquote>
+<p>​    <a href="https://github.com/sqshq/sampler/releases/download/v1.0.3/sampler-1.0.3-windows-amd64.exe">Download .exe</a></p>
+</blockquote>
+<h2 id="使用">使用</h2>
+<blockquote>
+<p>​    指定shell命令，Sampler会相应的速率执行这些命令。输出用于可视化。</p>
+<p>​    使用Sampler基本上的三步过程：</p>
+<p>​    在YAML配置文件中定义shell命令</p>
+<p>​    运行sampler -c config.yml</p>
+<p>​    在UI上调整组件大小和位置</p>
+</blockquote>
+<h2 id="市面早已有许多监控系统">市面早已有许多监控系统</h2>
+<p>Sampler绝不是监控系统的替代品，而是易于设置的开发工具。</p>
+<p>如果spinning up和使用Grafana配置<a href="https://prometheus.io/">Prometheus</a>是完全多余的任务，那么Sampler可能是正确的解决方案。没有服务器，没有数据库，不需要部署 - 你指定了shell命令，它就可以工作了。</p>
+<h2 id="我监控的每台服务器上都需要安装吗">我监控的每台服务器上都需要安装吗？</h2>
+<p>不，你可以在本地运行Sampler，但仍然可以从多台远程计算机上收集遥测数据。任何可视化都可能具有init命令，你可以在其中ssh到远程服务器。请参阅<a href="https://github.com/sqshq/sampler#ssh">SSH example</a></p>
+<h2 id="组件">组件</h2>
+<p>以下是每种组件类型的配置示例列表，其中包含与macOS兼容的采样脚本。</p>
+<h3 id="runchart">Runchart</h3>
+<p><img src="https://image.3001.net/images/20190829/1567053984_5d6758a0a8fa5.png!small" alt="img"></p>
+<pre><code>runcharts:
+  - title: Search engine response time
+    rate-ms: 500        # sampling rate, default = 1000
+    scale: 2            # number of digits after sample decimal point, default = 1
+    legend:
+      enabled: true     # enables item labels, default = true
+      details: false    # enables item statistics: cur/min/max/dlt values, default = true
+    items:
+      - label: GOOGLE
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://www.google.com
+        color: 178      # 8-bit color number, default one is chosen from a pre-defined palette
+      - label: YAHOO
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://search.yahoo.com
+      - label: BING
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://www.bing.com
+</code></pre><h3 id="sparkline">Sparkline</h3>
+<p><img src="https://image.3001.net/images/20190829/1567053997_5d6758ad1df0e.png!small" alt="img"></p>
+<pre><code>sparklines:
+  - title: CPU usage
+    rate-ms: 200
+    scale: 0
+    sample: ps -A -o %cpu | awk '{s+=$1} END {print s}'
+  - title: Free memory pages
+    rate-ms: 200
+    scale: 0
+    sample: memory_pressure | grep 'Pages free' | awk '{print $3}'
+</code></pre><h3 id="barchart">Barchart</h3>
+<p><img src="https://image.3001.net/images/20190829/1567054006_5d6758b665d66.png!small" alt="img"></p>
+<pre><code>barcharts:
+  - title: Local network activity
+    rate-ms: 500        # sampling rate, default = 1000
+    scale: 0            # number of digits after sample decimal point, default = 1
+    items:
+      - label: UDP bytes in
+        sample: nettop -J bytes_in -l 1 -m udp | awk '{sum += $4} END {print sum}'
+      - label: UDP bytes out
+        sample: nettop -J bytes_out -l 1 -m udp | awk '{sum += $4} END {print sum}'
+      - label: TCP bytes in
+        sample: nettop -J bytes_in -l 1 -m tcp | awk '{sum += $4} END {print sum}'
+      - label: TCP bytes out
+        sample: nettop -J bytes_out -l 1 -m tcp | awk '{sum += $4} END {print sum}'
+</code></pre><h3 id="gauge">Gauge</h3>
+<p><img src="https://image.3001.net/images/20190829/1567054026_5d6758ca21625.png!small" alt="img"></p>
+<pre><code>gauges:
+  - title: Minute progress
+    rate-ms: 500        # sampling rate, default = 1000
+    scale: 2            # number of digits after sample decimal point, default = 1
+    percent-only: false # toggle display of the current value, default = false
+    color: 178          # 8-bit color number, default one is chosen from a pre-defined palette
+    cur:
+      sample: date +%S  # sample script for current value
+    max:
+      sample: echo 60   # sample script for max value
+    min:
+      sample: echo 0    # sample script for min value
+  - title: Year progress
+    cur:
+      sample: date +%j
+    max:
+      sample: echo 365
+    min:
+      sample: echo 0
+</code></pre><h3 id="textbox">Textbox</h3>
+<p><img src="https://image.3001.net/images/20190829/1567054037_5d6758d509e97.png!small" alt="img"></p>
+<pre><code>textboxes:
+  - title: Local weather
+    rate-ms: 10000      # sampling rate, default = 1000
+    sample: curl wttr.in?0ATQF
+    border: false       # border around the item, default = true
+    color: 178          # 8-bit color number, default is white
+  - title: Docker containers stats
+    rate-ms: 500
+    sample: docker stats --no-stream --format &quot;table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}&quot;
+</code></pre><h3 id="asciibox">Asciibox</h3>
+<p><img src="https://image.3001.net/images/20190829/1567054044_5d6758dcdf3e5.png!small" alt="img"></p>
+<pre><code>asciiboxes:
+  - title: UTC time
+    rate-ms: 500        # sampling rate, default = 1000
+    font: 3d            # font type, default = 2d
+    border: false       # border around the item, default = true    
+    color: 43           # 8-bit color number, default is white
+    sample: env TZ=UTC date +%r
+</code></pre><h2 id="额外功能">额外功能</h2>
+<h3 id="triggers">Triggers</h3>
+<p>触发器允许执行条件操作，如视觉/声音告警或任意shell命令。以下示例说明了此概念。</p>
+<p>Clock gauge，从开始的每分钟显示时间进度和当前时间</p>
+<pre><code>gauges:
+  - title: MINUTE PROGRESS
+    position: [[0, 18], [80, 0]]  
+    cur:
+      sample: date +%S
+    max:
+      sample: echo 60
+    min:
+      sample: echo 0
+    triggers:
+      - title: CLOCK BELL EVERY MINUTE
+        condition: '[ $label == &quot;cur&quot; ] &amp;&amp; [ $cur -eq 0 ] &amp;&amp; echo 1 || echo 0'  # expects &quot;1&quot; as TRUE indicator
+        actions:
+          terminal-bell: true  # standard terminal bell, default = false
+          sound: true    # NASA quindar tone, default = false
+          visual: false  # notification with current value on top of the component area, default = false
+          script: say -v samantha `date +%I:%M%p`  # an arbitrary script, which can use $cur, $prev and $label variables
+</code></pre><p>搜索引擎延迟图表，在延迟超过阈值时向用户发出告警</p>
+<pre><code>runcharts:
+  - title: SEARCH ENGINE RESPONSE TIME (sec)
+    rate-ms: 200
+    items:
+      - label: GOOGLE
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://www.google.com
+      - label: YAHOO
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://search.yahoo.com     
+    triggers:
+      - title: Latency threshold exceeded
+        condition: echo &quot;$prev &lt; 0.3 &amp;&amp; $cur &gt; 0.3&quot; |bc -l  # expects &quot;1&quot; as TRUE indicator
+        actions:
+          terminal-bell: true  # standard terminal bell, default = false
+          sound: true   # NASA quindar tone, default = false
+          visual: true  # visual notification on top of the component area, default = false
+          script: 'say alert: ${label} latency exceeded ${cur} second' # an arbitrary script, which can use $cur, $prev and $label variables
+</code></pre><h3 id="交互式-shell-支持"><strong>交互式 shell 支持</strong></h3>
+<p>除了sample命令之外，还可以指定init命令（在采样前仅执行一次）和transform命令（后处理采样命令输出）。这包括交互式shell用例，例如仅建立与数据库的连接一次，然后在交互式shell会话中执行轮询。</p>
+<p><strong>Basic mode</strong></p>
+<pre><code>textboxes:
+  - title: MongoDB polling
+    rate-ms: 500
+    init: mongo --quiet --host=localhost test # executes only once to start the interactive session
+    sample: Date.now();                       # executes with a required rate, in scope of the interactive session
+    transform: echo result = $sample          # executes in scope of local session, $sample variable is available for transformation
+</code></pre><p><strong>PTY mode</strong></p>
+<p>在某些情况下，交互式shell将无法工作，因为它的stdin不是终端。这种情况下我们可以使用PTY模式：</p>
+<pre><code>textboxes:
+  - title: Neo4j polling
+    pty: true  # enables pseudo-terminal mode, default = false
+    init: cypher-shell -u neo4j -p pwd --format plain
+    sample: RETURN rand();
+    transform: echo &quot;$sample&quot; | tail -n 1
+  - title: Top on a remote server
+    pty: true  # enables pseudo-terminal mode, default = false
+    init: ssh -i ~/user.pem ec2-user@1.2.3.4
+    sample: top
+</code></pre><h3 id="init-命令逐步执行">init 命令逐步执行</h3>
+<p>在开始采样之前，还可以逐个执行多个init命令。</p>
+<pre><code>textboxes:
+  - title: Java application uptime
+    multistep-init:
+      - java -jar jmxterm-1.0.0-uber.jar
+      - open host:port # or local PID
+      - bean java.lang:type=Runtime
+    sample: get Uptime
+</code></pre><p><strong>变量</strong></p>
+<p>如果配置文件包含重复的模式，则可以将它们提取到变量部分。此外，还可以在启动时使用-v/&ndash;variable标志指定变量，并且任意的系统环境变量也可以在脚本中使用。</p>
+<pre><code>variables:
+    mongoconnection: mongo --quiet --host=localhost test
+barcharts:
+  - title: MongoDB documents by status
+    items:
+      - label: IN_PROGRESS
+        init: $mongoconnection
+        sample: db.getCollection('events').find({status:'IN_PROGRESS'}).count()
+      - label: SUCCESS
+        init: $mongoconnection
+        sample: db.getCollection('events').find({status:'SUCCESS'}).count()
+      - label: FAIL
+        init: $mongoconnection
+        sample: db.getCollection('events').find({status:'FAIL'}).count()
+</code></pre><p><strong>颜色主题</strong></p>
+<p><strong><img src="https://image.3001.net/images/20190829/1567054070_5d6758f6a9f2b.png!small" alt="img"></strong></p>
+<pre><code>theme: light # default = dark
+sparklines:
+  - title: CPU usage
+    sample: ps -A -o %cpu | awk '{s+=$1} END {print s}'
+</code></pre><h2 id="真实场景"><strong>真实场景</strong></h2>
+<h3 id="数据库"><strong>数据库</strong></h3>
+<p>以下是不同的数据库连接示例。建议使用交互式shell（init脚本）仅建立一次连接，然后在采样期间重用即可。</p>
+<p><strong>MySQL</strong></p>
+<pre><code># prerequisite: installed mysql shell
+variables:
+  mysql_connection: mysql -u root -s --database mysql --skip-column-names
+sparklines:  
+  - title: MySQL (random number example)
+    pty: true
+    init: $mysql_connection
+    sample: select rand();
+</code></pre><p><strong>PostgreSQL</strong></p>
+<pre><code># prerequisite: installed psql shell
+variables:
+  PGPASSWORD: pwd
+  postgres_connection: psql -h localhost -U postgres --no-align --tuples-only
+sparklines:
+  - title: PostgreSQL (random number example)
+    init: $postgres_connection
+    sample: select random();
+</code></pre><p><strong>MongoDB</strong></p>
+<pre><code># prerequisite: installed mongo shell
+variables:
+  mongo_connection: mongo --quiet --host=localhost test
+sparklines:
+  - title: MongoDB (random number example)
+    init: $mongo_connection
+    sample: Math.random();
+</code></pre><p><strong>Neo4j</strong></p>
+<pre><code># prerequisite: installed cypher shell
+variables:
+  neo4j_connection: cypher-shell -u neo4j -p pwd --format plain
+sparklines:
+  - title: Neo4j (random number example)
+    pty: true
+    init: $neo4j_connection
+    sample: RETURN rand();
+    transform: echo &quot;$sample&quot; | tail -n 1
+</code></pre><p><strong>Kafka</strong></p>
+<p>检查kafka lag值，计算每个队列lag值的和，高于阈值报警，多consumergroup，多topic。</p>
+<pre><code>variables:
+  kafka_connection: $KAFKA_HOME/bin/kafka-consumer-groups --bootstrap-server localhost:9092
+runcharts:
+  - title: Kafka lag per consumer group
+    rate-ms: 5000
+    scale: 0
+    items:
+      - label: A-&gt;B
+        sample: $kafka_connection --group group_a --describe | awk 'NR&gt;1 {sum += $5} END {print sum}'
+      - label: B-&gt;C
+        sample: $kafka_connection --group group_b --describe | awk 'NR&gt;1 {sum += $5} END {print sum}'
+      - label: C-&gt;D
+        sample: $kafka_connection --group group_c --describe | awk 'NR&gt;1 {sum += $5} END {print sum}'
+</code></pre><p><strong>Docker</strong></p>
+<p>Docker容器统计信息（CPU，MEM，O/I）</p>
+<pre><code>textboxes:
+  - title: Docker containers stats
+    sample: docker stats --no-stream --format &quot;table {{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}&quot;
+</code></pre><p><strong>SSH</strong></p>
+<p>远程服务器上的TOP命令</p>
+<pre><code>variables:
+  sshconnection: ssh -i ~/my-key-pair.pem ec2-user@1.2.3.4
+textboxes:
+  - title: SSH
+    pty: true
+    init: $sshconnection
+    sample: top
+</code></pre><p><strong>JMX</strong></p>
+<p>Java应用程序的正常运行示例</p>
+<pre><code># prerequisite: download [jmxterm jar file](https://docs.cyclopsgroup.org/jmxterm)
+textboxes:
+  - title: Java application uptime
+    multistep-init:
+      - java -jar jmxterm-1.0.0-uber.jar
+      - open host:port # or local PID
+      - bean java.lang:type=Runtime
+    sample: get Uptime
+    transform: echo $sample | tr -dc '0-9' | awk '{printf &quot;%.1f min&quot;, $1/1000/60}'
+</code></pre><p>*<strong>参考来源：<a href="https://github.com/sqshq/sampler">GitHub</a>，FB小编secist编译，转载请注明来自FreeBuf.COM</strong></p>
+<p>本文作者：secist， 转载请注明来自<a href="https://www.freebuf.com/">FreeBuf.COM</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/linux/">linux</a>
+
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/shell/">shell</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/12/7%E5%A4%A9%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E6%95%99%E4%BD%A07%E5%A4%A9%E7%94%A8go%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0-web-%E6%A1%86%E6%9E%B6/" data-tooltip=" 7天从入门到放弃？这个项目教你7天用Go从零实现 Web 框架">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/12/7%E5%A4%A9%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E6%95%99%E4%BD%A07%E5%A4%A9%E7%94%A8go%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0-web-%E6%A1%86%E6%9E%B6/" data-tooltip=" 7天从入门到放弃？这个项目教你7天用Go从零实现 Web 框架">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fsamplershell%25E5%2591%25BD%25E4%25BB%25A4%25E6%2589%25A7%25E8%25A1%258C%25E5%258F%25AF%25E8%25A7%2586%25E5%258C%2596%25E5%2592%258C%25E5%2591%258A%25E8%25AD%25A6%25E5%25B7%25A5%25E5%2585%25B7%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fsamplershell%25E5%2591%25BD%25E4%25BB%25A4%25E6%2589%25A7%25E8%25A1%258C%25E5%258F%25AF%25E8%25A7%2586%25E5%258C%2596%25E5%2592%258C%25E5%2591%258A%25E8%25AD%25A6%25E5%25B7%25A5%25E5%2585%25B7%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fsamplershell%25E5%2591%25BD%25E4%25BB%25A4%25E6%2589%25A7%25E8%25A1%258C%25E5%258F%25AF%25E8%25A7%2586%25E5%258C%2596%25E5%2592%258C%25E5%2591%258A%25E8%25AD%25A6%25E5%25B7%25A5%25E5%2585%25B7%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+    
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://nlbsn.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://nlbsn.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nlbsn.github.io\/2020\/12\/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7\/';
+          
+            this.page.identifier = '\/2020\/12\/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

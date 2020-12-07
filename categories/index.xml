@@ -6,10 +6,73 @@
     <description>Recent content in Categories on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Nov 2020 08:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Dec 2020 11:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nlbsn.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>linux</title>
+      <link>https://nlbsn.github.io/categories/linux/</link>
+      <pubDate>Thu, 03 Dec 2020 11:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/categories/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://nlbsn.github.io/categories/shell/</link>
+      <pubDate>Thu, 03 Dec 2020 11:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/categories/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://nlbsn.github.io/categories/golang/</link>
+      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/categories/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>package</title>
+      <link>https://nlbsn.github.io/categories/package/</link>
+      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/categories/package/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>star</title>
+      <link>https://nlbsn.github.io/categories/star/</link>
+      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/categories/star/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://nlbsn.github.io/categories/docker/</link>
+      <pubDate>Tue, 01 Dec 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/categories/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>容器</title>
+      <link>https://nlbsn.github.io/categories/%E5%AE%B9%E5%99%A8/</link>
+      <pubDate>Tue, 01 Dec 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/categories/%E5%AE%B9%E5%99%A8/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>生活</title>
@@ -30,15 +93,6 @@
     </item>
     
     <item>
-      <title>golang</title>
-      <link>https://nlbsn.github.io/categories/golang/</link>
-      <pubDate>Mon, 03 Aug 2020 12:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/categories/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>日常</title>
       <link>https://nlbsn.github.io/categories/%E6%97%A5%E5%B8%B8/</link>
       <pubDate>Sun, 02 Aug 2020 00:00:00 +0000</pubDate>
@@ -48,29 +102,11 @@
     </item>
     
     <item>
-      <title>docker</title>
-      <link>https://nlbsn.github.io/categories/docker/</link>
-      <pubDate>Sun, 12 Jul 2020 12:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/categories/docker/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>docker-compose</title>
       <link>https://nlbsn.github.io/categories/docker-compose/</link>
       <pubDate>Sun, 12 Jul 2020 12:00:00 +0000</pubDate>
       
       <guid>https://nlbsn.github.io/categories/docker-compose/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>容器</title>
-      <link>https://nlbsn.github.io/categories/%E5%AE%B9%E5%99%A8/</link>
-      <pubDate>Sun, 12 Jul 2020 12:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/categories/%E5%AE%B9%E5%99%A8/</guid>
       <description></description>
     </item>
     
@@ -89,15 +125,6 @@
       <pubDate>Thu, 09 Jul 2020 11:00:00 +0000</pubDate>
       
       <guid>https://nlbsn.github.io/categories/ffmpeg/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>linux</title>
-      <link>https://nlbsn.github.io/categories/linux/</link>
-      <pubDate>Thu, 09 Jul 2020 11:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/categories/linux/</guid>
       <description></description>
     </item>
     

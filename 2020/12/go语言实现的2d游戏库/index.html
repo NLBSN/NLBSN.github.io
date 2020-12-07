@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="爱喝饮料的少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="​    开发中使用过或者感兴趣的包。一个开源游戏库">
+
+
+<meta property="og:description" content="​    开发中使用过或者感兴趣的包。一个开源游戏库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言实现的2D游戏库">
+<meta name="twitter:title" content="Go语言实现的2D游戏库">
+<meta property="og:url" content="https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+<meta property="twitter:url" content="https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+<meta property="og:site_name" content="爱喝饮料的少年">
+<meta property="og:description" content="​    开发中使用过或者感兴趣的包。一个开源游戏库">
+<meta name="twitter:description" content="​    开发中使用过或者感兴趣的包。一个开源游戏库">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-12-01T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-12-01T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="golang">
+    
+      <meta property="article:section" content="package">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="package">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622200041.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622200041.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+
+
+    <title>Go语言实现的2D游戏库</title>
+
+    <link rel="icon" href="https://nlbsn.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://nlbsn.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nlbsn.github.io/">爱喝饮料的少年</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://nlbsn.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nlbsn.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Go语言实现的2D游戏库
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-12-01T00:00:00Z">
+        
+  
+  
+  
+  
+    2020年12月1日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://nlbsn.github.io/categories/golang">golang</a>, 
+    
+      <a class="category-link" href="https://nlbsn.github.io/categories/package">package</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>​    开发中使用过或者感兴趣的包。一个开源游戏库</p>
+<p>今天推荐一个日本人开发的 2D 游戏库，使用 Go 语言实现。项目名称 Ebiten（/ebíteɴ/），这是一个开源游戏库。项目地址：https://github.com/hajimehoshi/ebiten，Star 数 3.5k。Ebiten 的简单 API 使您可以快速轻松地开发可在多个平台上部署的 2D 游戏。该项目有官网：https://ebiten.org/，有完整的文档。</p>
+<p>这个项目同时支持桌面操作系统（Windows、macOS、Linux、FreeBSD）、Web 浏览器（Chrome、Firefox、Safari、Edge）、移动系统（Android 、iOS）。</p>
+<p>在 Ebiten 中，所有内容都是一幅图像：屏幕，图像文件中的数据甚至屏幕外的项目都表示为图像对象。大多数渲染操作包括在一个图像之上绘制一个图像。</p>
+<p>虽然 Ebiten的 绘图 API 非常简单，但是 Ebiten 游戏在 GPU 的支持下运行非常快。内部将多个图像集成到纹理图集中，并且在可能的情况下自动批量执行绘制操作。</p>
+<p>Ebiten 已用于开发生产级游戏。一个例子就是 Bear&rsquo;s Restaurant，这是一个移动应用程序，已经下载了 80 万次。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/lkYNiaZsfpqaFLklpKsN9Eiake7iaibeofOXamEAAjDXUJe0aPXGA18EZ3eqYRdUUVB45gic57sRqSAoTibYC7zUxqJg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>为了方便使用，官方提供了众多例子，包括：</p>
+<ul>
+<li>基本图形</li>
+<li>高级图形</li>
+<li>输入</li>
+<li>音频</li>
+<li>游戏</li>
+</ul>
+<p>游戏提供了在线运行版，比如 2048 游戏：https://ebiten.org/examples/2048.html。更多例子在这里找到：https://ebiten.org/examples/。</p>
+<p>这个项目，即使不做游戏开发，做图像处理等也是可以的。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/package/">package</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/12/%E4%BC%98%E5%8C%96docker-%E9%95%9C%E5%83%8F%E5%B0%8F%E6%8A%80%E5%B7%A7/" data-tooltip="优化Docker 镜像小技巧">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/11/%E7%94%A8go%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%95%B0%E5%AD%97%E5%86%99%E4%BD%9C%E7%A4%BE%E5%8C%BA/" data-tooltip="用Go实现的数字写作社区">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/12/%E4%BC%98%E5%8C%96docker-%E9%95%9C%E5%83%8F%E5%B0%8F%E6%8A%80%E5%B7%A7/" data-tooltip="优化Docker 镜像小技巧">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/11/%E7%94%A8go%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%95%B0%E5%AD%97%E5%86%99%E4%BD%9C%E7%A4%BE%E5%8C%BA/" data-tooltip="用Go实现的数字写作社区">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/12/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fgo%25E8%25AF%25AD%25E8%25A8%2580%25E5%25AE%259E%25E7%258E%25B0%25E7%259A%25842d%25E6%25B8%25B8%25E6%2588%258F%25E5%25BA%2593%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fgo%25E8%25AF%25AD%25E8%25A8%2580%25E5%25AE%259E%25E7%258E%25B0%25E7%259A%25842d%25E6%25B8%25B8%25E6%2588%258F%25E5%25BA%2593%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fgo%25E8%25AF%25AD%25E8%25A8%2580%25E5%25AE%259E%25E7%258E%25B0%25E7%259A%25842d%25E6%25B8%25B8%25E6%2588%258F%25E5%25BA%2593%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+    
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://nlbsn.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://nlbsn.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nlbsn.github.io\/2020\/12\/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93\/';
+          
+            this.page.identifier = '\/2020\/12\/go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E7%9A%842d%E6%B8%B8%E6%88%8F%E5%BA%93\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
