@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.73.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="爱喝饮料的少年">
+<meta name="keywords" content=", 运维, 开发, 容器, k8s, golang, go">
+<meta name="description" content="docker-compose配置文件详解，后续自己慢慢更新。">
+
+
+<meta property="og:description" content="docker-compose配置文件详解，后续自己慢慢更新。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker-compose文件详解">
+<meta name="twitter:title" content="docker-compose文件详解">
+<meta property="og:url" content="https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+<meta property="twitter:url" content="https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+<meta property="og:site_name" content="爱喝饮料的少年">
+<meta property="og:description" content="docker-compose配置文件详解，后续自己慢慢更新。">
+<meta name="twitter:description" content="docker-compose配置文件详解，后续自己慢慢更新。">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2020-12-17T12:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-12-17T12:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="docker">
+    
+      <meta property="article:section" content="docker-compose">
+    
+  
+  
+    
+      <meta property="article:tag" content="docker-compose">
+    
+      <meta property="article:tag" content="docker">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200622193715.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+  <meta property="twitter:image" content="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg">
+
+
+    <title>docker-compose文件详解</title>
+
+    <link rel="icon" href="https://nlbsn.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://nlbsn.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nlbsn.github.io/">爱喝饮料的少年</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://nlbsn.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nlbsn.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">爱喝饮料的少年</h4>
+        
+          <h5 class="sidebar-profile-bio">一个酷酷的<strong>帅小伙</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">文章</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">档案</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/NLBSN" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nlbsn.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      docker-compose文件详解
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-12-17T12:00:00Z">
+        
+  
+  
+  
+  
+    2020年12月17日
+  
+
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="https://nlbsn.github.io/categories/docker">docker</a>, 
+    
+      <a class="category-link" href="https://nlbsn.github.io/categories/docker-compose">docker-compose</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>docker-compose配置文件详解，后续自己慢慢更新。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">Compose和Docker兼容性：
+    Compose 文件格式有3个版本,分别为1, <span style="color:#ae81ff">2.</span>x 和 <span style="color:#ae81ff">3.</span>x
+    目前主流的为 <span style="color:#ae81ff">3.</span>x 其支持 docker <span style="color:#ae81ff">1.13.0</span> 及其以上的版本
+ 
+常用参数：
+    version           <span style="color:#75715e"># 指定 compose 文件的版本</span>
+    services          <span style="color:#75715e"># 定义所有的 service 信息, services 下面的第一级别的 key 既是一个 service 的名称</span>
+ 
+        build                 <span style="color:#75715e"># 指定包含构建上下文的路径, 或作为一个对象，该对象具有 context 和指定的 dockerfile 文件以及 args 参数值</span>
+            <span style="color:#66d9ef">context               # context</span>: 指定 Dockerfile 文件所在的路径
+            <span style="color:#66d9ef">dockerfile            # dockerfile</span>: 指定 context 指定的目录下面的 Dockerfile 的名称(默认为 Dockerfile)
+            <span style="color:#66d9ef">args                  # args</span>: Dockerfile 在 build 过程中需要的参数 (等同于 docker container build --build-arg 的作用)
+            cache_from            <span style="color:#75715e"># v3.2中新增的参数, 指定缓存的镜像列表 (等同于 docker container build --cache_from 的作用)</span>
+            labels                <span style="color:#75715e"># v3.3中新增的参数, 设置镜像的元数据 (等同于 docker container build --labels 的作用)</span>
+            shm_size              <span style="color:#75715e"># v3.5中新增的参数, 设置容器 /dev/shm 分区的大小 (等同于 docker container build --shm-size 的作用)</span>
+ 
+        command               <span style="color:#75715e"># 覆盖容器启动后默认执行的命令, 支持 shell 格式和 [] 格式</span>
+ 
+        configs               <span style="color:#75715e"># 不知道怎么用</span>
+ 
+        cgroup_parent         <span style="color:#75715e"># 不知道怎么用</span>
+ 
+        container_name        <span style="color:#75715e"># 指定容器的名称 (等同于 docker run --name 的作用)</span>
+ 
+        credential_spec       <span style="color:#75715e"># 不知道怎么用</span>
+ 
+        deploy                <span style="color:#75715e"># v3 版本以上, 指定与部署和运行服务相关的配置, deploy 部分是 docker stack 使用的, docker stack 依赖 docker swarm</span>
+            endpoint_mode         <span style="color:#75715e"># v3.3 版本中新增的功能, 指定服务暴露的方式</span>
+                vip                   <span style="color:#75715e"># Docker 为该服务分配了一个虚拟 IP(VIP), 作为客户端的访问服务的地址</span>
+                dnsrr                 <span style="color:#75715e"># DNS轮询, Docker 为该服务设置 DNS 条目, 使得服务名称的 DNS 查询返回一个 IP 地址列表, 客户端直接访问其中的一个地址</span>
+            labels                <span style="color:#75715e"># 指定服务的标签，这些标签仅在服务上设置</span>
+            mode                  <span style="color:#75715e"># 指定 deploy 的模式</span>
+                global                <span style="color:#75715e"># 每个集群节点都只有一个容器</span>
+                replicated            <span style="color:#75715e"># 用户可以指定集群中容器的数量(默认)</span>
+            placement             <span style="color:#75715e"># 不知道怎么用</span>
+            replicas              <span style="color:#75715e"># deploy 的 mode 为 replicated 时, 指定容器副本的数量</span>
+            resources             <span style="color:#75715e"># 资源限制</span>
+                limits                <span style="color:#75715e"># 设置容器的资源限制</span>
+                    <span style="color:#66d9ef">cpus</span>: <span style="color:#e6db74">&#34;0.5&#34;</span>           <span style="color:#75715e"># 设置该容器最多只能使用 50% 的 CPU </span>
+                    <span style="color:#66d9ef">memory</span>: 50M           <span style="color:#75715e"># 设置该容器最多只能使用 50M 的内存空间 </span>
+                reservations          <span style="color:#75715e"># 设置为容器预留的系统资源(随时可用)</span>
+                    <span style="color:#66d9ef">cpus</span>: <span style="color:#e6db74">&#34;0.2&#34;</span>           <span style="color:#75715e"># 为该容器保留 20% 的 CPU</span>
+                    <span style="color:#66d9ef">memory</span>: 20M           <span style="color:#75715e"># 为该容器保留 20M 的内存空间</span>
+            restart_policy        <span style="color:#75715e"># 定义容器重启策略, 用于代替 restart 参数</span>
+                condition             <span style="color:#75715e"># 定义容器重启策略(接受三个参数)</span>
+                    none                  <span style="color:#75715e"># 不尝试重启</span>
+                    on-failure            <span style="color:#75715e"># 只有当容器内部应用程序出现问题才会重启</span>
+                    any                   <span style="color:#75715e"># 无论如何都会尝试重启(默认)</span>
+                delay                 <span style="color:#75715e"># 尝试重启的间隔时间(默认为 0s)</span>
+                max_attempts          <span style="color:#75715e"># 尝试重启次数(默认一直尝试重启)</span>
+                window                <span style="color:#75715e"># 检查重启是否成功之前的等待时间(即如果容器启动了, 隔多少秒之后去检测容器是否正常, 默认 0s)</span>
+            update_config         <span style="color:#75715e"># 用于配置滚动更新配置</span>
+                parallelism           <span style="color:#75715e"># 一次性更新的容器数量</span>
+                delay                 <span style="color:#75715e"># 更新一组容器之间的间隔时间</span>
+                failure_action        <span style="color:#75715e"># 定义更新失败的策略</span>
+                    continue              <span style="color:#75715e"># 继续更新</span>
+                    rollback              <span style="color:#75715e"># 回滚更新</span>
+                    pause                 <span style="color:#75715e"># 暂停更新(默认)</span>
+                <span style="color:#66d9ef">monitor               # 每次更新后的持续时间以监视更新是否失败(单位</span>: ns|us|ms|s|m|h) (默认为0)
+                max_failure_ratio     <span style="color:#75715e"># 回滚期间容忍的失败率(默认值为0)</span>
+                order                 <span style="color:#75715e"># v3.4 版本中新增的参数, 回滚期间的操作顺序</span>
+                    stop-first            <span style="color:#75715e">#旧任务在启动新任务之前停止(默认)</span>
+                    start-first           <span style="color:#75715e">#首先启动新任务, 并且正在运行的任务暂时重叠</span>
+            rollback_config       <span style="color:#75715e"># v3.7 版本中新增的参数, 用于定义在 update_config 更新失败的回滚策略</span>
+                parallelism           <span style="color:#75715e"># 一次回滚的容器数, 如果设置为0, 则所有容器同时回滚</span>
+                delay                 <span style="color:#75715e"># 每个组回滚之间的时间间隔(默认为0)</span>
+                failure_action        <span style="color:#75715e"># 定义回滚失败的策略</span>
+                    continue              <span style="color:#75715e"># 继续回滚</span>
+                    pause                 <span style="color:#75715e"># 暂停回滚</span>
+                <span style="color:#66d9ef">monitor               # 每次回滚任务后的持续时间以监视失败(单位</span>: ns|us|ms|s|m|h) (默认为0)
+                max_failure_ratio     <span style="color:#75715e"># 回滚期间容忍的失败率(默认值0)</span>
+                order                 <span style="color:#75715e"># 回滚期间的操作顺序</span>
+                    stop-first            <span style="color:#75715e"># 旧任务在启动新任务之前停止(默认)</span>
+                    start-first           <span style="color:#75715e"># 首先启动新任务, 并且正在运行的任务暂时重叠</span>
+ 
+            注意：
+                支持 docker-compose up 和 docker-compose run 但不支持 docker stack deploy 的子选项
+                security_opt  container_name  devices  tmpfs  stop_signal  links    cgroup_parent
+                network_mode  external_links  restart  build  userns_mode  sysctls
+ 
+        devices               <span style="color:#75715e"># 指定设备映射列表 (等同于 docker run --device 的作用)</span>
+ 
+        depends_on            <span style="color:#75715e"># 定义容器启动顺序 (此选项解决了容器之间的依赖关系， 此选项在 v3 版本中 使用 swarm 部署时将忽略该选项)</span>
+            示例：
+                docker-compose up 以依赖顺序启动服务，下面例子中 redis 和 db 服务在 web 启动前启动
+                默认情况下使用 docker-compose up web 这样的方式启动 web 服务时，也会启动 redis 和 db 两个服务，因为在配置文件中定义了依赖关系
+ 
+                <span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3&#39;</span>
+                <span style="color:#66d9ef">services</span>:
+                    <span style="color:#66d9ef">web</span>:
+                        <span style="color:#66d9ef">build</span>: .
+                        <span style="color:#66d9ef">depends_on</span>:
+                            - db      
+                            - redis  
+                    <span style="color:#66d9ef">redis</span>:
+                        <span style="color:#66d9ef">image</span>: redis
+                    <span style="color:#66d9ef">db</span>:
+                        <span style="color:#66d9ef">image</span>: postgres                             
+ 
+        dns                   <span style="color:#75715e"># 设置 DNS 地址(等同于 docker run --dns 的作用)</span>
+ 
+        dns_search            <span style="color:#75715e"># 设置 DNS 搜索域(等同于 docker run --dns-search 的作用)</span>
+ 
+        tmpfs                 <span style="color:#75715e"># v2 版本以上, 挂载目录到容器中, 作为容器的临时文件系统(等同于 docker run --tmpfs 的作用, 在使用 swarm 部署时将忽略该选项)</span>
+ 
+        entrypoint            <span style="color:#75715e"># 覆盖容器的默认 entrypoint 指令 (等同于 docker run --entrypoint 的作用)</span>
+ 
+        env_file              <span style="color:#75715e"># 从指定文件中读取变量设置为容器中的环境变量, 可以是单个值或者一个文件列表, 如果多个文件中的变量重名则后面的变量覆盖前面的变量, environment 的值覆盖 env_file 的值</span>
+            文件格式：
+                RACK_ENV=development 
+ 
+        environment           <span style="color:#75715e"># 设置环境变量， environment 的值可以覆盖 env_file 的值 (等同于 docker run --env 的作用)</span>
+ 
+        expose                <span style="color:#75715e"># 暴露端口, 但是不能和宿主机建立映射关系, 类似于 Dockerfile 的 EXPOSE 指令</span>
+ 
+        external_links        <span style="color:#75715e"># 连接不在 docker-compose.yml 中定义的容器或者不在 compose 管理的容器(docker run 启动的容器, 在 v3 版本中使用 swarm 部署时将忽略该选项)</span>
+ 
+        extra_hosts           <span style="color:#75715e"># 添加 host 记录到容器中的 /etc/hosts 中 (等同于 docker run --add-host 的作用)</span>
+ 
+        healthcheck           <span style="color:#75715e"># v2.1 以上版本, 定义容器健康状态检查, 类似于 Dockerfile 的 HEALTHCHECK 指令</span>
+            test                  <span style="color:#75715e"># 检查容器检查状态的命令, 该选项必须是一个字符串或者列表, 第一项必须是 NONE, CMD 或 CMD-SHELL, 如果其是一个字符串则相当于 CMD-SHELL 加该字符串</span>
+                NONE                  <span style="color:#75715e"># 禁用容器的健康状态检测</span>
+                <span style="color:#66d9ef">CMD                   # test</span>: [<span style="color:#e6db74">&#34;CMD&#34;</span>, <span style="color:#e6db74">&#34;curl&#34;</span>, <span style="color:#e6db74">&#34;-f&#34;</span>, <span style="color:#e6db74">&#34;http://localhost&#34;</span>]
+                <span style="color:#66d9ef">CMD-SHELL             # test</span>: [<span style="color:#e6db74">&#34;CMD-SHELL&#34;</span>, <span style="color:#e6db74">&#34;curl -f http://localhost || exit 1&#34;</span><span style="color:#66d9ef">] 或者　test</span>: curl -f https://localhost || exit <span style="color:#ae81ff">1</span>
+            <span style="color:#66d9ef">interval</span>: 1m30s       <span style="color:#75715e"># 每次检查之间的间隔时间</span>
+            <span style="color:#66d9ef">timeout</span>: 10s          <span style="color:#75715e"># 运行命令的超时时间</span>
+            <span style="color:#66d9ef">retries</span>: <span style="color:#ae81ff">3</span>            <span style="color:#75715e"># 重试次数</span>
+            <span style="color:#66d9ef">start_period</span>: 40s     <span style="color:#75715e"># v3.4 以上新增的选项, 定义容器启动时间间隔</span>
+            <span style="color:#66d9ef">disable: true         # true 或 false, 表示是否禁用健康状态检测和　test</span>: NONE 相同
+ 
+        image                 <span style="color:#75715e"># 指定 docker 镜像, 可以是远程仓库镜像、本地镜像</span>
+ 
+        init                  <span style="color:#75715e"># v3.7 中新增的参数, true 或 false 表示是否在容器中运行一个 init, 它接收信号并传递给进程</span>
+ 
+        isolation             <span style="color:#75715e"># 隔离容器技术, 在 Linux 中仅支持 default 值</span>
+ 
+        labels                <span style="color:#75715e"># 使用 Docker 标签将元数据添加到容器, 与 Dockerfile 中的 LABELS 类似</span>
+ 
+        links                 <span style="color:#75715e"># 链接到其它服务中的容器, 该选项是 docker 历史遗留的选项, 目前已被用户自定义网络名称空间取代, 最终有可能被废弃 (在使用 swarm 部署时将忽略该选项)</span>
+ 
+        logging               <span style="color:#75715e"># 设置容器日志服务</span>
+            driver                <span style="color:#75715e"># 指定日志记录驱动程序, 默认 json-file (等同于 docker run --log-driver 的作用)</span>
+            options               <span style="color:#75715e"># 指定日志的相关参数 (等同于 docker run --log-opt 的作用)</span>
+                max-size              <span style="color:#75715e"># 设置单个日志文件的大小, 当到达这个值后会进行日志滚动操作</span>
+                max-file              <span style="color:#75715e"># 日志文件保留的数量</span>
+ 
+        network_mode          <span style="color:#75715e"># 指定网络模式 (等同于 docker run --net 的作用, 在使用 swarm 部署时将忽略该选项)         </span>
+ 
+        networks              <span style="color:#75715e"># 将容器加入指定网络 (等同于 docker network connect 的作用), networks 可以位于 compose 文件顶级键和 services 键的二级键</span>
+            aliases               <span style="color:#75715e"># 同一网络上的容器可以使用服务名称或别名连接到其中一个服务的容器</span>
+            ipv4_address      <span style="color:#75715e"># IP V4 格式</span>
+            ipv6_address      <span style="color:#75715e"># IP V6 格式</span>
+ 
+            <span style="color:#66d9ef">示例</span>:
+                <span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.7&#39;</span>
+                <span style="color:#66d9ef">services</span>: 
+                    <span style="color:#66d9ef">test</span>: 
+                        <span style="color:#66d9ef">image</span>: nginx:<span style="color:#ae81ff">1.14</span>-alpine
+                        <span style="color:#66d9ef">container_name</span>: mynginx
+                        <span style="color:#66d9ef">command</span>: ifconfig
+                        <span style="color:#66d9ef">networks</span>: 
+                            <span style="color:#66d9ef">app_net</span>:                                <span style="color:#75715e"># 调用下面 networks 定义的 app_net 网络</span>
+                            <span style="color:#66d9ef">ipv4_address</span>: <span style="color:#ae81ff">172.16.238.10</span>
+                <span style="color:#66d9ef">networks</span>:
+                    <span style="color:#66d9ef">app_net</span>:
+                        <span style="color:#66d9ef">driver</span>: bridge
+                        <span style="color:#66d9ef">ipam</span>:
+                            <span style="color:#66d9ef">driver</span>: default
+                            <span style="color:#66d9ef">config</span>:
+                                - <span style="color:#66d9ef">subnet</span>: <span style="color:#ae81ff">172.16.238.0</span>/<span style="color:#ae81ff">24</span>
+ 
+        <span style="color:#66d9ef">pid</span>: <span style="color:#e6db74">&#39;host&#39;</span>           <span style="color:#75715e"># 共享宿主机的 进程空间(PID)</span>
+ 
+        ports                 <span style="color:#75715e"># 建立宿主机和容器之间的端口映射关系, ports 支持两种语法格式</span>
+            <span style="color:#66d9ef">SHORT 语法格式示例</span>:
+                - <span style="color:#e6db74">&#34;3000&#34;</span>                            <span style="color:#75715e"># 暴露容器的 3000 端口, 宿主机的端口由 docker 随机映射一个没有被占用的端口</span>
+                - <span style="color:#e6db74">&#34;3000-3005&#34;</span>                       <span style="color:#75715e"># 暴露容器的 3000 到 3005 端口, 宿主机的端口由 docker 随机映射没有被占用的端口</span>
+                - <span style="color:#e6db74">&#34;8000:8000&#34;</span>                       <span style="color:#75715e"># 容器的 8000 端口和宿主机的 8000 端口建立映射关系</span>
+                - <span style="color:#e6db74">&#34;9090-9091:8080-8081&#34;</span>
+                - <span style="color:#e6db74">&#34;127.0.0.1:8001:8001&#34;</span>             <span style="color:#75715e"># 指定映射宿主机的指定地址的</span>
+                - <span style="color:#e6db74">&#34;127.0.0.1:5000-5010:5000-5010&#34;</span>   
+                - <span style="color:#e6db74">&#34;6060:6060/udp&#34;</span>                   <span style="color:#75715e"># 指定协议</span>
+ 
+            LONG 语法格式示例:(v3<span style="color:#ae81ff">.2</span> 新增的语法格式)
+                <span style="color:#66d9ef">ports</span>:
+                    - <span style="color:#66d9ef">target</span>: <span style="color:#ae81ff">80</span>                    <span style="color:#75715e"># 容器端口</span>
+                      <span style="color:#66d9ef">published</span>: <span style="color:#ae81ff">8080</span>               <span style="color:#75715e"># 宿主机端口</span>
+                      <span style="color:#66d9ef">protocol</span>: tcp                 <span style="color:#75715e"># 协议类型</span>
+                      <span style="color:#66d9ef">mode</span>: host                    <span style="color:#75715e"># host 在每个节点上发布主机端口,  ingress 对于群模式端口进行负载均衡</span>
+ 
+        secrets               <span style="color:#75715e"># 不知道怎么用</span>
+ 
+        security_opt          <span style="color:#75715e"># 为每个容器覆盖默认的标签 (在使用 swarm 部署时将忽略该选项)</span>
+ 
+        stop_grace_period     <span style="color:#75715e"># 指定在发送了 SIGTERM 信号之后, 容器等待多少秒之后退出(默认 10s)</span>
+ 
+        stop_signal           <span style="color:#75715e"># 指定停止容器发送的信号 (默认为 SIGTERM 相当于 kill PID; SIGKILL 相当于 kill -9 PID; 在使用 swarm 部署时将忽略该选项)</span>
+ 
+        sysctls               <span style="color:#75715e"># 设置容器中的内核参数 (在使用 swarm 部署时将忽略该选项)</span>
+ 
+        ulimits               <span style="color:#75715e"># 设置容器的 limit</span>
+ 
+        userns_mode           <span style="color:#75715e"># 如果Docker守护程序配置了用户名称空间, 则禁用此服务的用户名称空间 (在使用 swarm 部署时将忽略该选项)</span>
+ 
+        volumes               <span style="color:#75715e"># 定义容器和宿主机的卷映射关系, 其和 networks 一样可以位于 services 键的二级键和 compose 顶级键, 如果需要跨服务间使用则在顶级键定义, 在 services 中引用</span>
+            <span style="color:#66d9ef">SHORT 语法格式示例</span>:
+                <span style="color:#66d9ef">volumes</span>:
+                    - /var/lib/mysql                <span style="color:#75715e"># 映射容器内的 /var/lib/mysql 到宿主机的一个随机目录中</span>
+                    - /opt/data:/var/lib/mysql      <span style="color:#75715e"># 映射容器内的 /var/lib/mysql 到宿主机的 /opt/data</span>
+                    - ./cache:/tmp/cache            <span style="color:#75715e"># 映射容器内的 /var/lib/mysql 到宿主机 compose 文件所在的位置</span>
+                    - ~/configs:/etc/configs/:ro    <span style="color:#75715e"># 映射容器宿主机的目录到容器中去, 权限只读</span>
+                    - datavolume:/var/lib/mysql     <span style="color:#75715e"># datavolume 为 volumes 顶级键定义的目录, 在此处直接调用</span>
+ 
+            LONG 语法格式示例:(v3<span style="color:#ae81ff">.2</span> 新增的语法格式)
+                <span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#34;3.2&#34;</span>
+                <span style="color:#66d9ef">services</span>:
+                    <span style="color:#66d9ef">web</span>:
+                        <span style="color:#66d9ef">image</span>: nginx:alpine
+                        <span style="color:#66d9ef">ports</span>:
+                            - <span style="color:#e6db74">&#34;80:80&#34;</span>
+                        <span style="color:#66d9ef">volumes</span>:
+                            - <span style="color:#66d9ef">type</span>: volume                  <span style="color:#75715e"># mount 的类型, 必须是 bind、volume 或 tmpfs</span>
+                                <span style="color:#66d9ef">source</span>: mydata              <span style="color:#75715e"># 宿主机目录</span>
+                                <span style="color:#66d9ef">target</span>: /data               <span style="color:#75715e"># 容器目录</span>
+                                <span style="color:#66d9ef">volume</span>:                     <span style="color:#75715e"># 配置额外的选项, 其 key 必须和 type 的值相同</span>
+                                    <span style="color:#66d9ef">nocopy</span>: <span style="color:#66d9ef">true</span>                <span style="color:#75715e"># volume 额外的选项, 在创建卷时禁用从容器复制数据</span>
+                            - <span style="color:#66d9ef">type</span>: bind                    <span style="color:#75715e"># volume 模式只指定容器路径即可, 宿主机路径随机生成; bind 需要指定容器和数据机的映射路径</span>
+                                <span style="color:#66d9ef">source</span>: ./static
+                                <span style="color:#66d9ef">target</span>: /opt/app/static
+                                <span style="color:#66d9ef">read_only</span>: <span style="color:#66d9ef">true</span>             <span style="color:#75715e"># 设置文件系统为只读文件系统</span>
+                <span style="color:#66d9ef">volumes</span>:
+                    <span style="color:#66d9ef">mydata</span>:                                 <span style="color:#75715e"># 定义在 volume, 可在所有服务中调用</span>
+ 
+        restart               <span style="color:#75715e"># 定义容器重启策略(在使用 swarm 部署时将忽略该选项, 在 swarm 使用 restart_policy 代替 restart)</span>
+            no                    <span style="color:#75715e"># 禁止自动重启容器(默认)</span>
+            always                <span style="color:#75715e"># 无论如何容器都会重启</span>
+            on-failure            <span style="color:#75715e"># 当出现 on-failure 报错时, 容器重新启动</span>
+ 
+        其他选项：
+            domainname, hostname, ipc, mac_address, privileged, read_only, shm_size, stdin_open, tty, user, working_dir
+            上面这些选项都只接受单个值和 docker run 的对应参数类似
+ 
+        对于值为时间的可接受的值：
+            <span style="color:#ae81ff">2.</span>5s
+            10s
+            1m30s
+            2h32m
+            5h34m56s
+            <span style="color:#66d9ef">时间单位</span>: us, ms, s, m， h
+        对于值为大小的可接受的值：
+            2b
+            1024kb
+            2048k
+            300m
+            1gb
+            <span style="color:#66d9ef">单位</span>: b, k, m, g 或者 kb, mb, gb
+    networks          <span style="color:#75715e"># 定义 networks 信息</span>
+        driver                <span style="color:#75715e"># 指定网络模式, 大多数情况下, 它 bridge 于单个主机和 overlay Swarm 上</span>
+            bridge                <span style="color:#75715e"># Docker 默认使用 bridge 连接单个主机上的网络</span>
+            overlay               <span style="color:#75715e"># overlay 驱动程序创建一个跨多个节点命名的网络</span>
+            host                  <span style="color:#75715e"># 共享主机网络名称空间(等同于 docker run --net=host)</span>
+            none                  <span style="color:#75715e"># 等同于 docker run --net=none</span>
+        driver_opts           <span style="color:#75715e"># v3.2以上版本, 传递给驱动程序的参数, 这些参数取决于驱动程序</span>
+        attachable            <span style="color:#75715e"># driver 为 overlay 时使用, 如果设置为 true 则除了服务之外，独立容器也可以附加到该网络; 如果独立容器连接到该网络，则它可以与其他 Docker 守护进程连接到的该网络的服务和独立容器进行通信</span>
+        ipam                  <span style="color:#75715e"># 自定义 IPAM 配置. 这是一个具有多个属性的对象, 每个属性都是可选的</span>
+            driver                <span style="color:#75715e"># IPAM 驱动程序, bridge 或者 default</span>
+            config                <span style="color:#75715e"># 配置项</span>
+                subnet                <span style="color:#75715e"># CIDR格式的子网，表示该网络的网段</span>
+        external              <span style="color:#75715e"># 外部网络, 如果设置为 true 则 docker-compose up 不会尝试创建它, 如果它不存在则引发错误</span>
+        name                  <span style="color:#75715e"># v3.5 以上版本, 为此网络设置名称</span>
+文件格式示例：
+    <span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#34;3&#34;</span>
+    <span style="color:#66d9ef">services</span>:
+      <span style="color:#66d9ef">redis</span>:
+        <span style="color:#66d9ef">image</span>: redis:alpine
+        <span style="color:#66d9ef">ports</span>:
+          - <span style="color:#e6db74">&#34;6379&#34;</span>
+        <span style="color:#66d9ef">networks</span>:
+          - frontend
+        <span style="color:#66d9ef">deploy</span>:
+          <span style="color:#66d9ef">replicas</span>: <span style="color:#ae81ff">2</span>
+          <span style="color:#66d9ef">update_config</span>:
+            <span style="color:#66d9ef">parallelism</span>: <span style="color:#ae81ff">2</span>
+            <span style="color:#66d9ef">delay</span>: 10s
+          <span style="color:#66d9ef">restart_policy</span>:
+            <span style="color:#66d9ef">condition</span>: on-failure
+      <span style="color:#66d9ef">db</span>:
+        <span style="color:#66d9ef">image</span>: postgres:<span style="color:#ae81ff">9.4</span>
+        <span style="color:#66d9ef">volumes</span>:
+          - db-data:/var/lib/postgresql/data
+        <span style="color:#66d9ef">networks</span>:
+          - backend
+        <span style="color:#66d9ef">deploy</span>:
+          <span style="color:#66d9ef">placement</span>:
+            <span style="color:#66d9ef">constraints</span>: [node.role == manager]
+</code></pre></div>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/docker-compose/">docker-compose</a>
+
+  <a class="tag tag--primary tag--small" href="https://nlbsn.github.io/tags/docker/">docker</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/" data-tooltip="Sampler：Shell命令执行可视化和告警工具">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 爱喝饮料的少年. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nlbsn.github.io/2020/12/samplershell%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E5%92%8C%E5%91%8A%E8%AD%A6%E5%B7%A5%E5%85%B7/" data-tooltip="Sampler：Shell命令执行可视化和告警工具">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fdocker-compose%25E6%2596%2587%25E4%25BB%25B6%25E8%25AF%25A6%25E8%25A7%25A3%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fdocker-compose%25E6%2596%2587%25E4%25BB%25B6%25E8%25AF%25A6%25E8%25A7%25A3%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnlbsn.github.io%2F2020%2F12%2Fdocker-compose%25E6%2596%2587%25E4%25BB%25B6%25E8%25AF%25A6%25E8%25A7%25A3%2F">
+          <i class="fa fa-google-plus"></i><span>分享到 Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://gitee.com/zzf35/cloudimg/raw/master/img/20200628113203.jpg" alt="作者的图片" />
+    
+    <h4 id="about-card-name">爱喝饮料的少年</h4>
+    
+      <div id="about-card-bio">一个酷酷的<strong>帅小伙</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        运维开发工程师
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        山西
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://nlbsn.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://nlbsn.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nlbsn.github.io\/2020\/12\/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3\/';
+          
+            this.page.identifier = '\/2020\/12\/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = '帅小伙';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

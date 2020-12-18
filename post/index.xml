@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Dec 2020 11:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 17 Dec 2020 12:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nlbsn.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>docker-compose文件详解</title>
+      <link>https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Thu, 17 Dec 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/</guid>
+      <description>&lt;p&gt;docker-compose配置文件详解，后续自己慢慢更新。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Sampler：Shell命令执行可视化和告警工具</title>
@@ -117,6 +126,15 @@
       
       <guid>https://nlbsn.github.io/2020/08/go-netcdf%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
       <description>&lt;p&gt;​		使用netcdf的第三方封装库：github.com/fhs/go-netcdf&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>docker的daemon.json文件</title>
+      <link>https://nlbsn.github.io/2020/07/docker%E7%9A%84daemon.json%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Sun, 12 Jul 2020 12:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/2020/07/docker%E7%9A%84daemon.json%E6%96%87%E4%BB%B6/</guid>
+      <description>&lt;p&gt;自己常用的一些docker的daemo.json文件的记录&lt;/p&gt;</description>
     </item>
     
     <item>
