@@ -6,19 +6,10 @@
     <description>Recent content in docker on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Dec 2020 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Dec 2020 12:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nlbsn.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>docker-compose文件详解</title>
-      <link>https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/</link>
-      <pubDate>Thu, 17 Dec 2020 12:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/2020/12/docker-compose%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/</guid>
-      <description>&lt;p&gt;docker-compose配置文件详解，后续自己慢慢更新。&lt;/p&gt;</description>
-    </item>
     
     <item>
       <title>优化Docker 镜像小技巧</title>
@@ -27,15 +18,6 @@
       
       <guid>https://nlbsn.github.io/2020/12/%E4%BC%98%E5%8C%96docker-%E9%95%9C%E5%83%8F%E5%B0%8F%E6%8A%80%E5%B7%A7/</guid>
       <description>&lt;p&gt;Docker镜像，是Docker执行程序中的主要镜像。它们是“容器的蓝图”，提供了有关如何生成容器的说明。在本文中，我将介绍一些经常被忽视的概念，这些概念将有助于优化Docker镜像的开发和构建过程。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>docker的daemon.json文件</title>
-      <link>https://nlbsn.github.io/2020/07/docker%E7%9A%84daemon.json%E6%96%87%E4%BB%B6/</link>
-      <pubDate>Sun, 12 Jul 2020 12:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/2020/07/docker%E7%9A%84daemon.json%E6%96%87%E4%BB%B6/</guid>
-      <description>&lt;p&gt;自己常用的一些docker的daemo.json文件的记录&lt;/p&gt;</description>
     </item>
     
     <item>
