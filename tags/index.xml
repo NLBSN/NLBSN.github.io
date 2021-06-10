@@ -6,10 +6,28 @@
     <description>Recent content in Tags on 爱喝饮料的少年</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 17 Apr 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 May 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nlbsn.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>golang</title>
+      <link>https://nlbsn.github.io/tags/golang/</link>
+      <pubDate>Sat, 08 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>grpc</title>
+      <link>https://nlbsn.github.io/tags/grpc/</link>
+      <pubDate>Sat, 08 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://nlbsn.github.io/tags/grpc/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>生活</title>
@@ -35,15 +53,6 @@
       <pubDate>Thu, 03 Dec 2020 11:00:00 +0000</pubDate>
       
       <guid>https://nlbsn.github.io/tags/shell/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>golang</title>
-      <link>https://nlbsn.github.io/tags/golang/</link>
-      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/tags/golang/</guid>
       <description></description>
     </item>
     
@@ -161,15 +170,6 @@
       <pubDate>Fri, 26 Jun 2020 11:00:00 +0000</pubDate>
       
       <guid>https://nlbsn.github.io/tags/%E7%9B%91%E6%8E%A7/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>grpc</title>
-      <link>https://nlbsn.github.io/tags/grpc/</link>
-      <pubDate>Wed, 24 Jun 2020 21:00:00 +0000</pubDate>
-      
-      <guid>https://nlbsn.github.io/tags/grpc/</guid>
       <description></description>
     </item>
     
